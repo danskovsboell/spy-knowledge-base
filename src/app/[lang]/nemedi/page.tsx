@@ -29,7 +29,7 @@ export default async function NemediPage({ params }: PageProps) {
       ) : (
         <div className="iframe-wrapper">
           <iframe
-            src="/workflows/nemedi-workflow.html"
+            src={`/workflows/nemedi-workflow.html?lang=${locale}`}
             title="NemEDI Workflow"
             sandbox="allow-scripts allow-same-origin"
           />

@@ -22,7 +22,7 @@ export default async function DedicationPage({ params }: PageProps) {
         <h1>{article?.title || t.dedicationTitle}</h1>
         <p>{article?.description || t.dedicationPageDesc}</p>
       </div>
-      <DedicationContent />
+      <DedicationContent lang={locale} />
     </>
   )
 }

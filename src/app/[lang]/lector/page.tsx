@@ -29,7 +29,7 @@ export default async function LectorPage({ params }: PageProps) {
       ) : (
         <div className="iframe-wrapper">
           <iframe
-            src="/workflows/lector-customs-workflow.html"
+            src={`/workflows/lector-customs-workflow.html?lang=${locale}`}
             title="Lector Customs Workflow"
             sandbox="allow-scripts allow-same-origin"
           />

@@ -29,7 +29,7 @@ export default async function SitooPage({ params }: PageProps) {
       ) : (
         <div className="iframe-wrapper">
           <iframe
-            src="/workflows/sitoo-workflow.html"
+            src={`/workflows/sitoo-workflow.html?lang=${locale}`}
             title="Sitoo POS Workflow"
             sandbox="allow-scripts allow-same-origin"
           />

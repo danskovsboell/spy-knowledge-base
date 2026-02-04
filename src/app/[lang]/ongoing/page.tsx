@@ -29,7 +29,7 @@ export default async function OngoingPage({ params }: PageProps) {
       ) : (
         <div className="iframe-wrapper">
           <iframe
-            src="/workflows/ongoing-workflow.html"
+            src={`/workflows/ongoing-workflow.html?lang=${locale}`}
             title="Ongoing WMS Workflow"
             sandbox="allow-scripts allow-same-origin"
           />
