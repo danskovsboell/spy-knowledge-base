@@ -30,12 +30,6 @@ const navItems = [
       { href: '/dedication', label: 'Dedication / Reservering', icon: '🎯' },
     ],
   },
-  {
-    section: '📖 Dokumentation',
-    items: [
-      { href: '/domain-guide', label: 'Domain Guide', icon: '📚' },
-    ],
-  },
 ]
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {

@@ -19,10 +19,6 @@ export default function HomePage() {
             <div className="welcome-stat-num">1</div>
             <div className="welcome-stat-label">Funktions-<br/>guide</div>
           </div>
-          <div className="welcome-stat">
-            <div className="welcome-stat-num">1</div>
-            <div className="welcome-stat-label">Domain<br/>Guide</div>
-          </div>
         </div>
       </div>
 
@@ -95,21 +91,6 @@ export default function HomePage() {
         />
       </div>
 
-      {/* Dokumentation */}
-      <div className="section-title">📖 Dokumentation</div>
-      <div className="guide-grid">
-        <GuideCard
-          href="/domain-guide"
-          title="SPY Domain Guide"
-          description="Overordnet domæneguide for SPY's forretningsmodel, begreber, dataflows og systemstruktur."
-          category="Dokumentation / Alle"
-          icon="📚"
-          iconBg="#ebf5fb"
-          badge="Reference-dokument"
-          badgeColor="#337ab7"
-          badgeBg="#ebf5fb"
-        />
-      </div>
     </>
   )
 }
