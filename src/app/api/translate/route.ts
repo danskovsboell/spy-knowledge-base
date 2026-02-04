@@ -104,6 +104,9 @@ export async function POST(request: NextRequest) {
   const filterLanguages = body.languages as string[] | undefined
 
   const supabaseAdmin = createServerClient()
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Server client not configured. Check SUPABASE env vars.' }, { status: 500 })
+  }
   const results: any[] = []
 
   try {
@@ -250,6 +253,9 @@ export async function GET(request: NextRequest) {
   }
 
   const supabaseAdmin = createServerClient()
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Server client not configured. Check SUPABASE env vars.' }, { status: 500 })
+  }
 
   try {
     // Get translation coverage

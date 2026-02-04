@@ -222,6 +222,7 @@ export function getSlugForRoute(route: string): string {
  */
 export async function getArticles(lang: Locale): Promise<ArticleData[]> {
   try {
+    if (!supabase) throw new Error('Supabase not configured')
     const { data, error } = await supabase
       .from('kb_articles')
       .select(`
@@ -267,6 +268,7 @@ export async function getArticles(lang: Locale): Promise<ArticleData[]> {
  */
 export async function getArticle(slug: string, lang: Locale): Promise<ArticleData | null> {
   try {
+    if (!supabase) throw new Error('Supabase not configured')
     const { data, error } = await supabase
       .from('kb_articles')
       .select(`

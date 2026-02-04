@@ -186,6 +186,9 @@ export async function POST(request: NextRequest) {
   }
 
   const supabaseAdmin = createServerClient()
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Server client not configured. Check SUPABASE env vars.' }, { status: 500 })
+  }
   const results: string[] = []
 
   try {
@@ -276,6 +279,9 @@ export async function GET(request: NextRequest) {
 
   // Check current status
   const supabaseAdmin = createServerClient()
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: 'Server client not configured. Check SUPABASE env vars.' }, { status: 500 })
+  }
   let tablesExist = false
   let articleCount = 0
   let translationCount = 0
