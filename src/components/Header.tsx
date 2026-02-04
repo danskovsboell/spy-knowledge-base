@@ -17,9 +17,9 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
         <Image
           src="/spy-logo-black.jpg"
           alt="SPY"
-          width={120}
-          height={45}
-          style={{ height: '45px', width: 'auto', filter: 'invert(1)', mixBlendMode: 'screen' }}
+          width={84}
+          height={32}
+          style={{ height: '32px', width: 'auto', filter: 'invert(1)', mixBlendMode: 'screen' }}
           priority
         />
         <span style={{ fontSize: '0.75rem', opacity: 0.7, marginLeft: '8px', alignSelf: 'flex-end', marginBottom: '2px' }}>
