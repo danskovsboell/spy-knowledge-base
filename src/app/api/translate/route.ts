@@ -1,287 +1,130 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '../../../lib/supabase'
+import { translateArticle, translateAllLanguages } from '../../../lib/services/translation'
+import { markOutdatedTranslations } from '../../../lib/services/outdated'
 
-const TARGET_LANGUAGES = [
-  { code: 'en', name: 'English' },
-  { code: 'de', name: 'German' },
-  { code: 'nl', name: 'Dutch' },
-  { code: 'fr', name: 'French' },
-  { code: 'it', name: 'Italian' },
-  { code: 'es', name: 'Spanish' },
-  { code: 'sv', name: 'Swedish' },
-  { code: 'no', name: 'Norwegian' },
-]
-
-interface TranslationResult {
-  title: string
-  description: string
-  content: string | null
+function authorize(request: NextRequest): boolean {
+  const authHeader = request.headers.get('authorization')
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  return !!(authHeader && serviceKey && authHeader === `Bearer ${serviceKey}`)
 }
 
-async function translateWithOpenAI(
-  text: string,
-  targetLang: string,
-  targetLangName: string,
-  context: string = 'SPY System knowledge base article'
-): Promise<string> {
-  const apiKey = process.env.OPENAI_API_KEY
-  if (!apiKey) throw new Error('OPENAI_API_KEY not configured')
-
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'gpt-4.1-mini',
-      messages: [
-        {
-          role: 'system',
-          content: `You are a professional translator for ${context}. Translate the following Danish text to ${targetLangName}. 
-Keep technical terms (like "Ongoing WMS", "Sitoo POS", "NemEDI", "PRICAT", "HS-codes", "webhooks", "API", "EDI", "SPY") unchanged.
-Keep product names unchanged.
-Maintain the same tone - professional but accessible.
-If the text contains HTML, preserve all HTML tags and only translate the text content.
-Return ONLY the translated text, nothing else.`
-        },
-        {
-          role: 'user',
-          content: text
-        }
-      ],
-      temperature: 0.3,
-      max_tokens: 4000,
-    }),
-  })
-
-  if (!response.ok) {
-    const error = await response.json()
-    throw new Error(`OpenAI API error: ${error.error?.message || response.statusText}`)
-  }
-
-  const data = await response.json()
-  return data.choices[0].message.content.trim()
-}
-
-async function translateArticle(
-  danishTitle: string,
-  danishDescription: string,
-  danishContent: string | null,
-  targetLangCode: string,
-  targetLangName: string,
-): Promise<TranslationResult> {
-  // Translate title
-  const title = await translateWithOpenAI(danishTitle, targetLangCode, targetLangName, 'SPY System knowledge base article title')
-  
-  // Translate description
-  const description = await translateWithOpenAI(danishDescription, targetLangCode, targetLangName, 'SPY System knowledge base article description')
-  
-  // Translate content if present
-  let content: string | null = null
-  if (danishContent) {
-    content = await translateWithOpenAI(danishContent, targetLangCode, targetLangName, 'SPY System knowledge base article content')
-  }
-
-  return { title, description, content }
+const LANGUAGE_NAMES: Record<string, string> = {
+  en: 'English', de: 'German', nl: 'Dutch', fr: 'French',
+  it: 'Italian', es: 'Spanish', sv: 'Swedish', no: 'Norwegian',
+  da: 'Danish',
 }
 
 /**
- * POST /api/translate - Translate all articles from Danish to other languages
- * Body: { slug?: string, languages?: string[] } - optional filters
- * Requires service role key
+ * POST /api/translate - Translate articles
+ * Body: { article_id?: string, slug?: string, target_languages?: string[] }
  */
 export async function POST(request: NextRequest) {
-  const authHeader = request.headers.get('authorization')
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-  
-  if (!authHeader || !serviceKey || authHeader !== `Bearer ${serviceKey}`) {
+  if (!authorize(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const supabase = createServerClient()
+  if (!supabase) {
+    return NextResponse.json({ error: 'Server client not configured' }, { status: 500 })
   }
 
   const body = await request.json().catch(() => ({}))
-  const filterSlug = body.slug as string | undefined
-  const filterLanguages = body.languages as string[] | undefined
-
-  const supabaseAdmin = createServerClient()
-  if (!supabaseAdmin) {
-    return NextResponse.json({ error: 'Server client not configured. Check SUPABASE env vars.' }, { status: 500 })
-  }
-  const results: any[] = []
+  const { article_id, slug, target_languages } = body
 
   try {
-    // Get all articles with their Danish translations
-    let query = supabaseAdmin
-      .from('kb_articles')
-      .select(`
-        id, slug,
-        kb_translations!inner(title, description, content)
-      `)
-      .eq('kb_translations.language_code', 'da')
-
-    if (filterSlug) {
-      query = query.eq('slug', filterSlug)
+    // Resolve article_id from slug if needed
+    let articleId = article_id
+    if (!articleId && slug) {
+      const { data } = await supabase
+        .from('kb_articles')
+        .select('id')
+        .eq('slug', slug)
+        .single()
+      if (!data) return NextResponse.json({ error: 'Article not found' }, { status: 404 })
+      articleId = data.id
     }
 
-    const { data: articles, error: fetchError } = await query
-    if (fetchError) throw fetchError
-    if (!articles || articles.length === 0) {
-      return NextResponse.json({ error: 'No Danish articles found to translate' }, { status: 404 })
-    }
-
-    const targetLangs = filterLanguages 
-      ? TARGET_LANGUAGES.filter(l => filterLanguages.includes(l.code))
-      : TARGET_LANGUAGES
-
-    for (const article of articles) {
-      const daTranslation = Array.isArray(article.kb_translations) 
-        ? article.kb_translations[0] 
-        : article.kb_translations
-
-      if (!daTranslation) {
-        results.push({ slug: article.slug, status: 'skipped', reason: 'No Danish translation found' })
-        continue
-      }
-
-      for (const targetLang of targetLangs) {
-        // Create translation job
-        const { data: job } = await supabaseAdmin
-          .from('translation_jobs')
-          .insert({
-            article_id: article.id,
-            source_language: 'da',
-            target_language: targetLang.code,
-            status: 'processing',
-            model: 'gpt-4.1-mini',
-            started_at: new Date().toISOString(),
-          })
-          .select('id')
-          .single()
-
-        try {
-          const translated = await translateArticle(
-            daTranslation.title,
-            daTranslation.description,
-            daTranslation.content,
-            targetLang.code,
-            targetLang.name,
-          )
-
-          // Upsert translated content
-          const { error: upsertError } = await supabaseAdmin
-            .from('kb_translations')
-            .upsert({
-              article_id: article.id,
-              language_code: targetLang.code,
-              title: translated.title,
-              description: translated.description,
-              content: translated.content,
-              status: 'translated',
-              translated_by: 'openai/gpt-4.1-mini',
-              translated_at: new Date().toISOString(),
-            }, { onConflict: 'article_id,language_code' })
-
-          if (upsertError) throw upsertError
-
-          // Update job status
-          if (job) {
-            await supabaseAdmin
-              .from('translation_jobs')
-              .update({
-                status: 'completed',
-                completed_at: new Date().toISOString(),
-              })
-              .eq('id', job.id)
+    // If specific article
+    if (articleId) {
+      if (target_languages && target_languages.length > 0) {
+        // Translate to specific languages
+        const results = []
+        for (const langCode of target_languages) {
+          try {
+            const result = await translateArticle(
+              articleId, 'da', langCode, LANGUAGE_NAMES[langCode] || langCode
+            )
+            results.push({ lang: langCode, status: 'success', title: result.title, tokensUsed: result.tokensUsed })
+          } catch (err: any) {
+            results.push({ lang: langCode, status: 'failed', error: err.message })
           }
-
-          results.push({
-            slug: article.slug,
-            language: targetLang.code,
-            status: 'success',
-            title: translated.title,
-          })
-        } catch (translateError: any) {
-          // Update job with error
-          if (job) {
-            await supabaseAdmin
-              .from('translation_jobs')
-              .update({
-                status: 'failed',
-                error_message: translateError.message,
-                completed_at: new Date().toISOString(),
-              })
-              .eq('id', job.id)
-          }
-
-          results.push({
-            slug: article.slug,
-            language: targetLang.code,
-            status: 'failed',
-            error: translateError.message,
-          })
         }
+        return NextResponse.json({ success: true, results })
+      } else {
+        // Translate to all languages
+        const { results } = await translateAllLanguages(articleId)
+        return NextResponse.json({ success: true, results })
       }
     }
 
-    const successful = results.filter(r => r.status === 'success').length
-    const failed = results.filter(r => r.status === 'failed').length
+    // Translate ALL articles
+    const { data: articles } = await supabase
+      .from('kb_articles')
+      .select('id, slug')
+      .eq('is_published', true)
 
-    return NextResponse.json({
-      success: true,
-      summary: { total: results.length, successful, failed },
-      results,
-    })
+    if (!articles || articles.length === 0) {
+      return NextResponse.json({ error: 'No articles found' }, { status: 404 })
+    }
 
+    const allResults = []
+    for (const art of articles) {
+      const { results } = await translateAllLanguages(art.id)
+      allResults.push({ slug: art.slug, results })
+    }
+
+    return NextResponse.json({ success: true, articles: allResults })
   } catch (error: any) {
-    return NextResponse.json({
-      error: 'Translation failed',
-      details: error.message,
-      results,
-    }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
 
 /**
- * GET /api/translate - Get translation status
+ * GET /api/translate - Get translation coverage and status
  */
 export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get('authorization')
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-  
-  if (!authHeader || !serviceKey || authHeader !== `Bearer ${serviceKey}`) {
+  if (!authorize(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const supabaseAdmin = createServerClient()
-  if (!supabaseAdmin) {
-    return NextResponse.json({ error: 'Server client not configured. Check SUPABASE env vars.' }, { status: 500 })
+  const supabase = createServerClient()
+  if (!supabase) {
+    return NextResponse.json({ error: 'Server client not configured' }, { status: 500 })
   }
 
   try {
-    // Get translation coverage
-    const { data: translations } = await supabaseAdmin
-      .from('kb_translations')
-      .select('article_id, language_code, status, translated_by, translated_at')
+    const [
+      { data: translations },
+      { data: jobs },
+      { data: articles },
+    ] = await Promise.all([
+      supabase.from('kb_translations').select('article_id, language_code, status, translated_by, translated_at, source_hash'),
+      supabase.from('translation_jobs').select('*').order('created_at', { ascending: false }).limit(50),
+      supabase.from('kb_articles').select('id, slug'),
+    ])
 
-    // Get recent jobs
-    const { data: jobs } = await supabaseAdmin
-      .from('translation_jobs')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(20)
-
-    // Get articles
-    const { data: articles } = await supabaseAdmin
-      .from('kb_articles')
-      .select('id, slug')
-
-    const coverage: Record<string, string[]> = {}
+    const coverage: Record<string, Record<string, { status: string; translated_by: string | null }>> = {}
     if (translations && articles) {
       for (const article of articles) {
-        const articleTranslations = translations
-          .filter(t => t.article_id === article.id)
-          .map(t => t.language_code)
-        coverage[article.slug] = articleTranslations
+        coverage[article.slug] = {}
+        const articleTranslations = translations.filter(t => t.article_id === article.id)
+        for (const t of articleTranslations) {
+          coverage[article.slug][t.language_code] = {
+            status: t.status,
+            translated_by: t.translated_by,
+          }
+        }
       }
     }
 
@@ -291,9 +134,57 @@ export async function GET(request: NextRequest) {
       totalTranslations: translations?.length || 0,
     })
   } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+}
+
+/**
+ * PUT /api/translate - Update article and check for outdated translations
+ * Body: { article_id: string, title?: string, description?: string, content?: string }
+ */
+export async function PUT(request: NextRequest) {
+  if (!authorize(request)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const supabase = createServerClient()
+  if (!supabase) {
+    return NextResponse.json({ error: 'Server client not configured' }, { status: 500 })
+  }
+
+  const body = await request.json().catch(() => ({}))
+  const { article_id, title, description, content } = body
+
+  if (!article_id) {
+    return NextResponse.json({ error: 'article_id required' }, { status: 400 })
+  }
+
+  try {
+    // Update the source (Danish) translation
+    const updateFields: Record<string, any> = { updated_at: new Date().toISOString() }
+    if (title !== undefined) updateFields.title = title
+    if (description !== undefined) updateFields.description = description
+    if (content !== undefined) updateFields.content = content
+
+    const { error: updateError } = await supabase
+      .from('kb_translations')
+      .update(updateFields)
+      .eq('article_id', article_id)
+      .eq('language_code', 'da')
+
+    if (updateError) throw updateError
+
+    // Check for outdated translations
+    const outdatedLangs = await markOutdatedTranslations(article_id)
+
     return NextResponse.json({
-      error: 'Failed to fetch translation status',
-      details: error.message,
-    }, { status: 500 })
+      success: true,
+      outdatedLanguages: outdatedLangs,
+      message: outdatedLangs.length > 0
+        ? `${outdatedLangs.length} translations marked as outdated`
+        : 'No translations affected',
+    })
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
