@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface HeaderProps {
   onToggleSidebar: () => void
@@ -13,8 +14,17 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
         ☰
       </button>
       <Link href="/" className="header-logo">
-        <span>SPY</span>
-        Knowledge Base
+        <Image
+          src="/spy-logo.jpg"
+          alt="SPY"
+          width={120}
+          height={45}
+          style={{ filter: 'invert(1)', height: '45px', width: 'auto' }}
+          priority
+        />
+        <span style={{ fontSize: '0.75rem', opacity: 0.7, marginLeft: '8px', alignSelf: 'flex-end', marginBottom: '2px' }}>
+          Knowledge Base
+        </span>
       </Link>
     </header>
   )
