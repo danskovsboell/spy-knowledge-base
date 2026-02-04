@@ -15,11 +15,11 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
       </button>
       <Link href="/" className="header-logo">
         <Image
-          src="/spy-logo.jpg"
+          src="/spy-logo-white.jpg"
           alt="SPY"
           width={120}
           height={45}
-          style={{ filter: 'invert(1)', height: '45px', width: 'auto' }}
+          style={{ height: '45px', width: 'auto' }}
           priority
         />
         <span style={{ fontSize: '0.75rem', opacity: 0.7, marginLeft: '8px', alignSelf: 'flex-end', marginBottom: '2px' }}>
