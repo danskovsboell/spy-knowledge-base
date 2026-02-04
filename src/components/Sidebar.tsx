@@ -2,38 +2,42 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { type Locale } from '../lib/i18n'
+import { getTranslations } from '../lib/translations'
 
 interface SidebarProps {
+  lang: Locale
   isOpen: boolean
   onClose: () => void
 }
 
-const navItems = [
-  {
-    section: '🏠 Oversigt',
-    items: [
-      { href: '/', label: 'Startside', icon: '📊' },
-    ],
-  },
-  {
-    section: '🔌 Integrationer',
-    items: [
-      { href: '/ongoing', label: 'Ongoing WMS', icon: '📦' },
-      { href: '/sitoo', label: 'Sitoo POS', icon: '🏪' },
-      { href: '/nemedi', label: 'NemEDI', icon: '📄' },
-      { href: '/lector', label: 'Lector Customs', icon: '🛃' },
-    ],
-  },
-  {
-    section: '⚙️ Funktioner',
-    items: [
-      { href: '/dedication', label: 'Dedication / Reservering', icon: '🎯' },
-    ],
-  },
-]
-
-export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+export default function Sidebar({ lang, isOpen, onClose }: SidebarProps) {
   const pathname = usePathname()
+  const t = getTranslations(lang)
+
+  const navItems = [
+    {
+      section: t.navOverview,
+      items: [
+        { href: `/${lang}`, label: t.navHome, icon: '📊' },
+      ],
+    },
+    {
+      section: t.navIntegrations,
+      items: [
+        { href: `/${lang}/ongoing`, label: t.ongoingTitle, icon: '📦' },
+        { href: `/${lang}/sitoo`, label: t.sitooTitle, icon: '🏪' },
+        { href: `/${lang}/nemedi`, label: t.nemediTitle, icon: '📄' },
+        { href: `/${lang}/lector`, label: t.lectorTitle, icon: '🛃' },
+      ],
+    },
+    {
+      section: t.navFunctions,
+      items: [
+        { href: `/${lang}/dedication`, label: t.dedicationTitle, icon: '🎯' },
+      ],
+    },
+  ]
 
   return (
     <>

@@ -1,15 +1,19 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
-import { checkPassword, setAuthenticated } from '../../lib/auth'
+import { type Locale } from '../lib/i18n'
+import { getTranslations } from '../lib/translations'
+import { checkPassword, setAuthenticated } from '../lib/auth'
 
 interface LoginPageProps {
+  lang: Locale
   onSuccess: () => void
 }
 
-export default function LoginPage({ onSuccess }: LoginPageProps) {
+export default function LoginPage({ lang, onSuccess }: LoginPageProps) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const t = getTranslations(lang)
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -17,7 +21,7 @@ export default function LoginPage({ onSuccess }: LoginPageProps) {
       setAuthenticated()
       onSuccess()
     } else {
-      setError('Forkert adgangskode. Prøv igen.')
+      setError(t.loginError)
       setPassword('')
     }
   }
@@ -26,22 +30,22 @@ export default function LoginPage({ onSuccess }: LoginPageProps) {
     <div className="login-page">
       <form className="login-card" onSubmit={handleSubmit}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>🔐</div>
-        <h1>SPY Knowledge Base</h1>
-        <p>Indtast adgangskode for at fortsætte</p>
+        <h1>{t.loginTitle}</h1>
+        <p>{t.loginSubtitle}</p>
         {error && <div className="login-error">{error}</div>}
         <input
           className="login-input"
           type="password"
-          placeholder="Adgangskode"
+          placeholder={t.loginPlaceholder}
           value={password}
           onChange={e => setPassword(e.target.value)}
           autoFocus
         />
         <button className="login-btn" type="submit">
-          Log ind →
+          {t.loginButton}
         </button>
         <p style={{ fontSize: 12, color: '#666666', marginTop: 24 }}>
-          Kun for SPY-medarbejdere
+          {t.loginFooter}
         </p>
       </form>
     </div>

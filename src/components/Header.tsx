@@ -2,18 +2,24 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { type Locale } from '../lib/i18n'
+import { getTranslations } from '../lib/translations'
+import LanguageSwitcher from './LanguageSwitcher'
 
 interface HeaderProps {
+  lang: Locale
   onToggleSidebar: () => void
 }
 
-export default function Header({ onToggleSidebar }: HeaderProps) {
+export default function Header({ lang, onToggleSidebar }: HeaderProps) {
+  const t = getTranslations(lang)
+
   return (
     <header className="app-header">
       <button className="mobile-toggle" onClick={onToggleSidebar} aria-label="Toggle menu">
         ☰
       </button>
-      <Link href="/" className="header-logo">
+      <Link href={`/${lang}`} className="header-logo">
         <Image
           src="/spy-logo-black.jpg"
           alt="SPY"
@@ -23,9 +29,12 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           priority
         />
         <span style={{ fontSize: '0.75rem', opacity: 0.6, marginLeft: '8px', alignSelf: 'flex-end', marginBottom: '2px', color: '#c9a227' }}>
-          Knowledge Base
+          {t.knowledgeBase}
         </span>
       </Link>
+      <div style={{ marginLeft: 'auto' }}>
+        <LanguageSwitcher lang={lang} />
+      </div>
     </header>
   )
 }

@@ -1,6 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useParams } from 'next/navigation'
+import { type Locale } from '../../../lib/i18n'
+import { getTranslations } from '../../../lib/translations'
 
 /* ─── SPY dark mode color palette ─── */
 const C = {
@@ -364,14 +367,18 @@ function StepCard({ num, title, desc }: { num: string; title: string; desc: stri
 }
 
 export default function DedicationPage() {
+  const params = useParams()
+  const locale = (params.lang as Locale) || 'da'
+  const t = getTranslations(locale)
+
   return (
     <>
       <div className="page-header">
         <div className="page-breadcrumb">
-          <a href="/">Oversigt</a> → Funktioner → Dedication
+          <a href={`/${locale}`}>{t.breadcrumbOverview}</a> → {t.sectionFunctions} → Dedication
         </div>
-        <h1>Dedication / Reservering</h1>
-        <p>Forstå hvordan du styrer fordelingen af varer mellem stock-salg og pre-order sæsoner</p>
+        <h1>{t.dedicationTitle}</h1>
+        <p>{t.dedicationPageDesc}</p>
       </div>
       <div style={{ background: '#222222', borderRadius: 12, padding: '8px 24px', border: '1px solid #333333' }}>
         <Section1 />

@@ -1,11 +1,19 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { type Locale } from '../lib/i18n'
+import { getTranslations } from '../lib/translations'
 import { isAuthenticated } from '../lib/auth'
-import LoginPage from '../app/login/LoginPage'
+import LoginPage from './LoginPage'
 
-export default function AuthGuard({ children }: { children: React.ReactNode }) {
+interface AuthGuardProps {
+  children: React.ReactNode
+  lang: Locale
+}
+
+export default function AuthGuard({ children, lang }: AuthGuardProps) {
   const [authed, setAuthed] = useState<boolean | null>(null)
+  const t = getTranslations(lang)
 
   useEffect(() => {
     setAuthed(isAuthenticated())
@@ -21,13 +29,13 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
         justifyContent: 'center',
         background: '#0d0d0d',
       }}>
-        <div style={{ color: '#c9a227', fontSize: 16, fontFamily: "'Raleway', sans-serif" }}>Indlæser...</div>
+        <div style={{ color: '#c9a227', fontSize: 16, fontFamily: "'Raleway', sans-serif" }}>{t.loading}</div>
       </div>
     )
   }
 
   if (!authed) {
-    return <LoginPage onSuccess={() => setAuthed(true)} />
+    return <LoginPage lang={lang} onSuccess={() => setAuthed(true)} />
   }
 
   return <>{children}</>
