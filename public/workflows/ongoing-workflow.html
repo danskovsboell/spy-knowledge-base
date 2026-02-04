@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ongoing WMS Integration Workflow - SPY System</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --spy-black: #1a1a1a;
+            --spy-dark: #0f0f0f;
+            --spy-gold: #c9a227;
+            --spy-gold-light: #d4b84a;
+            --spy-white: #ffffff;
+            --spy-gray: #888888;
+            --spy-gray-light: #b3b3b3;
+            --spy-gray-dark: #333333;
+            --ongoing-green: #00875a;
+            --ongoing-green-light: #36b37e;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Raleway', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--spy-black);
+            min-height: 100vh;
+            padding: 40px;
+            color: var(--spy-white);
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { 
+            text-align: center; 
+            margin-bottom: 10px; 
+            font-size: 2.5em;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+        }
+        .subtitle { text-align: center; color: var(--spy-gray); margin-bottom: 40px; }
+        
+        .workflow-section {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--spy-gold);
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+        }
+        
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .flow-box {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 12px;
+            padding: 15px;
+            min-width: 130px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .flow-box:hover {
+            border-color: var(--spy-gold);
+            background: rgba(201, 162, 39, 0.05);
+        }
+        
+        .flow-box.ongoing { border-top: 3px solid var(--ongoing-green); }
+        .flow-box.spy { border-top: 3px solid var(--spy-gold); }
+        .flow-box.warehouse { border-top: 3px solid #3498db; }
+        .flow-box.supplier { border-top: 3px solid #9b59b6; }
+        
+        .flow-box-icon { font-size: 1.8em; margin-bottom: 8px; }
+        .flow-box-title { font-weight: 600; margin-bottom: 5px; color: var(--spy-white); font-size: 0.9em; }
+        .flow-box-desc { font-size: 0.75em; color: var(--spy-gray); }
+        
+        .arrow { font-size: 1.5em; color: var(--spy-gold); }
+        .arrow.reverse { color: var(--ongoing-green); }
+        
+        .status-flow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--spy-dark);
+            border-radius: 8px;
+        }
+        .status-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.85em;
+            text-align: center;
+        }
+        .status-box.active { border-color: var(--ongoing-green); color: var(--ongoing-green); }
+        .status-box.error { border-color: #e74c3c; color: #e74c3c; }
+        .status-arrow { color: var(--spy-gray); }
+        
+        .doc-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .doc-card {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+        .doc-card:hover { border-color: var(--spy-gold); }
+        .doc-card.export { border-left: 3px solid var(--spy-gold); }
+        .doc-card.import { border-left: 3px solid var(--ongoing-green); }
+        
+        .doc-card-title { font-weight: 600; margin-bottom: 8px; color: var(--spy-gold); }
+        .doc-card-full { font-size: 0.8em; color: var(--spy-gray); margin-bottom: 8px; }
+        .doc-card-desc { font-size: 0.85em; color: var(--spy-gray-light); }
+        
+        .code-path {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.7em;
+            color: var(--spy-gold);
+            background: rgba(201, 162, 39, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 8px;
+            word-break: break-all;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+        .legend-color.ongoing { background: var(--ongoing-green); }
+        .legend-color.spy { background: var(--spy-gold); }
+        .legend-color.warehouse { background: #3498db; }
+        .legend-color.supplier { background: #9b59b6; }
+        
+        /* Status Range Styles */
+        .range-section {
+            margin-top: 20px;
+        }
+        .range-title {
+            font-weight: 600;
+            color: var(--spy-gold);
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+        .range-bar-container {
+            display: flex;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 42px;
+            border: 1px solid var(--spy-gray-dark);
+        }
+        .range-segment {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 6px;
+            font-size: 0.72em;
+            font-weight: 600;
+            color: var(--spy-white);
+            position: relative;
+            min-width: 40px;
+            border-right: 1px solid rgba(0,0,0,0.3);
+        }
+        .range-segment:last-child { border-right: none; }
+        .range-segment .range-label { font-size: 0.95em; line-height: 1.2; }
+        .range-segment .range-nums { font-size: 0.85em; opacity: 0.8; font-weight: 400; }
+        
+        .range-segment.seg-customer { background: #2c3e50; }
+        .range-segment.seg-error { background: #c0392b; }
+        .range-segment.seg-notified { background: #2980b9; }
+        .range-segment.seg-open { background: #2980b9; }
+        .range-segment.seg-released { background: #27ae60; }
+        .range-segment.seg-allocated { background: #16a085; }
+        .range-segment.seg-arrival { background: #8e44ad; }
+        .range-segment.seg-handover { background: #d35400; }
+        .range-segment.seg-deviation { background: #e67e22; }
+        .range-segment.seg-picked { background: #27ae60; }
+        .range-segment.seg-sent { background: #00875a; }
+        .range-segment.seg-retrieved { background: #2ecc71; }
+        .range-segment.seg-returned { background: #e67e22; }
+        .range-segment.seg-received { background: #00875a; }
+        .range-segment.seg-completed { background: #00875a; }
+        .range-segment.seg-inprogress { background: #27ae60; }
+        .range-segment.seg-shredded { background: #7f8c8d; }
+        
+        .range-important-note {
+            background: rgba(201, 162, 39, 0.1);
+            border: 1px solid var(--spy-gold);
+            border-left: 4px solid var(--spy-gold);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .range-important-note strong { color: var(--spy-gold); }
+        .range-important-note code {
+            background: rgba(255,255,255,0.1);
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+        .range-example {
+            background: rgba(0, 135, 90, 0.08);
+            border: 1px solid rgba(0, 135, 90, 0.3);
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-top: 12px;
+            font-size: 0.85em;
+            color: var(--spy-gray-light);
+        }
+        .range-example strong { color: var(--ongoing-green); }
+        
+        .code-structure {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.85em;
+            line-height: 1.8;
+            background: var(--spy-dark);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--spy-gray-dark);
+        }
+        .code-structure .folder { color: var(--spy-gold); }
+        .code-structure .comment { color: var(--spy-gray); }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .info-card {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .info-card-title {
+            font-weight: 600;
+            color: var(--spy-gold);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .info-card-list {
+            list-style: none;
+            padding: 0;
+        }
+        .info-card-list li {
+            padding: 5px 0;
+            color: var(--spy-gray-light);
+            font-size: 0.9em;
+        }
+        .info-card-list li::before {
+            content: "\2192  ";
+            color: var(--spy-gold);
+        }
+        .info-card-list li.active::before {
+            content: "\2713  ";
+            color: var(--ongoing-green);
+        }
+        
+        .webhook-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .webhook-item {
+            background: rgba(0, 135, 90, 0.1);
+            border: 1px solid var(--ongoing-green);
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 0.85em;
+        }
+        .webhook-item-title { color: var(--ongoing-green); font-weight: 600; }
+        .webhook-item-desc { color: var(--spy-gray); font-size: 0.8em; margin-top: 4px; }
+        
+        .scenario-label {
+            display: inline-block;
+            background: rgba(201, 162, 39, 0.15);
+            border: 1px solid var(--spy-gold);
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 0.85em;
+            color: var(--spy-gold);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .scenario-label.ongoing-label {
+            background: rgba(0, 135, 90, 0.15);
+            border-color: var(--ongoing-green);
+            color: var(--ongoing-green);
+        }
+        
+        .footer-text {
+            text-align: center;
+            color: var(--spy-gray);
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+        .footer-text span { color: var(--spy-gold); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const Arrow = ({ reverse }) => <span className={`arrow ${reverse ? 'reverse' : ''}`}>{reverse ? '\u2190' : '\u2192'}</span>;
+        
+        const FlowBox = ({ icon, title, desc, type }) => (
+            <div className={`flow-box ${type}`}>
+                <div className="flow-box-icon">{icon}</div>
+                <div className="flow-box-title">{title}</div>
+                <div className="flow-box-desc">{desc}</div>
+            </div>
+        );
+        
+        const DocCard = ({ code, fullName, desc, direction, path }) => (
+            <div className={`doc-card ${direction}`}>
+                <div className="doc-card-title">{code}</div>
+                <div className="doc-card-full">{fullName}</div>
+                <div className="doc-card-desc">{desc}</div>
+                {path && <div className="code-path">{path}</div>}
+            </div>
+        );
+        
+        const WebhookItem = ({ title, desc }) => (
+            <div className="webhook-item">
+                <div className="webhook-item-title">{title}</div>
+                <div className="webhook-item-desc">{desc}</div>
+            </div>
+        );
+        
+        const OngoingWorkflow = () => {
+            return (
+                <div className="container">
+                    <h1>Ongoing WMS Integration Workflow</h1>
+                    <p className="subtitle">Visualisering af SPY's integration med Ongoing Warehouse Management System</p>
+                    
+                    <div className="legend">
+                        <div className="legend-item">
+                            <div className="legend-color ongoing"></div>
+                            <span>Ongoing WMS</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color spy"></div>
+                            <span>SPY System</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color warehouse"></div>
+                            <span>Fysisk lager</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color supplier"></div>
+                            <span>Leverand&oslash;r</span>
+                        </div>
+                    </div>
+                    
+                    {/* ============ UDGÅENDE ORDRE ============ */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">&#x1F4E6; Udg&aring;ende ordre (Salgsordre &rarr; Lager &rarr; Kunde)</h2>
+                        <div className="flow-container">
+                            <FlowBox icon="&#x1F6D2;" title="Ordre i SPY" desc="Packing klar" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F4CB;" title="PRICAT" desc="Artikeldata" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F4E4;" title="Order Export" desc="Send til Ongoing" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F3ED;" title="Ongoing" desc="Modtager ordre" type="ongoing" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F4E6;" title="Pick &amp; Pack" desc="Lagerarbejde" type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F514;" title="Webhook" desc="Status: Sent" type="ongoing" />
+                            <Arrow />
+                            <FlowBox icon="&#x2705;" title="SPY opdateret" desc="DESADV modtaget" type="spy" />
+                        </div>
+                        
+                        <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>Ordrestatus-flow i Ongoing (Sales Orders):</h4>
+                        <div className="status-flow">
+                            <div className="status-box">CustomerSpecific (0)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box error">Error (150)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box">Open (200)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box">Released (300)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box">Allocated (320)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box active">Picked (400)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box active">Sent (450)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box active">Retrieved (500)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box" style={{borderColor: '#e67e22', color: '#e67e22'}}>Returned (800)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box error">Shredded (1000)</div>
+                        </div>
+                        <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '8px'}}>
+                            &#x1F7E2; Gr&oslash;n = SPY opretter packing/levering &nbsp; | &nbsp; &#x1F7E0; Orange = Retur-h&aring;ndtering &nbsp; | &nbsp; &#x1F534; R&oslash;d = Fejl / slettet
+                        </p>
+                    </div>
+                    
+                    {/* ============ INDGÅENDE VARER ============ */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">&#x1F4E5; Indg&aring;ende varer (Leverand&oslash;r &rarr; Lager)</h2>
+                        <div className="flow-container">
+                            <FlowBox icon="&#x1F3ED;" title="Leverand&oslash;r" desc="Sender varer" type="supplier" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F4CB;" title="Purchase Order" desc="Forventet modtagelse" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F4E4;" title="PO Export" desc="Send til Ongoing" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F3ED;" title="Ongoing" desc="Forventer varer" type="ongoing" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F4E6;" title="Modtagelse" desc="Varer tjekkes ind" type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F514;" title="Webhook" desc="PO Status Changed" type="ongoing" />
+                            <Arrow />
+                            <FlowBox icon="&#x2705;" title="SPY opdateret" desc="Lager justeret" type="spy" />
+                        </div>
+                        
+                        <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>Purchase Order status-flow i Ongoing:</h4>
+                        <div className="status-flow">
+                            <div className="status-box">CustomerSpecific (0)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box">Notified (100)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box">ArrivalAtLocation (200)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box">HandOver (300)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box active">Deviation (400)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box active">Received (500)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box error">Shredded (900)</div>
+                        </div>
+                        <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '8px'}}>
+                            &#x1F7E2; Gr&oslash;n = SPY modtager PShipping (Deviation k&oslash;rer ogs&aring; receive-flow med korrektion)
+                        </p>
+                    </div>
+                    
+                    {/* ============ RETURNERINGER ============ */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">&#x1F504; Returneringer</h2>
+                        
+                        <div className="scenario-label">Scenarie A: Retur starter i SPY</div>
+                        <div className="flow-container" style={{marginBottom: '25px'}}>
+                            <FlowBox icon="&#x21A9;&#xFE0F;" title="Claim i SPY" desc="Retur oprettet" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F4E4;" title="Return Order" desc="Send til Ongoing" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F3ED;" title="Ongoing" desc="Forventer retur" type="ongoing" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F4E6;" title="Modtagelse" desc="Retur tjekkes ind" type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F514;" title="Webhook" desc="PO Status Changed (return PO)" type="ongoing" />
+                            <Arrow />
+                            <FlowBox icon="&#x2705;" title="Claim bekr&aelig;ftet" desc="ClaimConfirmer" type="spy" />
+                        </div>
+                        
+                        <div className="scenario-label ongoing-label">Scenarie B: Retur starter i Ongoing</div>
+                        <div className="flow-container">
+                            <FlowBox icon="&#x1F4E6;" title="Retur modtaget" desc="Vare returneret" type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F514;" title="Return Webhook" desc="Artikel returneret" type="ongoing" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F4DD;" title="Opret Claim" desc="ClaimImporter" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F504;" title="Order Returned" desc="Status 800" type="ongoing" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F4E7;" title="Email notifikation" desc="Ny claim i SPY" type="spy" />
+                        </div>
+                        
+                        <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>Return Order status-flow i Ongoing:</h4>
+                        <div className="status-flow">
+                            <div className="status-box">CustomerSpecific (0)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box">Notified (200)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box">ArrivalAtLocation (300)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box error">Deviation (400)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box active">Returned (500)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box error">Shredded (1000)</div>
+                        </div>
+                        <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '8px'}}>
+                            &#x1F7E2; Gr&oslash;n = Claim bekr&aelig;ftes i SPY &nbsp; | &nbsp; &#x1F534; R&oslash;d = Fejl / annullering
+                        </p>
+                    </div>
+                    
+                    {/* ============ PRODUCTION ORDERS ============ */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">&#x1F3ED; Production Orders (Assortment Splits)</h2>
+                        <div className="flow-container">
+                            <FlowBox icon="&#x1F4CA;" title="Assortment Split" desc="Opret i SPY" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F4E4;" title="Production Order" desc="Send til Ongoing" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F3ED;" title="Ongoing" desc="Produktionsordre" type="ongoing" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F4E6;" title="Ompak/Split" desc="Lagerarbejde" type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="&#x1F514;" title="Webhook" desc="Status changed" type="ongoing" />
+                            <Arrow />
+                            <FlowBox icon="&#x2705;" title="SPY opdateret" desc="Split godkendt" type="spy" />
+                        </div>
+                        
+                        <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>Production Order status-flow i Ongoing:</h4>
+                        <div className="status-flow">
+                            <div className="status-box">CustomerSpecific (0)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box">Open (100)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box">Released (200)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box">InProgress (300)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box active">Completed (500)</div>
+                            <span className="status-arrow">&rarr;</span>
+                            <div className="status-box error">Shredded (1000)</div>
+                        </div>
+                        <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '8px'}}>
+                            &#x1F7E2; Gr&oslash;n = Split markeres som godkendt i SPY
+                        </p>
+                    </div>
+                    
+                    {/* ============ DOKUMENTTYPER ============ */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">&#x1F4CB; Dokumenttyper</h2>
+                        
+                        <h3 style={{marginTop: '20px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>&#x1F4E4; Export til Ongoing (SPY &rarr; Ongoing)</h3>
+                        <div className="doc-types">
+                            <DocCard 
+                                code="Articles (PRICAT)" 
+                                fullName="Product Master Data" 
+                                desc="Artikeldata: EAN, navn, st&oslash;rrelse, farve, v&aelig;gt. Sendes via POST/PUT til Ongoing n&aring;r PRICAT genereres." 
+                                direction="export" 
+                                path="OngoingExportPRICATTask"
+                            />
+                            <DocCard 
+                                code="Orders" 
+                                fullName="Sales Orders" 
+                                desc="Udg&aring;ende ordrer til picking og forsendelse" 
+                                direction="export" 
+                                path="OngoingExportOrderTask"
+                            />
+                            <DocCard 
+                                code="Purchase Orders" 
+                                fullName="Inbound Purchase Orders" 
+                                desc="Forventede varemodtagelser fra leverand&oslash;rer" 
+                                direction="export" 
+                                path="OngoingExportPurchaseOrderTask"
+                            />
+                            <DocCard 
+                                code="Production Orders" 
+                                fullName="Assortment Splits" 
+                                desc="Ompaknings- og split-ordrer" 
+                                direction="export" 
+                                path="OngoingExportProductionOrderTask"
+                            />
+                            <DocCard 
+                                code="Return Orders" 
+                                fullName="Expected Returns" 
+                                desc="Forventede returneringer (B2C og B2B)" 
+                                direction="export" 
+                                path="OngoingExportReturnOrderTask"
+                            />
+                        </div>
+                        
+                        <h3 style={{marginTop: '30px', marginBottom: '15px', color: 'var(--ongoing-green)', fontSize: '1.1em'}}>&#x1F4E5; Webhooks fra Ongoing (Ongoing &rarr; SPY)</h3>
+                        <div className="webhook-grid">
+                            <WebhookItem title="OrderStatusIsChanged" desc="Ordre picked, sendt, hentet, returneret, etc." />
+                            <WebhookItem title="PurchaseOrderStatusIsChanged" desc="Varer modtaget p&aring; lager (inkl. return PO)" />
+                            <WebhookItem title="Return" desc="Returvare modtaget (opretter claim i SPY)" />
+                            <WebhookItem title="InventoryTransaction" desc="Lagerjusteringer, opt&aelig;lling" />
+                            <WebhookItem title="ProductionOrderStatusIsChanged" desc="Split/ompak fuldf&oslash;rt" />
+                        </div>
+                        <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '10px'}}>
+                            NB: Artikler synkroniseres kun &eacute;n vej &mdash; SPY sender artikeldata til Ongoing via PRICAT (POST/PUT). ArticleIsCreated/Updated webhooks bruges ikke.
+                        </p>
+                    </div>
+                    
+                    {/* ============ TEKNISK OVERSIGT ============ */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">&#x2699;&#xFE0F; Teknisk oversigt</h2>
+                        <div className="info-grid">
+                            <div className="info-card">
+                                <div className="info-card-title">&#x1F50C; API Integration</div>
+                                <ul className="info-card-list">
+                                    <li>REST API med JSON payloads</li>
+                                    <li>Webhook callbacks til SPY</li>
+                                    <li>Retry-logik p&aring; rate limit og server errors (GuzzleRetryMiddleware)</li>
+                                    <li>Error handler middleware (typed API exceptions)</li>
+                                    <li>Async job queue (Tasks)</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">&#x1F4E6; Order Statuses</div>
+                                <ul className="info-card-list">
+                                    <li>0: CustomerSpecific</li>
+                                    <li>150: Error</li>
+                                    <li>200: Open</li>
+                                    <li>300: Released</li>
+                                    <li>320: Allocated</li>
+                                    <li className="active">400: Picked</li>
+                                    <li className="active">450: Sent</li>
+                                    <li className="active">500: Retrieved</li>
+                                    <li>800: Returned</li>
+                                    <li>1000: Shredded</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">&#x1F4E5; Purchase Order Statuses</div>
+                                <ul className="info-card-list">
+                                    <li>0: CustomerSpecific</li>
+                                    <li>100: Notified</li>
+                                    <li>200: ArrivalAtLocation</li>
+                                    <li>300: HandOver</li>
+                                    <li className="active">400: Deviation</li>
+                                    <li className="active">500: Received</li>
+                                    <li>900: Shredded</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">&#x21A9;&#xFE0F; Return Order Statuses</div>
+                                <ul className="info-card-list">
+                                    <li>0: CustomerSpecific</li>
+                                    <li>200: Notified</li>
+                                    <li>300: ArrivalAtLocation</li>
+                                    <li>400: Deviation</li>
+                                    <li className="active">500: Returned</li>
+                                    <li>1000: Shredded</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">&#x1F3ED; Production Order Statuses</div>
+                                <ul className="info-card-list">
+                                    <li>0: CustomerSpecific</li>
+                                    <li>100: Open</li>
+                                    <li>200: Released</li>
+                                    <li>300: InProgress</li>
+                                    <li className="active">500: Completed</li>
+                                    <li>1000: Shredded</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">&#x1F3ED; Ongoing Entiteter</div>
+                                <ul className="info-card-list">
+                                    <li>Articles (produkter)</li>
+                                    <li>Orders (udg&aring;ende)</li>
+                                    <li>Purchase Orders (indg&aring;ende)</li>
+                                    <li>Production Orders (splits)</li>
+                                    <li>Returns</li>
+                                    <li>Inventory</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* ============ STATUS GRUPPER / RANGES ============ */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">&#x1F4CA; Status-grupper / Ranges &mdash; S&aring;dan virker Ongoing statuses</h2>
+                        
+                        <div className="range-important-note">
+                            <strong>&#x26A0;&#xFE0F; Vigtigt koncept:</strong> Ongoing statuses fungerer som <strong>GRUPPER / RANGES</strong> &mdash; ikke individuelle v&aelig;rdier.<br/>
+                            Alle statusnumre fra starten af en gruppe og indtil n&aelig;ste gruppe starter, tilh&oslash;rer samme gruppe.<br/><br/>
+                            <strong>Eksempel:</strong> Hvis <code>Notified = 100</code> og n&aelig;ste gruppe er <code>ArrivalAtLocation = 200</code>, 
+                            s&aring; er status <code>100</code>, <code>101</code>, <code>142</code>, <code>199</code> ALLE "Notified".<br/>
+                            Det betyder at din kode skal tjekke med <strong>ranges</strong> (fx <code>status &gt;= 100 &amp;&amp; status &lt; 200</code>) &mdash; ikke blot <code>status === 100</code>.
+                            <div className="range-example">
+                                <strong>&#x1F4A1; Praktisk konsekvens:</strong> N&aring;r du modtager en webhook med fx <code>orderStatus: 175</code>, 
+                                tilh&oslash;rer den gruppen <strong>CustomerSpecific</strong> (for Orders, 0&ndash;199), selvom 175 ikke er en "navngivet" v&aelig;rdi. 
+                                Undtagelse: <code>150</code> er altid <strong>Error</strong> for Orders.
+                            </div>
+                        </div>
+                        
+                        <div className="range-section">
+                            <div className="range-title">&#x1F4E6; Order Statuses (Salgsordrer)</div>
+                            <div className="range-bar-container">
+                                <div className="range-segment seg-customer" style={{flex: '20'}}>
+                                    <span className="range-label">CustomerSpecific</span>
+                                    <span className="range-nums">0&ndash;149</span>
+                                </div>
+                                <div className="range-segment seg-error" style={{flex: '1'}}>
+                                    <span className="range-label">Err</span>
+                                    <span className="range-nums">150</span>
+                                </div>
+                                <div className="range-segment seg-customer" style={{flex: '5'}}>
+                                    <span className="range-label">CustSpec</span>
+                                    <span className="range-nums">151&ndash;199</span>
+                                </div>
+                                <div className="range-segment seg-open" style={{flex: '10'}}>
+                                    <span className="range-label">Open</span>
+                                    <span className="range-nums">200&ndash;299</span>
+                                </div>
+                                <div className="range-segment seg-released" style={{flex: '2'}}>
+                                    <span className="range-label">Released</span>
+                                    <span className="range-nums">300&ndash;319</span>
+                                </div>
+                                <div className="range-segment seg-allocated" style={{flex: '8'}}>
+                                    <span className="range-label">Allocated</span>
+                                    <span className="range-nums">320&ndash;399</span>
+                                </div>
+                                <div className="range-segment seg-picked" style={{flex: '5'}}>
+                                    <span className="range-label">Picked</span>
+                                    <span className="range-nums">400&ndash;449</span>
+                                </div>
+                                <div className="range-segment seg-sent" style={{flex: '5'}}>
+                                    <span className="range-label">Sent</span>
+                                    <span className="range-nums">450&ndash;499</span>
+                                </div>
+                                <div className="range-segment seg-retrieved" style={{flex: '30'}}>
+                                    <span className="range-label">Retrieved</span>
+                                    <span className="range-nums">500&ndash;799</span>
+                                </div>
+                                <div className="range-segment seg-returned" style={{flex: '20'}}>
+                                    <span className="range-label">Returned</span>
+                                    <span className="range-nums">800&ndash;999</span>
+                                </div>
+                                <div className="range-segment seg-shredded" style={{flex: '5'}}>
+                                    <span className="range-label">Shredded</span>
+                                    <span className="range-nums">1000+</span>
+                                </div>
+                            </div>
+                            <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '6px'}}>
+                                &#x26A0;&#xFE0F; CustomerSpecific d&aelig;kker 0&ndash;199, men status <strong>150 er altid Error</strong> (undtagelse i rangen)
+                            </p>
+                        </div>
+                        
+                        <div className="range-section">
+                            <div className="range-title">&#x1F4E5; Purchase Order Statuses (Indg&aring;ende varer)</div>
+                            <div className="range-bar-container">
+                                <div className="range-segment seg-customer" style={{flex: '10'}}>
+                                    <span className="range-label">CustomerSpecific</span>
+                                    <span className="range-nums">0&ndash;99</span>
+                                </div>
+                                <div className="range-segment seg-notified" style={{flex: '10'}}>
+                                    <span className="range-label">Notified</span>
+                                    <span className="range-nums">100&ndash;199</span>
+                                </div>
+                                <div className="range-segment seg-arrival" style={{flex: '10'}}>
+                                    <span className="range-label">ArrivalAtLocation</span>
+                                    <span className="range-nums">200&ndash;299</span>
+                                </div>
+                                <div className="range-segment seg-handover" style={{flex: '10'}}>
+                                    <span className="range-label">HandOver</span>
+                                    <span className="range-nums">300&ndash;399</span>
+                                </div>
+                                <div className="range-segment seg-deviation" style={{flex: '10'}}>
+                                    <span className="range-label">Deviation</span>
+                                    <span className="range-nums">400&ndash;499</span>
+                                </div>
+                                <div className="range-segment seg-received" style={{flex: '40'}}>
+                                    <span className="range-label">Received</span>
+                                    <span className="range-nums">500&ndash;899</span>
+                                </div>
+                                <div className="range-segment seg-shredded" style={{flex: '10'}}>
+                                    <span className="range-label">Shredded</span>
+                                    <span className="range-nums">900+</span>
+                                </div>
+                            </div>
+                            <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '6px'}}>
+                                CustomerSpecific: 0&ndash;99 | Alle numre i et interval tilh&oslash;rer den gruppe
+                            </p>
+                        </div>
+                        
+                        <div className="range-section">
+                            <div className="range-title">&#x21A9;&#xFE0F; Return Order Statuses</div>
+                            <div className="range-bar-container">
+                                <div className="range-segment seg-customer" style={{flex: '20'}}>
+                                    <span className="range-label">CustomerSpecific</span>
+                                    <span className="range-nums">0&ndash;199</span>
+                                </div>
+                                <div className="range-segment seg-notified" style={{flex: '10'}}>
+                                    <span className="range-label">Notified</span>
+                                    <span className="range-nums">200&ndash;299</span>
+                                </div>
+                                <div className="range-segment seg-arrival" style={{flex: '10'}}>
+                                    <span className="range-label">ArrivalAtLoc.</span>
+                                    <span className="range-nums">300&ndash;399</span>
+                                </div>
+                                <div className="range-segment seg-deviation" style={{flex: '10'}}>
+                                    <span className="range-label">Deviation</span>
+                                    <span className="range-nums">400&ndash;499</span>
+                                </div>
+                                <div className="range-segment seg-received" style={{flex: '50'}}>
+                                    <span className="range-label">Returned</span>
+                                    <span className="range-nums">500&ndash;999</span>
+                                </div>
+                                <div className="range-segment seg-shredded" style={{flex: '5'}}>
+                                    <span className="range-label">Shredded</span>
+                                    <span className="range-nums">1000+</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="range-section">
+                            <div className="range-title">&#x1F3ED; Production Order Statuses</div>
+                            <div className="range-bar-container">
+                                <div className="range-segment seg-customer" style={{flex: '10'}}>
+                                    <span className="range-label">CustomerSpecific</span>
+                                    <span className="range-nums">0&ndash;99</span>
+                                </div>
+                                <div className="range-segment seg-open" style={{flex: '10'}}>
+                                    <span className="range-label">Open</span>
+                                    <span className="range-nums">100&ndash;199</span>
+                                </div>
+                                <div className="range-segment seg-released" style={{flex: '10'}}>
+                                    <span className="range-label">Released</span>
+                                    <span className="range-nums">200&ndash;299</span>
+                                </div>
+                                <div className="range-segment seg-inprogress" style={{flex: '20'}}>
+                                    <span className="range-label">InProgress</span>
+                                    <span className="range-nums">300&ndash;499</span>
+                                </div>
+                                <div className="range-segment seg-completed" style={{flex: '50'}}>
+                                    <span className="range-label">Completed</span>
+                                    <span className="range-nums">500&ndash;999</span>
+                                </div>
+                                <div className="range-segment seg-shredded" style={{flex: '5'}}>
+                                    <span className="range-label">Shredded</span>
+                                    <span className="range-nums">1000+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* ============ KODESTRUKTUR ============ */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">&#x1F5C2;&#xFE0F; Kodestruktur</h2>
+                        <div className="code-structure">
+                            <span className="folder">class/Integration/ExternalWarehouse/Ongoing/</span><br/>
+                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingExternalWarehouseIntegrationManager.php <span className="comment">&larr; Hovedlogik</span><br/>
+                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingProvider.php <span className="comment">&larr; API klient (Guzzle + retry-logik)</span><br/>
+                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingManager.php <span className="comment">&larr; Business logic</span><br/>
+                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; Data/ <span className="comment">&larr; Data objekter</span><br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; Enum/ <span className="comment">&larr; Statuses &amp; types</span><br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingOrderStatus.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingPurchaseOrderStatus.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingReturnOrderStatus.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingProductionOrderStatus.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2514;&#x2500;&#x2500; OngoingWebhookTemplate.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; RemoteArticleData.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2514;&#x2500;&#x2500; RemoteOrderData.php<br/>
+                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; Jobs/ <span className="comment">&larr; Async tasks</span><br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingExportOrderTask.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingExportPurchaseOrderTask.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingExportPRICATTask.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingExportProductionOrderTask.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingExportReturnOrderTask.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingOrderStatusIsChangedHandler.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingPurchaseOrderStatusIsChangedHandler.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingReturnWebhookTaskHandler.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingProductionOrderWebhookTaskHandler.php<br/>
+                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2514;&#x2500;&#x2500; OngoingInventoryTransactionWebhookTaskHandler.php<br/>
+                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; Flow/ <span className="comment">&larr; Workflow handlers</span><br/>
+                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; Exceptions/ <span className="comment">&larr; Typed API exceptions</span><br/>
+                            &nbsp;&nbsp;&#x2514;&#x2500;&#x2500; Middleware/ <span className="comment">&larr; Error handling (ErrorHandlerMiddleware)</span><br/><br/>
+                            <span className="folder">applications/API/V1/Controller/Webhook/Ongoing/</span><br/>
+                            &nbsp;&nbsp;&#x2514;&#x2500;&#x2500; Controller.php <span className="comment">&larr; Webhook endpoint</span>
+                        </div>
+                    </div>
+                    
+                    <p className="footer-text">
+                        Genereret af <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString('da-DK')}
+                    </p>
+                </div>
+            );
+        };
+        
+        ReactDOM.render(<OngoingWorkflow />, document.getElementById('root'));
+    </script>
+</body>
+</html>

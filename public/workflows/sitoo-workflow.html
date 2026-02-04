@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitoo POS Integration Workflow - SPY System</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --spy-black: #1a1a1a;
+            --spy-dark: #0f0f0f;
+            --spy-gold: #c9a227;
+            --spy-gold-light: #d4b84a;
+            --spy-white: #ffffff;
+            --spy-gray: #888888;
+            --spy-gray-light: #b3b3b3;
+            --spy-gray-dark: #333333;
+            --sitoo-blue: #0066cc;
+            --sitoo-blue-light: #3399ff;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Raleway', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--spy-black);
+            min-height: 100vh;
+            padding: 40px;
+            color: var(--spy-white);
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { 
+            text-align: center; 
+            margin-bottom: 10px; 
+            font-size: 2.5em;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+        }
+        .subtitle { text-align: center; color: var(--spy-gray); margin-bottom: 40px; }
+        
+        .workflow-section {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--spy-gold);
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+        }
+        
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .flow-box {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 160px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .flow-box:hover {
+            border-color: var(--spy-gold);
+            background: rgba(201, 162, 39, 0.05);
+        }
+        
+        .flow-box.sitoo { border-top: 3px solid var(--sitoo-blue); }
+        .flow-box.spy { border-top: 3px solid var(--spy-gold); }
+        .flow-box.store { border-top: 3px solid #2ecc71; }
+        
+        .flow-box-icon { font-size: 2em; margin-bottom: 10px; }
+        .flow-box-title { font-weight: 600; margin-bottom: 5px; color: var(--spy-white); }
+        .flow-box-desc { font-size: 0.85em; color: var(--spy-gray); }
+        
+        .arrow {
+            font-size: 2em;
+            color: var(--spy-gold);
+        }
+        .arrow.reverse { color: var(--sitoo-blue); }
+        
+        .doc-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .doc-card {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 10px;
+            padding: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .doc-card:hover {
+            border-color: var(--spy-gold);
+        }
+        .doc-card.import { border-left: 3px solid var(--sitoo-blue); }
+        .doc-card.export { border-left: 3px solid #2ecc71; }
+        
+        .doc-card-title { 
+            font-weight: 600; 
+            margin-bottom: 8px; 
+            color: var(--spy-gold);
+        }
+        .doc-card-full { font-size: 0.8em; color: var(--spy-gray); margin-bottom: 8px; }
+        .doc-card-desc { font-size: 0.85em; color: var(--spy-gray-light); }
+        
+        .code-path {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.7em;
+            color: var(--spy-gold);
+            background: rgba(201, 162, 39, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 8px;
+            word-break: break-all;
+            white-space: normal;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+        .legend-color.sitoo { background: var(--sitoo-blue); }
+        .legend-color.spy { background: var(--spy-gold); }
+        .legend-color.store { background: #2ecc71; }
+        
+        .code-structure {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.85em;
+            line-height: 1.8;
+            background: var(--spy-dark);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--spy-gray-dark);
+        }
+        .code-structure .folder { color: var(--spy-gold); }
+        .code-structure .comment { color: var(--spy-gray); }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .info-card {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .info-card-title {
+            font-weight: 600;
+            color: var(--spy-gold);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .info-card-list {
+            list-style: none;
+            padding: 0;
+        }
+        .info-card-list li {
+            padding: 5px 0;
+            color: var(--spy-gray-light);
+            font-size: 0.9em;
+        }
+        .info-card-list li::before {
+            content: "→ ";
+            color: var(--spy-gold);
+        }
+        
+        .footer-text {
+            text-align: center;
+            color: var(--spy-gray);
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+        .footer-text span { color: var(--spy-gold); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const Arrow = ({ reverse }) => <span className={`arrow ${reverse ? 'reverse' : ''}`}>{reverse ? '←' : '→'}</span>;
+        
+        const FlowBox = ({ icon, title, desc, type }) => (
+            <div className={`flow-box ${type}`}>
+                <div className="flow-box-icon">{icon}</div>
+                <div className="flow-box-title">{title}</div>
+                <div className="flow-box-desc">{desc}</div>
+            </div>
+        );
+        
+        const DocCard = ({ code, fullName, desc, direction, path }) => (
+            <div className={`doc-card ${direction}`}>
+                <div className="doc-card-title">{code}</div>
+                <div className="doc-card-full">{fullName}</div>
+                <div className="doc-card-desc">{desc}</div>
+                {path && <div className="code-path">{path}</div>}
+            </div>
+        );
+        
+        const SitooWorkflow = () => {
+            return (
+                <div className="container">
+                    <h1>Sitoo POS Integration Workflow</h1>
+                    <p className="subtitle">Visualisering af SPY's integration med Sitoo kassesystem</p>
+                    
+                    <div className="legend">
+                        <div className="legend-item">
+                            <div className="legend-color sitoo"></div>
+                            <span>Sitoo POS</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color spy"></div>
+                            <span>SPY System</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color store"></div>
+                            <span>Butik/Lager</span>
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">🏷️ Produktsynkronisering (SPY → Sitoo)</h2>
+                        <div className="flow-container">
+                            <FlowBox icon="👗" title="Style oprettet" desc="Nyt produkt i SPY" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="📋" title="PRICAT genereres" desc="Priskatalog med varianter" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🔄" title="API Push" desc="Products & Variants" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🏪" title="Sitoo" desc="Produkt synkroniseret" type="sitoo" />
+                            <Arrow />
+                            <FlowBox icon="📱" title="Kasse" desc="Klar til salg" type="store" />
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">📦 Lagersynkronisering (SPY → Sitoo)</h2>
+                        <div className="flow-container">
+                            <FlowBox icon="📊" title="Lagerændring" desc="Stock update i SPY" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="📄" title="STKUPD" desc="Stock Update dokument" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🔄" title="Warehouse API" desc="Opdater lagerbeholdning" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🏪" title="Sitoo" desc="Lager opdateret" type="sitoo" />
+                            <Arrow />
+                            <FlowBox icon="📱" title="Butikslager" desc="Viser korrekt antal" type="store" />
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">🚚 Forsendelse til butik (SPY → Sitoo)</h2>
+                        <div className="flow-container">
+                            <FlowBox icon="📦" title="Pakket ordre" desc="Consignment klar" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="📄" title="DESADV" desc="Forsendelsesadvis" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🔄" title="Shipment API" desc="Opret forsendelse" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🏪" title="Sitoo" desc="Shipment registreret" type="sitoo" />
+                            <Arrow />
+                            <FlowBox icon="✅" title="Butik modtager" desc="Varer checket ind" type="store" />
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">💰 Salgsrapportering (Sitoo → SPY)</h2>
+                        <div className="flow-container">
+                            <FlowBox icon="🛒" title="Salg i butik" desc="Transaktion gennemført" type="store" />
+                            <Arrow reverse />
+                            <FlowBox icon="🏪" title="Sitoo" desc="Ordre registreret" type="sitoo" />
+                            <Arrow reverse />
+                            <FlowBox icon="🔔" title="Webhook" desc="Order event trigger" type="sitoo" />
+                            <Arrow reverse />
+                            <FlowBox icon="📄" title="SLSRPT" desc="Sales Report" type="spy" />
+                            <Arrow reverse />
+                            <FlowBox icon="📊" title="SPY bogfører" desc="Salg + lager opdateret" type="spy" />
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">🔄 Lagerbevægelser (Sitoo → SPY)</h2>
+                        <div className="flow-container">
+                            <FlowBox icon="📋" title="Optælling/Manuel" desc="Stock transaction i butik" type="store" />
+                            <Arrow reverse />
+                            <FlowBox icon="🏪" title="Sitoo" desc="Transaction logged" type="sitoo" />
+                            <Arrow reverse />
+                            <FlowBox icon="🔔" title="Webhook" desc="Inventory event" type="sitoo" />
+                            <Arrow reverse />
+                            <FlowBox icon="⚙️" title="SPY Processing" desc="Juster beholdning" type="spy" />
+                            <Arrow reverse />
+                            <FlowBox icon="✅" title="Synkroniseret" desc="Lager matcher" type="spy" />
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">📋 Dokumenttyper</h2>
+                        
+                        <h3 style={{marginTop: '20px', marginBottom: '15px', color: '#2ecc71', fontSize: '1.1em'}}>📤 Export til Sitoo (SPY → Sitoo)</h3>
+                        <div className="doc-types">
+                            <DocCard 
+                                code="PRICAT" 
+                                fullName="Price Catalogue" 
+                                desc="Produkter, varianter, priser, kategorier, billeder" 
+                                direction="export" 
+                                path="POSExchangePRICATInterface"
+                            />
+                            <DocCard 
+                                code="DESADV" 
+                                fullName="Despatch Advice" 
+                                desc="Forsendelser/shipments til butikker" 
+                                direction="export" 
+                                path="POSExchangeDESADVInterface"
+                            />
+                            <DocCard 
+                                code="STKUPD" 
+                                fullName="Stock Update" 
+                                desc="Lagerbeholdninger per lokation" 
+                                direction="export" 
+                                path="class/EDI/POS/Documents/STKUPDBuilder"
+                            />
+                        </div>
+                        
+                        <h3 style={{marginTop: '30px', marginBottom: '15px', color: 'var(--sitoo-blue)', fontSize: '1.1em'}}>📥 Import fra Sitoo (Sitoo → SPY via Webhook)</h3>
+                        <div className="doc-types">
+                            <DocCard 
+                                code="SLSRPT" 
+                                fullName="Sales Report" 
+                                desc="Salgsrapporter fra kasser (ordrer, betalinger)" 
+                                direction="import" 
+                                path="class/EDI/POS/XML/SLSRPT"
+                            />
+                            <DocCard 
+                                code="Orders" 
+                                fullName="Sitoo Orders" 
+                                desc="Lukkede ordrer med linjer og betalinger" 
+                                direction="import" 
+                                path="Webhook: order.closed"
+                            />
+                            <DocCard 
+                                code="Refunds" 
+                                fullName="Refund Transactions" 
+                                desc="Returneringer og claims" 
+                                direction="import" 
+                                path="TransactionType: 40"
+                            />
+                            <DocCard 
+                                code="Stock Transactions" 
+                                fullName="Inventory Movements" 
+                                desc="Manuel ind/ud, optælling, justeringer" 
+                                direction="import" 
+                                path="Webhook: warehousetransaction"
+                            />
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">⚙️ Teknisk oversigt</h2>
+                        <div className="info-grid">
+                            <div className="info-card">
+                                <div className="info-card-title">🔌 API Integration</div>
+                                <ul className="info-card-list">
+                                    <li>REST API (v2 + v3)</li>
+                                    <li>Rate limiting middleware</li>
+                                    <li>Batch operations (2000 items/call)</li>
+                                    <li>Webhook callbacks</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">📦 Sitoo Entiteter</div>
+                                <ul className="info-card-list">
+                                    <li>Products & Variants</li>
+                                    <li>Categories & Manufacturers</li>
+                                    <li>Warehouses & Stock</li>
+                                    <li>Shipments & Orders</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">🔄 Transaction Types</div>
+                                <ul className="info-card-list">
+                                    <li>10: Manual In</li>
+                                    <li>20: Manual Out</li>
+                                    <li>30: Sales</li>
+                                    <li>40: Refund</li>
+                                    <li>50: Stocktaking</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">📊 Custom Attributes</div>
+                                <ul className="info-card-list">
+                                    <li>Season (sæson)</li>
+                                    <li>Style No (varenummer)</li>
+                                    <li>Color (variant attribute)</li>
+                                    <li>Size (variant attribute)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">🗂️ Kodestruktur</h2>
+                        <div className="code-structure">
+                            <span className="folder">class/Integration/POS/Systems/Sitoo/</span><br/>
+                            &nbsp;&nbsp;├── SitooIntegrationManager.php <span className="comment">← Hovedlogik</span><br/>
+                            &nbsp;&nbsp;├── SitooProvider.php <span className="comment">← API v2 klient</span><br/>
+                            &nbsp;&nbsp;├── SitooV3Provider.php <span className="comment">← API v3 klient</span><br/>
+                            &nbsp;&nbsp;├── SitooQueueProducer.php <span className="comment">← Job queue</span><br/>
+                            &nbsp;&nbsp;├── BaseSitooProvider.php <span className="comment">← Fælles funktionalitet</span><br/>
+                            &nbsp;&nbsp;├── Data/ <span className="comment">← Data objekter</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── SitooPOSData.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── ProductsAndVariantsData.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── ShipmentActionData.php<br/>
+                            &nbsp;&nbsp;├── Exception/ <span className="comment">← Fejlhåndtering</span><br/>
+                            &nbsp;&nbsp;└── Middleware/ <span className="comment">← Rate limiting</span><br/><br/>
+                            <span className="folder">applications/API/V1/Controller/Webhook/Sitoo/</span><br/>
+                            &nbsp;&nbsp;└── Controller.php <span className="comment">← Webhook endpoint</span><br/><br/>
+                            <span className="folder">class/Entity/Integration/POS/Systems/Sitoo/</span><br/>
+                            &nbsp;&nbsp;└── SitooCustomerConfiguration.php <span className="comment">← Kundeopsætning</span>
+                        </div>
+                    </div>
+                    
+                    <p className="footer-text">
+                        Genereret af <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString('da-DK')}
+                    </p>
+                </div>
+            );
+        };
+        
+        ReactDOM.render(<SitooWorkflow />, document.getElementById('root'));
+    </script>
+</body>
+</html>

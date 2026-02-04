@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NemEDI Workflow - SPY System</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --spy-black: #1a1a1a;
+            --spy-dark: #0f0f0f;
+            --spy-gold: #c9a227;
+            --spy-gold-light: #d4b84a;
+            --spy-white: #ffffff;
+            --spy-gray: #888888;
+            --spy-gray-light: #b3b3b3;
+            --spy-gray-dark: #333333;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Raleway', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--spy-black);
+            min-height: 100vh;
+            padding: 40px;
+            color: var(--spy-white);
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { 
+            text-align: center; 
+            margin-bottom: 10px; 
+            font-size: 2.5em;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+        }
+        .subtitle { text-align: center; color: var(--spy-gray); margin-bottom: 40px; }
+        
+        .workflow-section {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--spy-gold);
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+        }
+        
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .flow-box {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 160px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .flow-box:hover {
+            border-color: var(--spy-gold);
+            background: rgba(201, 162, 39, 0.05);
+        }
+        
+        .flow-box.external { border-top: 3px solid #3498db; }
+        .flow-box.spy { border-top: 3px solid var(--spy-gold); }
+        .flow-box.customer { border-top: 3px solid #2ecc71; }
+        
+        .flow-box-icon { font-size: 2em; margin-bottom: 10px; }
+        .flow-box-title { font-weight: 600; margin-bottom: 5px; color: var(--spy-white); }
+        .flow-box-desc { font-size: 0.85em; color: var(--spy-gray); }
+        
+        .arrow {
+            font-size: 2em;
+            color: var(--spy-gold);
+        }
+        
+        .doc-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .doc-card {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 10px;
+            padding: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .doc-card:hover {
+            border-color: var(--spy-gold);
+        }
+        .doc-card.import { border-left: 3px solid #3498db; }
+        .doc-card.export { border-left: 3px solid #2ecc71; }
+        
+        .doc-card-title { 
+            font-weight: 600; 
+            margin-bottom: 8px; 
+            color: var(--spy-gold);
+        }
+        .doc-card-full { font-size: 0.8em; color: var(--spy-gray); margin-bottom: 8px; }
+        .doc-card-desc { font-size: 0.85em; color: var(--spy-gray-light); }
+        
+        .code-path {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.7em;
+            color: var(--spy-gold);
+            background: rgba(201, 162, 39, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 8px;
+            word-break: break-all;
+            white-space: normal;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+        .legend-color.external { background: #3498db; }
+        .legend-color.spy { background: var(--spy-gold); }
+        .legend-color.customer { background: #2ecc71; }
+        
+        .code-structure {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.85em;
+            line-height: 1.8;
+            background: var(--spy-dark);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--spy-gray-dark);
+        }
+        .code-structure .folder { color: var(--spy-gold); }
+        .code-structure .comment { color: var(--spy-gray); }
+        
+        .footer-text {
+            text-align: center;
+            color: var(--spy-gray);
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+        .footer-text span { color: var(--spy-gold); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const Arrow = () => <span className="arrow">→</span>;
+        
+        const FlowBox = ({ icon, title, desc, type }) => (
+            <div className={`flow-box ${type}`}>
+                <div className="flow-box-icon">{icon}</div>
+                <div className="flow-box-title">{title}</div>
+                <div className="flow-box-desc">{desc}</div>
+            </div>
+        );
+        
+        const DocCard = ({ code, fullName, desc, direction, path }) => (
+            <div className={`doc-card ${direction}`}>
+                <div className="doc-card-title">{code}</div>
+                <div className="doc-card-full">{fullName}</div>
+                <div className="doc-card-desc">{desc}</div>
+                <div className="code-path">{path}</div>
+            </div>
+        );
+        
+        const NemEDIWorkflow = () => {
+            return (
+                <div className="container">
+                    <h1>NemEDI Integration Workflow</h1>
+                    <p className="subtitle">Visualisering af SPY's EDI dokumentflow</p>
+                    
+                    <div className="legend">
+                        <div className="legend-item">
+                            <div className="legend-color external"></div>
+                            <span>Ekstern part</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color spy"></div>
+                            <span>SPY System</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color customer"></div>
+                            <span>SPY Kunde</span>
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">📦 Indkøbsflow</h2>
+                        <div className="flow-container">
+                            <FlowBox icon="🏭" title="Leverandør" desc="Sender ordrebekræftelse" type="external" />
+                            <Arrow />
+                            <FlowBox icon="📄" title="ORDERS Import" desc="Modtag ordre" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="⚙️" title="SPY Processing" desc="Opret purchase" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="📤" title="ORDRSP Export" desc="Send respons" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🏭" title="Leverandør" desc="Bekræftelse modtaget" type="external" />
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">💰 Salgsflow</h2>
+                        <div className="flow-container">
+                            <FlowBox icon="🛒" title="Kunde bestiller" desc="Via B2B/ordre" type="customer" />
+                            <Arrow />
+                            <FlowBox icon="📤" title="ORDERS Export" desc="Send til leverandør" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🏭" title="Leverandør" desc="Behandler ordre" type="external" />
+                            <Arrow />
+                            <FlowBox icon="📄" title="DESADV Import" desc="Forsendelsesadvis" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="📦" title="Lager opdateret" desc="Varer modtaget" type="spy" />
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">🧾 Faktureringsflow</h2>
+                        <div className="flow-container">
+                            <FlowBox icon="📦" title="Levering sendt" desc="Packing complete" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="📤" title="INVOIC Export" desc="Send faktura" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🏪" title="Butik/Kunde" desc="Modtager faktura" type="customer" />
+                            <Arrow />
+                            <FlowBox icon="📄" title="RECADV Import" desc="Modtag kvittering" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="✅" title="Bogført" desc="Betaling registreret" type="spy" />
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">📋 EDI Dokumenttyper</h2>
+                        
+                        <h3 style={{marginTop: '20px', marginBottom: '15px', color: '#3498db', fontSize: '1.1em'}}>📥 Import (modtages fra eksterne)</h3>
+                        <div className="doc-types">
+                            <DocCard code="ORDERS" fullName="Purchase Order" desc="Indgående ordrer fra kunder/leverandører" direction="import" path="class/EDI/NemEDI/.../Import/ORDERS/"/>
+                            <DocCard code="DESADV" fullName="Despatch Advice" desc="Forsendelsesadvis - varer afsendt" direction="import" path="class/EDI/NemEDI/.../Import/DESADV/"/>
+                            <DocCard code="RECADV" fullName="Receiving Advice" desc="Kvittering, claims, returneringer" direction="import" path="class/EDI/NemEDI/.../Import/RECADV/"/>
+                        </div>
+                        
+                        <h3 style={{marginTop: '30px', marginBottom: '15px', color: '#2ecc71', fontSize: '1.1em'}}>📤 Export (sendes til eksterne)</h3>
+                        <div className="doc-types">
+                            <DocCard code="ORDERS" fullName="Purchase Order" desc="Udgående ordrer til leverandører" direction="export" path="class/EDI/NemEDI/.../Export/ORDERS/"/>
+                            <DocCard code="ORDRSP" fullName="Order Response" desc="Ordrebekræftelse/respons" direction="export" path="class/EDI/NemEDI/.../Export/ORDRSP/"/>
+                            <DocCard code="DESADV" fullName="Despatch Advice" desc="Forsendelsesadvis til kunder" direction="export" path="class/EDI/NemEDI/.../Export/DESADV/"/>
+                            <DocCard code="INVOIC" fullName="Invoice" desc="Fakturaer til kunder" direction="export" path="class/EDI/NemEDI/.../Export/INVOIC/"/>
+                            <DocCard code="PRICAT" fullName="Price Catalogue" desc="Prisliste/katalog" direction="export" path="class/EDI/NemEDI/.../Export/PRICAT/"/>
+                            <DocCard code="INVRPT" fullName="Inventory Report" desc="Lagerrapport" direction="export" path="class/EDI/NemEDI/.../Export/INVRPT/"/>
+                        </div>
+                    </div>
+                    
+                    <div className="workflow-section">
+                        <h2 className="section-title">🗂️ Kodestruktur</h2>
+                        <div className="code-structure">
+                            <span className="folder">class/EDI/NemEDI/</span><br/>
+                            &nbsp;&nbsp;├── <span className="folder">Documents/</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── Import/ <span className="comment">← Modtag EDI dokumenter</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── ORDERS/<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── DESADV/<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── RECADV/<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── Export/ <span className="comment">← Send EDI dokumenter</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── ORDERS/<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── ORDRSP/<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── DESADV/<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── INVOIC/<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── PRICAT/<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── INVRPT/<br/><br/>
+                            <span className="folder">applications/Spy/Controller/Tools/NemEDI/</span><br/>
+                            &nbsp;&nbsp;├── ReceivedFiles/ <span className="comment">← Håndter modtagne filer</span><br/>
+                            &nbsp;&nbsp;├── SalesDeliveries/<br/>
+                            &nbsp;&nbsp;├── SalesInvoices/<br/>
+                            &nbsp;&nbsp;└── SalesOrders/
+                        </div>
+                    </div>
+                    
+                    <p className="footer-text">
+                        Genereret af <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString('da-DK')}
+                    </p>
+                </div>
+            );
+        };
+        
+        ReactDOM.render(<NemEDIWorkflow />, document.getElementById('root'));
+    </script>
+</body>
+</html>
