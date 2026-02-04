@@ -1,15 +1,45 @@
 import { type Locale } from '../../lib/i18n'
 import { getTranslations } from '../../lib/translations'
+import { getArticles, getRouteForSlug } from '../../lib/articles'
 import GuideCard from '../../components/GuideCard'
 
 interface HomePageProps {
   params: Promise<{ lang: string }>
 }
 
+// Badge color to background color mapping
+function badgeBg(color: string): string {
+  const map: Record<string, string> = {
+    '#3498db': 'rgba(52, 152, 219, 0.12)',
+    '#27ae60': 'rgba(39, 174, 96, 0.12)',
+    '#e67e22': 'rgba(230, 126, 34, 0.12)',
+    '#9b59b6': 'rgba(155, 89, 182, 0.12)',
+    '#c9a227': 'rgba(201, 162, 39, 0.12)',
+  }
+  return map[color] || 'rgba(201, 162, 39, 0.12)'
+}
+
+function iconBg(color: string): string {
+  const map: Record<string, string> = {
+    '#3498db': 'rgba(52, 152, 219, 0.15)',
+    '#27ae60': 'rgba(39, 174, 96, 0.15)',
+    '#e67e22': 'rgba(230, 126, 34, 0.15)',
+    '#9b59b6': 'rgba(155, 89, 182, 0.15)',
+    '#c9a227': 'rgba(201, 162, 39, 0.15)',
+  }
+  return map[color] || 'rgba(201, 162, 39, 0.15)'
+}
+
 export default async function HomePage({ params }: HomePageProps) {
   const { lang } = await params
   const locale = lang as Locale
   const t = getTranslations(locale)
+  
+  // Fetch articles from database (with fallback to hardcoded)
+  const articles = await getArticles(locale)
+  
+  const integrations = articles.filter(a => a.category === 'Integration')
+  const features = articles.filter(a => a.category === 'Feature')
 
   return (
     <>
@@ -19,12 +49,12 @@ export default async function HomePage({ params }: HomePageProps) {
         <p>{t.welcomeDescription}</p>
         <div className="welcome-stats">
           <div className="welcome-stat">
-            <div className="welcome-stat-num">4</div>
-            <div className="welcome-stat-label">{t.integrationWorkflows.split(' ').join('<br/>')}</div>
+            <div className="welcome-stat-num">{integrations.length}</div>
+            <div className="welcome-stat-label">{t.integrationWorkflows}</div>
           </div>
           <div className="welcome-stat">
-            <div className="welcome-stat-num">1</div>
-            <div className="welcome-stat-label">{t.functionGuides.split(' ').join('<br/>')}</div>
+            <div className="welcome-stat-num">{features.length}</div>
+            <div className="welcome-stat-label">{t.functionGuides}</div>
           </div>
         </div>
       </div>
@@ -32,70 +62,41 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* Integrations */}
       <div className="section-title">{t.sectionIntegrations}</div>
       <div className="guide-grid" style={{ marginBottom: 32 }}>
-        <GuideCard
-          href={`/${locale}/ongoing`}
-          title={t.ongoingTitle}
-          description={t.ongoingDesc}
-          category={t.categoryIntegration}
-          icon="📦"
-          iconBg="rgba(52, 152, 219, 0.15)"
-          imageSrc="/images/ongoing.svg"
-          badge={t.interactiveWorkflow}
-          badgeColor="#3498db"
-          badgeBg="rgba(52, 152, 219, 0.12)"
-        />
-        <GuideCard
-          href={`/${locale}/sitoo`}
-          title={t.sitooTitle}
-          description={t.sitooDesc}
-          category={t.categoryIntegration}
-          icon="🏪"
-          iconBg="rgba(39, 174, 96, 0.15)"
-          imageSrc="/images/sitoo.png"
-          badge={t.interactiveWorkflow}
-          badgeColor="#27ae60"
-          badgeBg="rgba(39, 174, 96, 0.12)"
-        />
-        <GuideCard
-          href={`/${locale}/nemedi`}
-          title={t.nemediTitle}
-          description={t.nemediDesc}
-          category={t.categoryIntegration}
-          icon="📄"
-          iconBg="rgba(230, 126, 34, 0.15)"
-          imageSrc="/images/nemedi.png"
-          badge={t.interactiveWorkflow}
-          badgeColor="#e67e22"
-          badgeBg="rgba(230, 126, 34, 0.12)"
-        />
-        <GuideCard
-          href={`/${locale}/lector`}
-          title={t.lectorTitle}
-          description={t.lectorDesc}
-          category={t.categoryIntegration}
-          icon="🛃"
-          iconBg="rgba(155, 89, 182, 0.15)"
-          imageSrc="/images/lector.png"
-          badge={t.interactiveWorkflow}
-          badgeColor="#9b59b6"
-          badgeBg="rgba(155, 89, 182, 0.12)"
-        />
+        {integrations.map(article => (
+          <GuideCard
+            key={article.slug}
+            href={`/${locale}/${getRouteForSlug(article.slug)}`}
+            title={article.title}
+            description={article.description}
+            category={t.categoryIntegration}
+            icon={article.icon}
+            iconBg={iconBg(article.badgeColor)}
+            imageSrc={article.imageUrl || undefined}
+            badge={article.badge}
+            badgeColor={article.badgeColor}
+            badgeBg={badgeBg(article.badgeColor)}
+          />
+        ))}
       </div>
 
       {/* Functions */}
       <div className="section-title">{t.sectionFunctions}</div>
       <div className="guide-grid" style={{ marginBottom: 32 }}>
-        <GuideCard
-          href={`/${locale}/dedication`}
-          title={t.dedicationTitle}
-          description={t.dedicationDesc}
-          category={t.categoryFunction}
-          icon="🎯"
-          iconBg="rgba(201, 162, 39, 0.15)"
-          badge={t.interactiveGuide}
-          badgeColor="#c9a227"
-          badgeBg="rgba(201, 162, 39, 0.12)"
-        />
+        {features.map(article => (
+          <GuideCard
+            key={article.slug}
+            href={`/${locale}/${getRouteForSlug(article.slug)}`}
+            title={article.title}
+            description={article.description}
+            category={t.categoryFunction}
+            icon={article.icon}
+            iconBg={iconBg(article.badgeColor)}
+            imageSrc={article.imageUrl || undefined}
+            badge={article.badge}
+            badgeColor={article.badgeColor}
+            badgeBg={badgeBg(article.badgeColor)}
+          />
+        ))}
       </div>
     </>
   )

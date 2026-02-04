@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "db:setup": "npx tsx scripts/setup-database.ts",
+    "db:translate": "npx tsx scripts/translate-articles.ts",
+    "db:translate:dry": "npx tsx scripts/translate-articles.ts --dry-run"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.94.0",
@@ -17,6 +20,7 @@
   "devDependencies": {
     "@types/node": "20.19.31",
     "@types/react": "^18.0.0",
+    "tsx": "^4.21.0",
     "typescript": "5.9.3"
   }
 }
