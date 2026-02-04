@@ -288,13 +288,18 @@
                         <div className="flow-container">
                             <FlowBox icon="📦" title="Pakket ordre" desc="Consignment klar" type="spy" />
                             <Arrow />
+                            <FlowBox icon="🏷️" title="PRICAT" desc="Produktdata for forsendelsen" type="spy" />
+                            <Arrow />
                             <FlowBox icon="📄" title="DESADV" desc="Forsendelsesadvis" type="spy" />
                             <Arrow />
-                            <FlowBox icon="🔄" title="Shipment API" desc="Opret forsendelse" type="spy" />
+                            <FlowBox icon="🔄" title="Shipment API" desc="Push PRICAT + DESADV" type="spy" />
                             <Arrow />
                             <FlowBox icon="🏪" title="Sitoo" desc="Shipment registreret" type="sitoo" />
                             <Arrow />
                             <FlowBox icon="✅" title="Butik modtager" desc="Varer checket ind" type="store" />
+                        </div>
+                        <div style={{marginTop: '12px', padding: '10px 16px', background: 'rgba(201,162,39,0.08)', borderRadius: '8px', fontSize: '0.85em', color: '#b3b3b3'}}>
+                            <strong style={{color: '#c9a227'}}>💡 Bemærk:</strong> <code>SitooQueueProducer::scheduleDESADVExport()</code> kalder først <code>scheduleDeliveryPRICAT()</code> for at sikre at Sitoo har produktdata for alle varer i forsendelsen, før selve DESADV'en sendes.
                         </div>
                     </div>
                     
@@ -302,13 +307,13 @@
                         <h2 className="section-title">💰 Salgsrapportering (Sitoo → SPY)</h2>
                         <div className="flow-container">
                             <FlowBox icon="🛒" title="Salg i butik" desc="Transaktion gennemført" type="store" />
-                            <Arrow reverse />
+                            <Arrow />
                             <FlowBox icon="🏪" title="Sitoo" desc="Ordre registreret" type="sitoo" />
-                            <Arrow reverse />
-                            <FlowBox icon="🔔" title="Webhook" desc="Order event trigger" type="sitoo" />
-                            <Arrow reverse />
+                            <Arrow />
+                            <FlowBox icon="🔔" title="Webhook" desc="order.closed event" type="sitoo" />
+                            <Arrow />
                             <FlowBox icon="📄" title="SLSRPT" desc="Sales Report" type="spy" />
-                            <Arrow reverse />
+                            <Arrow />
                             <FlowBox icon="📊" title="SPY bogfører" desc="Salg + lager opdateret" type="spy" />
                         </div>
                     </div>
@@ -317,13 +322,13 @@
                         <h2 className="section-title">🔄 Lagerbevægelser (Sitoo → SPY)</h2>
                         <div className="flow-container">
                             <FlowBox icon="📋" title="Optælling/Manuel" desc="Stock transaction i butik" type="store" />
-                            <Arrow reverse />
+                            <Arrow />
                             <FlowBox icon="🏪" title="Sitoo" desc="Transaction logged" type="sitoo" />
-                            <Arrow reverse />
-                            <FlowBox icon="🔔" title="Webhook" desc="Inventory event" type="sitoo" />
-                            <Arrow reverse />
+                            <Arrow />
+                            <FlowBox icon="🔔" title="Webhook" desc="warehousetransaction event" type="sitoo" />
+                            <Arrow />
                             <FlowBox icon="⚙️" title="SPY Processing" desc="Juster beholdning" type="spy" />
-                            <Arrow reverse />
+                            <Arrow />
                             <FlowBox icon="✅" title="Synkroniseret" desc="Lager matcher" type="spy" />
                         </div>
                     </div>
@@ -454,8 +459,19 @@
                         </div>
                     </div>
                     
+                    <div className="workflow-section" style={{textAlign: 'center'}}>
+                        <h2 className="section-title">🔗 Ekstern dokumentation</h2>
+                        <p style={{color: '#b3b3b3', marginBottom: '12px'}}>
+                            Sitoo's officielle API-dokumentation:
+                        </p>
+                        <a href="https://developer.sitoo.com/api-reference/overview/" target="_blank" 
+                           style={{color: '#3399ff', fontSize: '1.1em', textDecoration: 'none', borderBottom: '1px solid #3399ff'}}>
+                            📖 developer.sitoo.com/api-reference/overview
+                        </a>
+                    </div>
+                    
                     <p className="footer-text">
-                        Genereret af <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString('da-DK')}
+                        Genereret af <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString('da-DK')} | Opdateret med feedback fra Jakob Larsen
                     </p>
                 </div>
             );
