@@ -19,9 +19,9 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: '#1a1a2e',
+        background: '#0d0d0d',
       }}>
-        <div style={{ color: '#ffffff', fontSize: 16 }}>Indlæser...</div>
+        <div style={{ color: '#c9a227', fontSize: 16, fontFamily: "'Raleway', sans-serif" }}>Indlæser...</div>
       </div>
     )
   }

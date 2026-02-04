@@ -22,7 +22,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           style={{ height: '32px', width: 'auto', filter: 'invert(1)', mixBlendMode: 'screen' }}
           priority
         />
-        <span style={{ fontSize: '0.75rem', opacity: 0.7, marginLeft: '8px', alignSelf: 'flex-end', marginBottom: '2px' }}>
+        <span style={{ fontSize: '0.75rem', opacity: 0.6, marginLeft: '8px', alignSelf: 'flex-end', marginBottom: '2px', color: '#c9a227' }}>
           Knowledge Base
         </span>
       </Link>

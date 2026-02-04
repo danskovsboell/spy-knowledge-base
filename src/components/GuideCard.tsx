@@ -36,7 +36,7 @@ export default function GuideCard({
       {badge && (
         <div
           className="guide-card-badge"
-          style={{ background: badgeBg || '#ebf5fb', color: badgeColor || '#337ab7' }}
+          style={{ background: badgeBg || 'rgba(201, 162, 39, 0.1)', color: badgeColor || '#c9a227' }}
         >
           {badge}
         </div>

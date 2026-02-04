@@ -23,7 +23,7 @@ export default function HomePage() {
       </div>
 
       {/* Integrationer */}
-      <div className="section-title">🔌 Integrationer</div>
+      <div className="section-title">Integrationer</div>
       <div className="guide-grid" style={{ marginBottom: 32 }}>
         <GuideCard
           href="/ongoing"
@@ -31,11 +31,11 @@ export default function HomePage() {
           description="Komplet workflow for Ongoing WMS integration – ordrer, webhooks, statuser og fejlhåndtering."
           category="Integration / Development"
           icon="📦"
-          iconBg="#ebf5fb"
+          iconBg="rgba(52, 152, 219, 0.15)"
           imageSrc="/images/ongoing.svg"
           badge="Interaktiv workflow"
-          badgeColor="#337ab7"
-          badgeBg="#ebf5fb"
+          badgeColor="#3498db"
+          badgeBg="rgba(52, 152, 219, 0.12)"
         />
         <GuideCard
           href="/sitoo"
@@ -43,11 +43,11 @@ export default function HomePage() {
           description="Workflow for Sitoo POS integration – butikssalg, lagersynkronisering og produktdata."
           category="Integration / Development"
           icon="🏪"
-          iconBg="#e8f8f5"
+          iconBg="rgba(39, 174, 96, 0.15)"
           imageSrc="/images/sitoo.png"
           badge="Interaktiv workflow"
           badgeColor="#27ae60"
-          badgeBg="#e8f8f5"
+          badgeBg="rgba(39, 174, 96, 0.12)"
         />
         <GuideCard
           href="/nemedi"
@@ -55,11 +55,11 @@ export default function HomePage() {
           description="EDI dokumentflow for NemEDI integration – PRICAT, ordrer og leveringsadviser."
           category="Integration / Development"
           icon="📄"
-          iconBg="#fef9e7"
+          iconBg="rgba(230, 126, 34, 0.15)"
           imageSrc="/images/nemedi.png"
           badge="Interaktiv workflow"
           badgeColor="#e67e22"
-          badgeBg="#fef9e7"
+          badgeBg="rgba(230, 126, 34, 0.12)"
         />
         <GuideCard
           href="/lector"
@@ -67,16 +67,16 @@ export default function HomePage() {
           description="Told/customs workflow for Lector integration – toldbehandling, HS-koder og dokumentation."
           category="Integration / Development"
           icon="🛃"
-          iconBg="#f4ecf7"
+          iconBg="rgba(155, 89, 182, 0.15)"
           imageSrc="/images/lector.png"
           badge="Interaktiv workflow"
           badgeColor="#9b59b6"
-          badgeBg="#f4ecf7"
+          badgeBg="rgba(155, 89, 182, 0.12)"
         />
       </div>
 
       {/* Funktioner */}
-      <div className="section-title">⚙️ Funktioner</div>
+      <div className="section-title">Funktioner</div>
       <div className="guide-grid" style={{ marginBottom: 32 }}>
         <GuideCard
           href="/dedication"
@@ -84,10 +84,10 @@ export default function HomePage() {
           description="Guide til Pre-Dedication funktionaliteten – fordeling af varer mellem Stock og Pre ordrer."
           category="Funktioner / Support"
           icon="🎯"
-          iconBg="#f4ecf7"
+          iconBg="rgba(201, 162, 39, 0.15)"
           badge="Interaktiv guide"
-          badgeColor="#9b59b6"
-          badgeBg="#f4ecf7"
+          badgeColor="#c9a227"
+          badgeBg="rgba(201, 162, 39, 0.12)"
         />
       </div>
 

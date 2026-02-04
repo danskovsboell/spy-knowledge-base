@@ -40,7 +40,7 @@ export default function LoginPage({ onSuccess }: LoginPageProps) {
         <button className="login-btn" type="submit">
           Log ind →
         </button>
-        <p style={{ fontSize: 12, color: '#a0aab4', marginTop: 24 }}>
+        <p style={{ fontSize: 12, color: '#666666', marginTop: 24 }}>
           Kun for SPY-medarbejdere
         </p>
       </form>
