@@ -1,205 +1,232 @@
 #!/usr/bin/env node
 /**
- * Translate workflow HTML files using OpenAI
- * Processes one language at a time for reliability
+ * Workflow Translation Script
+ * 
+ * Læser dansk tekst fra workflow HTML-filer og oversætter til engelsk (en) og hollandsk (nl)
+ * via OpenAI API. Gemmer oversættelser i JSON-filer.
+ * 
+ * Usage: node translate-workflows.mjs [workflow-name]
+ * Example: node translate-workflows.mjs ongoing-workflow
  */
 
-import fs from 'fs';
-import path from 'path';
+import { readFile, writeFile } from 'fs/promises';
+import { dirname, join, basename } from 'path';
+import { fileURLToPath } from 'url';
 
-const OPENAI_KEY = process.env.OPENAI_API_KEY;
-if (!OPENAI_KEY) {
-  console.error('Error: OPENAI_API_KEY environment variable is required');
-  process.exit(1);
-}
-const WORKFLOWS_DIR = '/home/clawdbot/clawd/spy-knowledge-base/public/workflows';
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const WORKFLOWS = [
-  'ongoing-workflow.html',
-  'sitoo-workflow.html',
-  'lector-customs-workflow.html',
-  'nemedi-workflow.html'
+// OpenAI API configuration
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const OPENAI_MODEL = 'gpt-4o-mini';
+
+// Workflow files
+const WORKFLOWS_DIR = join(__dirname, '../public/workflows');
+const WORKFLOW_FILES = [
+    'ongoing-workflow.html',
+    'nemedi-workflow.html',
+    'sitoo-workflow.html',
+    'lector-customs-workflow.html'
 ];
 
-const LANGUAGES = {
-  en: 'English',
-  de: 'German',
-  nl: 'Dutch',
-  fr: 'French',
-  it: 'Italian',
-  es: 'Spanish',
-  sv: 'Swedish',
-  no: 'Norwegian Bokmål'
-};
+/**
+ * Extract translatable text from HTML content
+ * Finds all text inside t("...") function calls
+ */
+function extractTranslatableText(html) {
+    const texts = new Set();
+    
+    // Match t("...") and t('...') patterns
+    const tFunctionRegex = /\bt\s*\(\s*["']([^"']+)["']\s*\)/g;
+    let match;
+    
+    while ((match = tFunctionRegex.exec(html)) !== null) {
+        const text = match[1];
+        // Skip empty strings and strings that look like code/paths
+        if (text && text.trim() && !text.startsWith('/') && !text.includes('Task')) {
+            texts.add(text);
+        }
+    }
+    
+    return Array.from(texts);
+}
 
-async function callOpenAI(messages, maxTokens = 16000) {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 120000); // 2 min timeout
+/**
+ * Decode HTML entities
+ */
+function decodeHtmlEntities(text) {
+    const entities = {
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&quot;': '"',
+        '&#x27;': "'",
+        '&apos;': "'",
+        '&aring;': 'å',
+        '&Aring;': 'Å',
+        '&aelig;': 'æ',
+        '&AElig;': 'Æ',
+        '&oslash;': 'ø',
+        '&Oslash;': 'Ø',
+        '&nbsp;': ' ',
+        '&mdash;': '—',
+        '&ndash;': '–',
+        '&rarr;': '→',
+        '&larr;': '←',
+        '&eacute;': 'é'
+    };
+    
+    let decoded = text;
+    for (const [entity, char] of Object.entries(entities)) {
+        decoded = decoded.replace(new RegExp(entity, 'g'), char);
+    }
+    
+    // Handle numeric entities
+    decoded = decoded.replace(/&#x([0-9A-Fa-f]+);/g, (_, hex) => 
+        String.fromCodePoint(parseInt(hex, 16))
+    );
+    decoded = decoded.replace(/&#(\d+);/g, (_, dec) => 
+        String.fromCodePoint(parseInt(dec, 10))
+    );
+    
+    return decoded;
+}
 
-  try {
-    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-5-mini',
-        messages,
-        temperature: 0.15,
-        max_tokens: maxTokens,
-        response_format: { type: 'json_object' }
-      }),
-      signal: controller.signal
+/**
+ * Call OpenAI API to translate texts
+ */
+async function translateWithOpenAI(texts, targetLang) {
+    const langNames = {
+        'en': 'English',
+        'nl': 'Dutch'
+    };
+    
+    const prompt = `You are a professional translator. Translate the following Danish texts to ${langNames[targetLang]}.
+These are UI texts for a warehouse management system integration documentation.
+
+Return ONLY a JSON object mapping Danish text → ${langNames[targetLang]} translation.
+Keep technical terms, product names, and code references (like "PRICAT", "DESADV", "Ongoing") unchanged.
+Preserve any formatting like colons, parentheses, etc.
+
+Danish texts to translate:
+${JSON.stringify(texts, null, 2)}
+
+Return JSON object with format: {"danish text": "translated text", ...}`;
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${OPENAI_API_KEY}`
+        },
+        body: JSON.stringify({
+            model: OPENAI_MODEL,
+            messages: [
+                { role: 'system', content: 'You are a professional translator specializing in technical documentation. Return only valid JSON.' },
+                { role: 'user', content: prompt }
+            ],
+            temperature: 0.3,
+            response_format: { type: 'json_object' }
+        })
     });
 
-    clearTimeout(timeout);
-    const json = await resp.json();
-    if (json.error) throw new Error(json.error.message);
-    return JSON.parse(json.choices[0].message.content);
-  } catch (err) {
-    clearTimeout(timeout);
-    throw err;
-  }
-}
-
-async function extractStrings(jsx) {
-  const result = await callOpenAI([
-    {
-      role: 'system',
-      content: `Extract ALL translatable user-facing Danish text from this React JSX code. Return JSON: { "strings": ["text1", "text2", ...] }
-
-Rules:
-- Decode HTML entities: ø not &oslash;, å not &aring;, æ not &aelig;, → not &rarr;, ← not &larr;, — not &mdash;
-- Decode hex entities: &#x1F4E6; becomes the emoji 📦
-- Include section titles WITH their leading emoji
-- Include all FlowBox title/desc values
-- Include all DocCard/WebhookItem/InfoCard text
-- Include subtitles, notes, paragraphs, legend labels, list items
-- Include footer text
-- Exclude: CSS, JS code, file paths (like "OngoingExportPRICATTask"), class names
-- Each string = exactly what a text node contains in rendered DOM`
-    },
-    {
-      role: 'user',
-      content: jsx
+    if (!response.ok) {
+        const error = await response.text();
+        throw new Error(`OpenAI API error: ${response.status} - ${error}`);
     }
-  ]);
-  return result.strings;
-}
 
-async function translateBatch(strings, langCode, langName) {
-  const result = await callOpenAI([
-    {
-      role: 'system',
-      content: `Translate Danish text to ${langName}. Return JSON object mapping Danish→${langName}: { "Danish text": "${langName} text", ... }
-
-Keep unchanged: SPY, Ongoing, Ongoing WMS, Sitoo, NemEDI, Lector, PRICAT, DESADV, ORDERS, ORDRSP, INVOIC, RECADV, INVRPT, STKUPD, SLSRPT, REST API, JSON, Guzzle, webhook, POST, PUT, GET, SFTP
-Keep status names: CustomerSpecific, Open, Released, Allocated, Picked, Sent, Retrieved, Returned, Shredded, Notified, ArrivalAtLocation, HandOver, Deviation, Received, Completed, InProgress, Error
-Keep emojis at start of strings
-Translate naturally and professionally. Translate ALL ${strings.length} strings.`
-    },
-    {
-      role: 'user',
-      content: JSON.stringify(strings)
-    }
-  ]);
-  return result;
-}
-
-function generateI18nScript(translations) {
-  // Compact the translations JSON
-  const json = JSON.stringify(translations);
-  
-  return `
-    <script>
-    (function(){
-      var L=new URLSearchParams(window.location.search).get('lang')||'da';
-      if(L==='da'){document.body.style.opacity='1';return}
-      var T=${json};
-      var D=T[L];
-      if(!D){document.body.style.opacity='1';return}
-      function tr(){
-        var r=document.getElementById('root');
-        if(!r||!r.children.length)return false;
-        var K=Object.keys(D).sort(function(a,b){return b.length-a.length});
-        var w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT,null,false);
-        var N=[];while(w.nextNode())N.push(w.currentNode);
-        N.forEach(function(n){
-          var t=n.textContent,s=t.trim();
-          if(!s)return;
-          if(D[s]){n.textContent=t.replace(s,D[s]);return}
-          for(var i=0;i<K.length;i++){
-            var k=K[i];
-            if(k.length>4&&s.indexOf(k)!==-1){n.textContent=n.textContent.replace(k,D[k])}
-          }
-        });
-        document.documentElement.lang=L;
-        return true
-      }
-      var done=false;
-      var obs=new MutationObserver(function(m,o){
-        if(!done&&tr()){done=true;o.disconnect();document.body.style.opacity='1'}
-      });
-      obs.observe(document.getElementById('root'),{childList:true,subtree:true});
-      setTimeout(function(){obs.disconnect();if(!done){tr();document.body.style.opacity='1'}},4000);
-    })();
-    </script>`;
-}
-
-async function processWorkflow(filename) {
-  console.log(`\n--- ${filename} ---`);
-  const filePath = path.join(WORKFLOWS_DIR, filename);
-  const content = fs.readFileSync(filePath, 'utf8');
-
-  const babelMatch = content.match(/<script type="text\/babel">([\s\S]*?)<\/script>/);
-  if (!babelMatch) { console.error('  No babel script!'); return; }
-
-  // Check if already has i18n (for re-runs)
-  let cleanContent = content;
-  cleanContent = cleanContent.replace(/\s*<script>\s*\(function\(\)\{[\s\S]*?var L=new URLSearchParams[\s\S]*?<\/script>/g, '');
-  cleanContent = cleanContent.replace(/<body[^>]*>/, '<body>');
-
-  // Step 1: Extract strings
-  console.log('  Extracting strings...');
-  const strings = await extractStrings(babelMatch[1]);
-  console.log(`  Found ${strings.length} strings`);
-
-  // Step 2: Translate to each language
-  const allTranslations = {};
-  
-  for (const [code, name] of Object.entries(LANGUAGES)) {
-    process.stdout.write(`  ${code} (${name})...`);
+    const data = await response.json();
+    const content = data.choices[0].message.content;
+    
     try {
-      const trans = await translateBatch(strings, code, name);
-      allTranslations[code] = trans;
-      console.log(` ✓ (${Object.keys(trans).length} strings)`);
-    } catch (err) {
-      console.log(` ✗ ${err.message}`);
+        return JSON.parse(content);
+    } catch (e) {
+        console.error('Failed to parse OpenAI response:', content);
+        throw new Error('Invalid JSON response from OpenAI');
     }
-  }
-
-  // Step 3: Save translations JSON
-  const transFile = path.join(WORKFLOWS_DIR, filename.replace('.html', '-translations.json'));
-  fs.writeFileSync(transFile, JSON.stringify(allTranslations, null, 2));
-
-  // Step 4: Modify HTML
-  let modified = cleanContent;
-  modified = modified.replace(/<body[^>]*>/, '<body style="opacity:0;transition:opacity .15s">');
-  modified = modified.replace('</body>', generateI18nScript(allTranslations) + '\n</body>');
-
-  fs.writeFileSync(filePath, modified);
-  console.log(`  ✅ Done: ${filename}`);
 }
 
+/**
+ * Process a single workflow file
+ */
+async function processWorkflow(filename) {
+    const filepath = join(WORKFLOWS_DIR, filename);
+    const workflowName = basename(filename, '.html');
+    
+    console.log(`\n📄 Processing: ${filename}`);
+    
+    // Read HTML file
+    const html = await readFile(filepath, 'utf-8');
+    
+    // Extract translatable texts
+    const texts = extractTranslatableText(html);
+    console.log(`   Found ${texts.length} translatable strings`);
+    
+    if (texts.length === 0) {
+        console.log('   ⚠️  No translatable texts found (no t() function calls)');
+        return null;
+    }
+    
+    // Decode HTML entities in source texts
+    const decodedTexts = texts.map(t => decodeHtmlEntities(t));
+    
+    // Create Danish base (identity mapping)
+    const daTranslations = {};
+    for (const text of decodedTexts) {
+        daTranslations[text] = text;
+    }
+    
+    console.log(`   🔄 Translating to English...`);
+    const enTranslations = await translateWithOpenAI(decodedTexts, 'en');
+    
+    console.log(`   🔄 Translating to Dutch...`);
+    const nlTranslations = await translateWithOpenAI(decodedTexts, 'nl');
+    
+    // Build final translation object
+    const translations = {
+        da: daTranslations,
+        en: enTranslations,
+        nl: nlTranslations
+    };
+    
+    // Save to JSON file
+    const outputPath = join(WORKFLOWS_DIR, `${workflowName}-translations.json`);
+    await writeFile(outputPath, JSON.stringify(translations, null, 2), 'utf-8');
+    
+    console.log(`   ✅ Saved: ${workflowName}-translations.json`);
+    
+    return translations;
+}
+
+/**
+ * Main function
+ */
 async function main() {
-  console.log('🌐 Workflow Translation Script\n');
-  
-  for (const filename of WORKFLOWS) {
-    await processWorkflow(filename);
-  }
-  
-  console.log('\n✅ All workflows translated!');
+    console.log('🌐 Workflow Translation Script');
+    console.log('================================');
+    console.log(`Using model: ${OPENAI_MODEL}`);
+    
+    const specificWorkflow = process.argv[2];
+    
+    let filesToProcess = WORKFLOW_FILES;
+    if (specificWorkflow) {
+        const filename = specificWorkflow.endsWith('.html') ? specificWorkflow : `${specificWorkflow}.html`;
+        if (!WORKFLOW_FILES.includes(filename)) {
+            console.error(`❌ Unknown workflow: ${specificWorkflow}`);
+            console.log(`Available workflows: ${WORKFLOW_FILES.join(', ')}`);
+            process.exit(1);
+        }
+        filesToProcess = [filename];
+    }
+    
+    for (const file of filesToProcess) {
+        try {
+            await processWorkflow(file);
+        } catch (error) {
+            console.error(`❌ Error processing ${file}:`, error.message);
+        }
+    }
+    
+    console.log('\n✨ Done!');
 }
 
-main().catch(err => { console.error('Fatal:', err); process.exit(1); });
+main().catch(console.error);
