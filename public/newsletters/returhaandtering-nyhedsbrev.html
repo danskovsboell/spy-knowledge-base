@@ -287,12 +287,35 @@
         .footer-contact-title { font-weight: 600; margin-bottom: 4px; }
         .footer-contact-info { font-size: 13px; color: var(--spy-gray); }
         
-        /* Print Styles */
+        /* Print Styles - Keep dark theme */
         @media print {
-            body { background: white; color: black; }
-            .card, .method-card, .quickstart, .partner-card { border-color: #ddd; background: #f9f9f9; }
-            .flow-box { background: #eee; }
-            .flow-box.highlight { background: var(--spy-gold); }
+            body { 
+                background: var(--spy-black) !important; 
+                color: var(--spy-white) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .card, .method-card, .quickstart, .partner-card { 
+                border-color: var(--spy-gray-dark) !important; 
+                background: rgba(255,255,255,0.03) !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            .flow-box { 
+                background: var(--spy-gray-dark) !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            .flow-box.highlight { 
+                background: var(--spy-gold) !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            .container {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
         }
 
         ul, ol { margin-left: 20px; margin-bottom: 16px; }
