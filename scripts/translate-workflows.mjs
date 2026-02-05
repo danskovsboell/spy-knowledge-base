@@ -3,15 +3,16 @@
  * Workflow Translation Script
  * 
  * Læser dansk tekst fra workflow HTML-filer og oversætter til engelsk (en) og hollandsk (nl)
- * via OpenAI API. Gemmer oversættelser i JSON-filer.
+ * via OpenAI API. Gemmer oversættelser i Supabase kb_translations tabellen.
  * 
  * Usage: node translate-workflows.mjs [workflow-name]
  * Example: node translate-workflows.mjs ongoing-workflow
  */
 
-import { readFile, writeFile } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import { dirname, join, basename } from 'path';
 import { fileURLToPath } from 'url';
+import { createClient } from '@supabase/supabase-js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -19,13 +20,22 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_MODEL = 'gpt-4o-mini';
 
-// Workflow files
+// Supabase configuration
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://fbaxsnfbgqipgyozcbzw.supabase.co';
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!SUPABASE_SERVICE_KEY) {
+  console.error('Missing SUPABASE_SERVICE_ROLE_KEY environment variable');
+  process.exit(1);
+}
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+
+// Workflow files and their corresponding slugs
 const WORKFLOWS_DIR = join(__dirname, '../public/workflows');
-const WORKFLOW_FILES = [
-    'ongoing-workflow.html',
-    'nemedi-workflow.html',
-    'sitoo-workflow.html',
-    'lector-customs-workflow.html'
+const WORKFLOW_CONFIG = [
+    { file: 'ongoing-workflow.html', slug: 'ongoing-wms' },
+    { file: 'nemedi-workflow.html', slug: 'nemedi-workflow' },
+    { file: 'sitoo-workflow.html', slug: 'sitoo-pos' },
+    { file: 'lector-customs-workflow.html', slug: 'lector-customs' }
 ];
 
 /**
@@ -146,13 +156,96 @@ Return JSON object with format: {"danish text": "translated text", ...}`;
 }
 
 /**
+ * Get or create article in kb_articles
+ */
+async function getOrCreateArticle(slug, title) {
+    // Check if article exists
+    const { data: existing, error: selectError } = await supabase
+        .from('kb_articles')
+        .select('id')
+        .eq('slug', slug)
+        .single();
+    
+    if (existing) {
+        console.log(`   📚 Found existing article: ${slug} (id: ${existing.id})`);
+        return existing.id;
+    }
+    
+    // Create new article (only slug and category - no title/status columns exist)
+    const { data: newArticle, error: insertError } = await supabase
+        .from('kb_articles')
+        .insert({
+            slug: slug,
+            category: 'workflows',
+            is_published: true
+        })
+        .select('id')
+        .single();
+    
+    if (insertError) {
+        throw new Error(`Failed to create article: ${insertError.message}`);
+    }
+    
+    console.log(`   📚 Created new article: ${slug} (id: ${newArticle.id})`);
+    return newArticle.id;
+}
+
+/**
+ * Save translation to Supabase
+ */
+async function saveTranslationToSupabase(articleId, locale, translations) {
+    const contentJson = JSON.stringify(translations);
+    
+    // Check if translation exists
+    const { data: existing } = await supabase
+        .from('kb_translations')
+        .select('id')
+        .eq('article_id', articleId)
+        .eq('language_code', locale)
+        .single();
+    
+    if (existing) {
+        // Update existing translation
+        const { error } = await supabase
+            .from('kb_translations')
+            .update({
+                content: contentJson,
+                status: 'published',
+                translated_by: 'openai-gpt-4o-mini',
+                translated_at: new Date().toISOString()
+            })
+            .eq('id', existing.id);
+        
+        if (error) throw new Error(`Failed to update translation: ${error.message}`);
+        console.log(`   💾 Updated ${locale} translation in database`);
+    } else {
+        // Insert new translation
+        const { error } = await supabase
+            .from('kb_translations')
+            .insert({
+                article_id: articleId,
+                language_code: locale,
+                title: '',
+                content: contentJson,
+                status: 'published',
+                translated_by: 'openai-gpt-4o-mini',
+                translated_at: new Date().toISOString()
+            });
+        
+        if (error) throw new Error(`Failed to insert translation: ${error.message}`);
+        console.log(`   💾 Saved ${locale} translation to database`);
+    }
+}
+
+/**
  * Process a single workflow file
  */
-async function processWorkflow(filename) {
-    const filepath = join(WORKFLOWS_DIR, filename);
-    const workflowName = basename(filename, '.html');
+async function processWorkflow(config) {
+    const { file, slug } = config;
+    const filepath = join(WORKFLOWS_DIR, file);
+    const workflowName = basename(file, '.html');
     
-    console.log(`\n📄 Processing: ${filename}`);
+    console.log(`\n📄 Processing: ${file} (slug: ${slug})`);
     
     // Read HTML file
     const html = await readFile(filepath, 'utf-8');
@@ -169,64 +262,68 @@ async function processWorkflow(filename) {
     // Decode HTML entities in source texts
     const decodedTexts = texts.map(t => decodeHtmlEntities(t));
     
+    // Get or create article in database
+    const articleId = await getOrCreateArticle(slug, workflowName.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+    
     // Create Danish base (identity mapping)
     const daTranslations = {};
     for (const text of decodedTexts) {
         daTranslations[text] = text;
     }
     
+    // Save Danish (source) translations
+    await saveTranslationToSupabase(articleId, 'da', daTranslations);
+    
     console.log(`   🔄 Translating to English...`);
     const enTranslations = await translateWithOpenAI(decodedTexts, 'en');
+    await saveTranslationToSupabase(articleId, 'en', enTranslations);
     
     console.log(`   🔄 Translating to Dutch...`);
     const nlTranslations = await translateWithOpenAI(decodedTexts, 'nl');
+    await saveTranslationToSupabase(articleId, 'nl', nlTranslations);
     
-    // Build final translation object
-    const translations = {
-        da: daTranslations,
-        en: enTranslations,
-        nl: nlTranslations
-    };
+    console.log(`   ✅ Completed: ${workflowName}`);
     
-    // Save to JSON file
-    const outputPath = join(WORKFLOWS_DIR, `${workflowName}-translations.json`);
-    await writeFile(outputPath, JSON.stringify(translations, null, 2), 'utf-8');
-    
-    console.log(`   ✅ Saved: ${workflowName}-translations.json`);
-    
-    return translations;
+    return { da: daTranslations, en: enTranslations, nl: nlTranslations };
 }
 
 /**
  * Main function
  */
 async function main() {
-    console.log('🌐 Workflow Translation Script');
-    console.log('================================');
+    console.log('🌐 Workflow Translation Script (Supabase)');
+    console.log('==========================================');
     console.log(`Using model: ${OPENAI_MODEL}`);
+    console.log(`Supabase: ${SUPABASE_URL}`);
+    
+    if (!OPENAI_API_KEY) {
+        console.error('❌ OPENAI_API_KEY environment variable is required');
+        process.exit(1);
+    }
     
     const specificWorkflow = process.argv[2];
     
-    let filesToProcess = WORKFLOW_FILES;
+    let configsToProcess = WORKFLOW_CONFIG;
     if (specificWorkflow) {
         const filename = specificWorkflow.endsWith('.html') ? specificWorkflow : `${specificWorkflow}.html`;
-        if (!WORKFLOW_FILES.includes(filename)) {
+        const config = WORKFLOW_CONFIG.find(c => c.file === filename);
+        if (!config) {
             console.error(`❌ Unknown workflow: ${specificWorkflow}`);
-            console.log(`Available workflows: ${WORKFLOW_FILES.join(', ')}`);
+            console.log(`Available workflows: ${WORKFLOW_CONFIG.map(c => c.file).join(', ')}`);
             process.exit(1);
         }
-        filesToProcess = [filename];
+        configsToProcess = [config];
     }
     
-    for (const file of filesToProcess) {
+    for (const config of configsToProcess) {
         try {
-            await processWorkflow(file);
+            await processWorkflow(config);
         } catch (error) {
-            console.error(`❌ Error processing ${file}:`, error.message);
+            console.error(`❌ Error processing ${config.file}:`, error.message);
         }
     }
     
-    console.log('\n✨ Done!');
+    console.log('\n✨ Done! Translations saved to Supabase database.');
 }
 
 main().catch(console.error);
