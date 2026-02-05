@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * Workflow Translation Script
- * 
+ *
  * Læser dansk tekst fra workflow HTML-filer og oversætter til engelsk (en) og hollandsk (nl)
  * via OpenAI API. Gemmer oversættelser i Supabase kb_translations tabellen.
- * 
+ *
  * Usage: node translate-workflows.mjs [workflow-name]
  * Example: node translate-workflows.mjs ongoing-workflow
  */
@@ -13,8 +13,21 @@ import { readFile } from 'fs/promises';
 import { dirname, join, basename } from 'path';
 import { fileURLToPath } from 'url';
 import { createClient } from '@supabase/supabase-js';
+import fs from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Load .env.local
+const envPath = join(__dirname, '../.env.local');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf-8');
+  envContent.split('\n').forEach(line => {
+    const [key, ...valueParts] = line.split('=');
+    if (key && valueParts.length) {
+      process.env[key.trim()] = valueParts.join('=').trim();
+    }
+  });
+}
 
 // OpenAI API configuration
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -134,7 +147,6 @@ Return JSON object with format: {"danish text": "translated text", ...}`;
                 { role: 'system', content: 'You are a professional translator specializing in technical documentation. Return only valid JSON.' },
                 { role: 'user', content: prompt }
             ],
-            temperature: 0.3,
             response_format: { type: 'json_object' }
         })
     });
