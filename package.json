@@ -11,10 +11,11 @@
     "db:translate:dry": "npx tsx scripts/translate-articles.ts --dry-run"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.94.0",
+    "@supabase/supabase-js": "^2.94.1",
     "next": "^14.0.0",
     "openai": "^6.17.0",
     "pg": "^8.18.0",
+    "puppeteer": "^24.37.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-markdown": "^9.0.0"

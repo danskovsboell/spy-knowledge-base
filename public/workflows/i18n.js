@@ -1,11 +1,21 @@
 /**
  * i18n helper for workflow HTML files
  * Supports both React components (via t() function) and DOM text replacement
+ * 
+ * Henter oversættelser fra Supabase database via API endpoint
  */
 
 // Supported locales (currently active: da, en, nl)
 const SUPPORTED_LOCALES = ['da', 'en', 'nl'];
 const DEFAULT_LOCALE = 'da';
+
+// Workflow name → database slug mapping
+const WORKFLOW_SLUGS = {
+  'ongoing-workflow': 'ongoing-wms',
+  'nemedi-workflow': 'nemedi',
+  'sitoo-workflow': 'sitoo-pos',
+  'lector-customs-workflow': 'lector-customs'
+};
 
 // Get locale from URL parameter
 function getLocale() {
@@ -17,27 +27,18 @@ function getLocale() {
   return DEFAULT_LOCALE;
 }
 
-// Map workflow HTML filenames to article slugs
-const WORKFLOW_SLUG_MAP = {
-  'ongoing-workflow': 'ongoing-wms',
-  'sitoo-workflow': 'sitoo-pos',
-  'nemedi-workflow': 'nemedi',
-  'lector-customs-workflow': 'lector-customs',
-  'dedication': 'dedication'
-};
-
-// Load translations from database API
+// Load translations from API endpoint (Supabase database)
 async function loadTranslations(workflowName) {
   const locale = getLocale();
 
-  // Map workflow name to article slug
-  const slug = WORKFLOW_SLUG_MAP[workflowName] || workflowName;
+  // Map workflow name to database slug
+  const slug = WORKFLOW_SLUGS[workflowName] || workflowName;
 
   try {
-    // Fetch from database API
+    // Fetch from API endpoint (henter fra Supabase kb_translations)
     const response = await fetch(`/api/translations/${slug}/${locale}`);
     if (!response.ok) {
-      console.warn(`[i18n] Translations not found for ${slug}/${locale}`);
+      console.warn(`[i18n] API returned ${response.status} for ${slug}/${locale}`);
       return { locale, translations: null };
     }
 
@@ -45,11 +46,11 @@ async function loadTranslations(workflowName) {
     const translations = data.translations || null;
 
     if (!translations || Object.keys(translations).length === 0) {
-      console.warn(`[i18n] No translations found for locale: ${locale}`);
+      console.warn(`[i18n] No translations found for ${slug}/${locale}`);
       return { locale, translations: null };
     }
 
-    console.log(`[i18n] Loaded ${Object.keys(translations).length} translations from database for ${slug}/${locale}`);
+    console.log(`[i18n] Loaded ${Object.keys(translations).length} translations for ${slug}/${locale} from ${data.source || 'API'}`);
     return { locale, translations };
   } catch (error) {
     console.error('[i18n] Error loading translations:', error);
@@ -141,5 +142,6 @@ window.i18n = {
   autoApplyTranslations,
   translateDOM,
   SUPPORTED_LOCALES,
-  DEFAULT_LOCALE
+  DEFAULT_LOCALE,
+  WORKFLOW_SLUGS
 };
