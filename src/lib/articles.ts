@@ -237,11 +237,12 @@ export async function getArticles(lang: Locale): Promise<ArticleData[]> {
     if (!data || data.length === 0) throw new Error('No articles found')
 
     return data.map((article: any) => {
-      const translation = Array.isArray(article.kb_translations) 
-        ? article.kb_translations[0] 
+      const translation = Array.isArray(article.kb_translations)
+        ? article.kb_translations[0]
         : article.kb_translations
       const fallback = FALLBACK_ARTICLES[article.slug]
-      
+      const contentType = fallback?.contentType || 'html'
+
       return {
         slug: article.slug,
         category: article.category,
@@ -252,8 +253,9 @@ export async function getArticles(lang: Locale): Promise<ArticleData[]> {
         sortOrder: article.sort_order,
         title: translation?.title || fallback?.titles[lang] || fallback?.titles.da || article.slug,
         description: translation?.description || fallback?.descriptions[lang] || fallback?.descriptions.da || '',
-        content: translation?.content || null,
-        contentType: fallback?.contentType || 'html',
+        // For iframe/react content types, use null (content field contains translation keys JSON, not HTML)
+        content: contentType === 'iframe' || contentType === 'react' ? null : (translation?.content || null),
+        contentType,
         iframeSrc: fallback?.iframeSrc,
       }
     })
@@ -288,6 +290,8 @@ export async function getArticle(slug: string, lang: Locale): Promise<ArticleDat
       : data.kb_translations
     const fallback = FALLBACK_ARTICLES[slug]
 
+    const contentType = fallback?.contentType || 'html'
+
     return {
       slug: data.slug,
       category: data.category,
@@ -298,8 +302,9 @@ export async function getArticle(slug: string, lang: Locale): Promise<ArticleDat
       sortOrder: data.sort_order,
       title: translation?.title || fallback?.titles[lang] || fallback?.titles.da || slug,
       description: translation?.description || fallback?.descriptions[lang] || fallback?.descriptions.da || '',
-      content: translation?.content || null,
-      contentType: fallback?.contentType || 'html',
+      // For iframe/react content types, use null (content field contains translation keys JSON, not HTML)
+      content: contentType === 'iframe' || contentType === 'react' ? null : (translation?.content || null),
+      contentType,
       iframeSrc: fallback?.iframeSrc,
     }
   } catch {
