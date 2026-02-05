@@ -345,98 +345,62 @@
                     {/* INDKØBSFLOW */}
                     <div className="workflow-section">
                         <h2 className="section-title">📦 Indkøbsflow (SPY køber fra leverandør)</h2>
-                        <p className="flow-label">Happy path: SPY bestiller varer hos leverandør</p>
+                        <p className="flow-label">Happy path: Ordre → Bekræftelse → Levering → Faktura</p>
                         <div className="flow-container">
                             <FlowBox icon="🏢" title="SPY" desc="Opretter indkøbsordre" type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📤" title="ORDERS Export" desc="Send ordre til leverandør" type="spy" />
+                            <FlowBox icon="📤" title="ORDERS" desc="Send til leverandør" type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="🏭" title="Leverandør" desc="Modtager ordre" type="external" />
-                        </div>
-                        <div className="flow-container">
-                            <FlowBox icon="🏭" title="Leverandør" desc="Behandler og bekræfter" type="external" />
+                            <FlowBox icon="🏭" title="Leverandør" desc="Bekræfter" type="external" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📄" title="ORDRSP Import" desc="Modtag ordrebekræftelse" type="spy" />
+                            <FlowBox icon="📄" title="ORDRSP" desc="Ordrebekræftelse" type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="✅" title="Ordre bekræftet" desc="Status opdateret i SPY" type="spy" />
-                        </div>
-                        <p className="flow-label" style={{marginTop: '20px'}}>Leverandør sender varer</p>
-                        <div className="flow-container">
-                            <FlowBox icon="🏭" title="Leverandør" desc="Afsender varer" type="external" />
+                            <FlowBox icon="📄" title="DESADV" desc="Forsendelsesadvis" type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📄" title="DESADV Import" desc="Modtag forsendelsesadvis" type="spy" />
+                            <FlowBox icon="📄" title="INVOIC" desc="Købsfaktura" type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📦" title="Modtagelse" desc="Forbered varemodtagelse" type="spy" />
-                        </div>
-                        <p className="flow-label" style={{marginTop: '20px'}}>Leverandør sender faktura</p>
-                        <div className="flow-container">
-                            <FlowBox icon="🏭" title="Leverandør" desc="Sender faktura" type="external" />
-                            <Arrow direction="right" />
-                            <FlowBox icon="📄" title="INVOIC Import" desc="Modtag købsfaktura" type="spy" />
-                            <Arrow direction="right" />
-                            <FlowBox icon="💰" title="Bogføring" desc="Faktura klar til betaling" type="spy" />
+                            <FlowBox icon="✅" title="Komplet" desc="Ordre afsluttet" type="spy" />
                         </div>
                         
                         <p className="flow-label" style={{marginTop: '20px', color: 'var(--spy-red)'}}>Fejlscenarie: Leverandør kan ikke levere</p>
                         <div className="flow-container">
-                            <FlowBox icon="🏭" title="Leverandør" desc="Afviser/ændrer ordre" type="external" />
+                            <FlowBox icon="🏭" title="Leverandør" desc="Afviser ordre" type="external" />
                             <Arrow direction="right" error />
-                            <FlowBox icon="📄" title="ORDRSP Import" desc="Negativ bekræftelse" type="spy" />
+                            <FlowBox icon="📄" title="ORDRSP" desc="Negativ bekræftelse" type="spy" />
                             <Arrow direction="right" error />
-                            <FlowBox icon="❌" title="Ordre afvist" desc="Kræver manuel handling" type="error" />
+                            <FlowBox icon="❌" title="Afvist" desc="Kræver manuel handling" type="error" />
                         </div>
                     </div>
                     
                     {/* SALGSFLOW */}
                     <div className="workflow-section">
                         <h2 className="section-title">💰 Salgsflow (Kunde køber fra SPY)</h2>
-                        <p className="flow-label">Happy path: Kunde bestiller varer hos SPY</p>
+                        <p className="flow-label">Happy path: Ordre → Bekræftelse → Levering → Faktura → Kvittering</p>
                         <div className="flow-container">
                             <FlowBox icon="🛒" title="Kunde" desc="Sender ordre" type="customer" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📄" title="ORDERS Import" desc="Modtag kundeordre" type="spy" />
+                            <FlowBox icon="📄" title="ORDERS" desc="Kundeordre ind" type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="⚙️" title="SPY Processing" desc="Opret salgsordre" type="spy" />
-                        </div>
-                        <div className="flow-container">
-                            <FlowBox icon="🏢" title="SPY" desc="Bekræfter ordre" type="spy" />
+                            <FlowBox icon="📤" title="ORDRSP" desc="Bekræftelse ud" type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📤" title="ORDRSP Export" desc="Send ordrebekræftelse" type="spy" />
-                            <Arrow direction="right" />
-                            <FlowBox icon="🛒" title="Kunde" desc="Modtager bekræftelse" type="customer" />
-                        </div>
-                        <p className="flow-label" style={{marginTop: '20px'}}>SPY sender varer til kunde</p>
-                        <div className="flow-container">
                             <FlowBox icon="📦" title="Pakkeri" desc="Varer pakkes" type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📤" title="DESADV Export" desc="Send forsendelsesadvis" type="spy" />
+                            <FlowBox icon="📤" title="DESADV" desc="Forsendelsesadvis" type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="🛒" title="Kunde" desc="Varer undervejs" type="customer" />
-                        </div>
-                        <p className="flow-label" style={{marginTop: '20px'}}>SPY fakturerer kunde</p>
-                        <div className="flow-container">
-                            <FlowBox icon="🧾" title="Fakturering" desc="Opret faktura i SPY" type="spy" />
+                            <FlowBox icon="📤" title="INVOIC" desc="Faktura ud" type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📤" title="INVOIC Export" desc="Send faktura til kunde" type="spy" />
+                            <FlowBox icon="📄" title="RECADV" desc="Kvittering ind" type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="🛒" title="Kunde" desc="Modtager faktura" type="customer" />
-                        </div>
-                        <p className="flow-label" style={{marginTop: '20px'}}>Kunde bekræfter modtagelse</p>
-                        <div className="flow-container">
-                            <FlowBox icon="🛒" title="Kunde" desc="Bekræfter modtagelse" type="customer" />
-                            <Arrow direction="right" />
-                            <FlowBox icon="📄" title="RECADV Import" desc="Modtag kvittering" type="spy" />
-                            <Arrow direction="right" />
-                            <FlowBox icon="✅" title="Afsluttet" desc="Ordre komplet" type="spy" />
+                            <FlowBox icon="✅" title="Komplet" desc="Ordre afsluttet" type="spy" />
                         </div>
                         
                         <p className="flow-label" style={{marginTop: '20px', color: 'var(--spy-red)'}}>Fejlscenarie: Varer ikke på lager</p>
                         <div className="flow-container">
-                            <FlowBox icon="📄" title="ORDERS Import" desc="Modtager ordre" type="spy" />
+                            <FlowBox icon="📄" title="ORDERS" desc="Modtager ordre" type="spy" />
                             <Arrow direction="right" error />
-                            <FlowBox icon="⚠️" title="Lagermangel" desc="Varer ikke tilgængelige" type="error" />
+                            <FlowBox icon="⚠️" title="Lagermangel" desc="Ikke tilgængelig" type="error" />
                             <Arrow direction="right" error />
-                            <FlowBox icon="📤" title="ORDRSP Export" desc="Negativ bekræftelse" type="spy" />
+                            <FlowBox icon="📤" title="ORDRSP" desc="Negativ bekræftelse" type="spy" />
                         </div>
                     </div>
                     
