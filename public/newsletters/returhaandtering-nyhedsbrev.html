@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPY News – Ny Returhåndtering i SPY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --spy-black: #1a1a1a;
+            --spy-dark: #0f0f0f;
+            --spy-gold: #c9a227;
+            --spy-gold-light: #d4b652;
+            --spy-white: #ffffff;
+            --spy-gray: #888888;
+            --spy-gray-light: #cccccc;
+            --spy-gray-dark: #333333;
+            --green: #27ae60;
+            --blue: #3498db;
+            --purple: #9b59b6;
+            --orange: #e67e22;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Raleway', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--spy-black);
+            color: var(--spy-white);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+        
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 24px; }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 60px 0 40px;
+            border-bottom: 2px solid var(--spy-gold);
+            margin-bottom: 40px;
+        }
+        .header-logo { font-size: 14px; letter-spacing: 4px; color: var(--spy-gold); margin-bottom: 20px; font-weight: 600; }
+        .header h1 { font-size: 36px; font-weight: 300; margin-bottom: 16px; }
+        .header-subtitle { font-size: 18px; color: var(--spy-gray-light); max-width: 600px; margin: 0 auto; }
+        
+        /* Alert Box */
+        .alert {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.15), rgba(230, 126, 34, 0.15));
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .alert-icon { font-size: 24px; }
+        .alert-title { font-weight: 700; color: #e74c3c; margin-bottom: 4px; }
+        .alert-text { font-size: 14px; color: var(--spy-gray-light); }
+        
+        /* Section */
+        .section { margin-bottom: 48px; }
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--spy-white);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title-icon { font-size: 28px; }
+        .section-intro { color: var(--spy-gray-light); margin-bottom: 24px; font-size: 16px; }
+        
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+        .card-icon.green { background: rgba(39, 174, 96, 0.15); }
+        .card-icon.blue { background: rgba(52, 152, 219, 0.15); }
+        .card-icon.purple { background: rgba(155, 89, 182, 0.15); }
+        .card-icon.gold { background: rgba(201, 162, 39, 0.15); }
+        .card-title { font-size: 18px; font-weight: 700; color: var(--spy-white); }
+        .card-subtitle { font-size: 13px; color: var(--spy-gray); margin-top: 4px; }
+        
+        /* Partner Cards */
+        .partner-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+        .partner-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .partner-logo { font-size: 24px; font-weight: 700; color: var(--spy-gold); margin-bottom: 12px; }
+        .partner-offer { 
+            background: rgba(39, 174, 96, 0.1); 
+            border: 1px solid rgba(39, 174, 96, 0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 16px 0;
+        }
+        .partner-offer-title { font-size: 12px; color: var(--green); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .partner-contact { font-size: 13px; color: var(--spy-gray); margin-top: 16px; }
+        
+        /* Quick Start Box */
+        .quickstart {
+            background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(201, 162, 39, 0.05));
+            border: 2px solid var(--spy-gold);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 40px;
+        }
+        .quickstart-title { font-size: 20px; font-weight: 700; color: var(--spy-gold); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+        .quickstart-steps { display: flex; gap: 16px; flex-wrap: wrap; }
+        .quickstart-step {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .quickstart-step-num {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--spy-gold);
+            color: var(--spy-black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 12px;
+        }
+        .quickstart-step-title { font-weight: 600; margin-bottom: 8px; }
+        .quickstart-step-text { font-size: 13px; color: var(--spy-gray-light); }
+        
+        /* Flow Diagram */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 24px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+        .flow-box {
+            background: var(--spy-gray-dark);
+            border-radius: 8px;
+            padding: 12px 20px;
+            text-align: center;
+            min-width: 120px;
+        }
+        .flow-box.highlight { background: var(--spy-gold); color: var(--spy-black); }
+        .flow-box-title { font-weight: 600; font-size: 13px; }
+        .flow-box-sub { font-size: 11px; opacity: 0.7; margin-top: 4px; }
+        .flow-arrow { font-size: 20px; color: var(--spy-gold); }
+        
+        /* Method Cards */
+        .method-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            border-left: 4px solid var(--spy-gold);
+        }
+        .method-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .method-num {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--spy-gold);
+            color: var(--spy-black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .method-title { font-size: 20px; font-weight: 700; }
+        .method-when { font-size: 14px; color: var(--spy-gray); margin-top: 4px; }
+        
+        /* Steps List */
+        .steps-list { counter-reset: step; }
+        .step-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        .step-item::before {
+            counter-increment: step;
+            content: counter(step);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--spy-gray-dark);
+            color: var(--spy-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        /* Info Box */
+        .info-box {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid rgba(52, 152, 219, 0.2);
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .info-box-title { font-weight: 700; color: var(--blue); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        
+        /* Tip Box */
+        .tip-box {
+            background: rgba(39, 174, 96, 0.1);
+            border: 1px solid rgba(39, 174, 96, 0.2);
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .tip-box-title { font-weight: 700; color: var(--green); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        
+        /* Navigation Path */
+        .nav-path {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--spy-gray-dark);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: monospace;
+            margin: 8px 0;
+        }
+        .nav-path span { color: var(--spy-gold); }
+        
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--spy-gray-dark);
+            text-align: center;
+        }
+        .footer-title { font-size: 18px; font-weight: 600; color: var(--spy-gold); margin-bottom: 24px; }
+        .footer-contacts { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+        .footer-contact { text-align: center; }
+        .footer-contact-flag { font-size: 32px; margin-bottom: 8px; }
+        .footer-contact-title { font-weight: 600; margin-bottom: 4px; }
+        .footer-contact-info { font-size: 13px; color: var(--spy-gray); }
+        
+        /* Print Styles */
+        @media print {
+            body { background: white; color: black; }
+            .card, .method-card, .quickstart, .partner-card { border-color: #ddd; background: #f9f9f9; }
+            .flow-box { background: #eee; }
+            .flow-box.highlight { background: var(--spy-gold); }
+        }
+
+        ul, ol { margin-left: 20px; margin-bottom: 16px; }
+        li { margin-bottom: 8px; }
+        p { margin-bottom: 16px; }
+        strong { color: var(--spy-white); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-logo">SPY NEWS</div>
+            <h1>Ny Returhåndtering i SPY</h1>
+            <p class="header-subtitle">Direkte integration mellem Shopify Returportaler og SPY – for nemmere og hurtigere håndtering af B2C returneringer</p>
+        </header>
+
+        <!-- Alert -->
+        <div class="alert">
+            <div class="alert-icon">⚠️</div>
+            <div>
+                <div class="alert-title">Vigtigt: Håndscanner-support kommer i uge 7</div>
+                <div class="alert-text">Vi arbejder på at få de almindelige Zebra håndscannere til at understøtte scanning af retur. Indtil da virker scanning kun med en bordscanner, der er fysisk forbundet til PC'en (returstationen).</div>
+            </div>
+        </div>
+
+        <!-- Quick Start -->
+        <div class="quickstart">
+            <div class="quickstart-title">🚀 Quick Start – Kom i gang på 3 minutter</div>
+            <div class="quickstart-steps">
+                <div class="quickstart-step">
+                    <div class="quickstart-step-num">1</div>
+                    <div class="quickstart-step-title">Aktivér Integration</div>
+                    <div class="quickstart-step-text">Admin → Settings → Shopify → Edit → Slå "Handle Returns" til</div>
+                </div>
+                <div class="quickstart-step">
+                    <div class="quickstart-step-num">2</div>
+                    <div class="quickstart-step-title">Gå til Scan</div>
+                    <div class="quickstart-step-text">Sales → Claims/Returns → Scan Shopify Returns</div>
+                </div>
+                <div class="quickstart-step">
+                    <div class="quickstart-step-num">3</div>
+                    <div class="quickstart-step-title">Scan & Bekræft</div>
+                    <div class="quickstart-step-text">Scan returlabel → Registrér varer → Confirm</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Intro Section -->
+        <section class="section">
+            <h2 class="section-title"><span class="section-title-icon">📦</span> Hvad er nyt?</h2>
+            <p class="section-intro">Vi har udvidet vores returhåndtering, så I nu både kan starte og scanne en retur direkte i SPY. Derudover er vores Shopify-integration blevet udvidet med returhåndtering fra returportaler, så disse passer ind i en ny arbejdsproces i SPY.</p>
+            
+            <p>Det betyder, at I nu har mulighed for nemmere returhåndtering i jeres forretning med de muligheder, en returportal kan give – såsom ombytninger, returlabels og hurtigere refunderinger.</p>
+        </section>
+
+        <!-- Partners Section -->
+        <section class="section">
+            <h2 class="section-title"><span class="section-title-icon">🤝</span> Returportaler & Apps</h2>
+            <p class="section-intro">Enhver portal, der understøtter vores proces, kan bruges. Vi har testet og har kendskab til følgende:</p>
+            
+            <div class="partner-grid">
+                <div class="partner-card">
+                    <div class="partner-logo">Returnflows</div>
+                    <p style="font-size: 14px; color: var(--spy-gray-light);">returnflows.com</p>
+                    <div class="partner-offer">
+                        <div class="partner-offer-title">🎁 Særtilbud til SPY-kunder</div>
+                        <ul style="font-size: 13px; margin: 0;">
+                            <li>Intet opsætningsgebyr (normalt 2.500-10.000 kr.)</li>
+                            <li>Ingen ekstra pris pr. marked (normalt 250 kr/md)</li>
+                            <li>30 dages gratis prøveperiode</li>
+                        </ul>
+                    </div>
+                    <div class="partner-contact">
+                        📞 +45 27 13 40 53<br>
+                        ✉️ jeppe@returnflows.com
+                    </div>
+                </div>
+                
+                <div class="partner-card">
+                    <div class="partner-logo">Float</div>
+                    <p style="font-size: 14px; color: var(--spy-gray-light);">floatreturns.com</p>
+                    <div class="partner-offer">
+                        <div class="partner-offer-title">🎁 Særtilbud til SPY-kunder</div>
+                        <ul style="font-size: 13px; margin: 0;">
+                            <li>Intet opstartsgebyr</li>
+                            <li>Ingen ekstra gebyr for flere shops/markeder</li>
+                            <li>60 dages gratis prøveperiode</li>
+                        </ul>
+                    </div>
+                    <div class="partner-contact">
+                        Kontakt Float for mere information
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-box" style="margin-top: 24px;">
+                <div class="info-box-title">💡 Bruger I en anden returportal?</div>
+                <p style="margin: 0;">Ønsker I at bruge en anden returportal end ovenstående? Ræk ud til os, så vi kan starte en dialog omkring jeres ønskede løsning.</p>
+            </div>
+        </section>
+
+        <!-- Flow Overview -->
+        <section class="section">
+            <h2 class="section-title"><span class="section-title-icon">🔄</span> Den overordnede proces</h2>
+            
+            <div class="flow-diagram">
+                <div class="flow-box">
+                    <div class="flow-box-title">Kunde</div>
+                    <div class="flow-box-sub">Bruger returportal</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">
+                    <div class="flow-box-title">Returportal</div>
+                    <div class="flow-box-sub">Label + valg</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box highlight">
+                    <div class="flow-box-title">SPY</div>
+                    <div class="flow-box-sub">Scan & håndtér</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">
+                    <div class="flow-box-title">Shopify</div>
+                    <div class="flow-box-sub">Auto-opdatering</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <p><strong>Slutkunden</strong> bruger den tilgængelige returportal til registrering af returen – herunder valg af ordrer, varer og muligheder som fx returlabel, refundering eller ombytning.</p>
+                <p style="margin-bottom: 0;"><strong>Selve varehåndteringen sker i SPY:</strong> Håndtér pakken ved modtagelse på lageret med bordscanner/håndscanner. Godkend, refundér eller ombyt fra SPY, og integrationen opdaterer automatisk Shopify.</p>
+            </div>
+            
+            <div class="info-box">
+                <div class="info-box-title">📋 Godt at vide</div>
+                <ul style="margin: 0; font-size: 14px;">
+                    <li><strong>Gavekort:</strong> Det er pt. ikke muligt at udstede gavekort i stedet for tilbagebetaling – men vi arbejder på det.</li>
+                    <li><strong>Price Reduction:</strong> Funktionen i SPY understøttes ikke i kombination med Shopify Returportaler.</li>
+                    <li><strong>Copy/Credit:</strong> Via Sales → Invoiced bruges stadig til krediteringer uden returportaler.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Method Selection -->
+        <section class="section">
+            <h2 class="section-title"><span class="section-title-icon">🎯</span> Vælg din metode</h2>
+            <p class="section-intro">Der er 3 måder at håndtere B2C-returneringer i SPY. Vælg den, der passer til jeres situation:</p>
+            
+            <div class="card" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 40px; margin-bottom: 12px;">1️⃣</div>
+                    <div style="font-weight: 700; margin-bottom: 8px;">Process Shopify Return</div>
+                    <div style="font-size: 13px; color: var(--spy-gray);">Kunden har brugt en returportal</div>
+                </div>
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 40px; margin-bottom: 12px;">2️⃣</div>
+                    <div style="font-weight: 700; margin-bottom: 8px;">Create Return</div>
+                    <div style="font-size: 13px; color: var(--spy-gray);">Manuel registrering uden portal</div>
+                </div>
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 40px; margin-bottom: 12px;">3️⃣</div>
+                    <div style="font-weight: 700; margin-bottom: 8px;">Eksternt Lager</div>
+                    <div style="font-size: 13px; color: var(--spy-gray);">Via ekstern lagerintegration</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Method 1 -->
+        <section class="section">
+            <div class="method-card">
+                <div class="method-header">
+                    <div class="method-num">1</div>
+                    <div>
+                        <div class="method-title">Process Shopify Return</div>
+                        <div class="method-when">Når kunden har startet returen via en integreret returportal</div>
+                    </div>
+                </div>
+                
+                <div class="nav-path">Sales <span>→</span> Claims/Returns <span>→</span> Scan Shopify Returns</div>
+                
+                <div class="steps-list" style="margin-top: 20px;">
+                    <div class="step-item">
+                        <div><strong>Søg efter returen</strong> ved at scanne returlabelen eller søge efter Shopify-ordren.</div>
+                    </div>
+                    <div class="step-item">
+                        <div><strong>Tryk "Process Shopify Return"</strong> – varelinjerne, der er meldt retur, ligger klar til registrering.</div>
+                    </div>
+                    <div class="step-item">
+                        <div><strong>Registrér varerne</strong> ved at scanne stregkoden eller trykke på den. Vælg:<br>
+                            • <strong>Claim Cause</strong> – årsagskode for returen<br>
+                            • <strong>Claim Type</strong> – "Return/Credit Note" (på lager) eller "Claim/Credit Note" (ikke på lager)<br>
+                            • <strong>Needs Label</strong> – slå til, hvis I ønsker print af ny style-label
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div><strong>Gem linjen</strong> ved at trykke eller scanne "Save Item". Gentag for alle varelinjer.</div>
+                    </div>
+                    <div class="step-item">
+                        <div><strong>Bekræft returen</strong> ved at trykke eller scanne "Confirm". Tilbagebetaling sættes i gang automatisk.</div>
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <div class="tip-box-title">💰 Tilbagebetaling</div>
+                    <p style="margin: 0;">Returen ligger nu under Sales → Claims/Returns → Confirmed. Tilbagebetalingen går automatisk tilbage til det oprindelige betalingsmiddel (kreditkort, gavekort osv.). SPY følger fragtbeløbet fra returportalen.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Exchanges Section -->
+        <section class="section">
+            <div class="card" style="border-left: 4px solid var(--purple);">
+                <div class="card-header">
+                    <div class="card-icon purple">🔄</div>
+                    <div>
+                        <div class="card-title">Ombytninger via returportaler</div>
+                        <div class="card-subtitle">Automatisk håndtering af bytte til anden størrelse/farve</div>
+                    </div>
+                </div>
+                
+                <p>Når systemet registrerer en ombytning via returportalen:</p>
+                <ul>
+                    <li><strong>Varerne reserveres på lageret med det samme</strong> – så de er klar til den nye ordre.</li>
+                    <li>Den "nye" ordre venter, til varerne fra den oprindelige ordre er registreret retur.</li>
+                    <li>SPY håndterer automatisk eventuel ekstra betaling via Shopify, hvis der er prisforskel.</li>
+                </ul>
+                
+                <div class="info-box">
+                    <div class="info-box-title">⚡ Vigtigt om ombytninger</div>
+                    <p style="margin: 0;">SPY håndterer først kreditering eller opkrævning, når <strong>både</strong> returen og ombytningen er færdiggjort i SPY. Ombytninger, der ikke er lavet via en integreret returportal, kræver stadig en manuel arbejdsgang.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Method 2 -->
+        <section class="section">
+            <div class="method-card">
+                <div class="method-header">
+                    <div class="method-num">2</div>
+                    <div>
+                        <div class="method-title">Create Return</div>
+                        <div class="method-when">Når returen ikke er startet via en returportal – I registrerer den selv</div>
+                    </div>
+                </div>
+                
+                <div class="nav-path">Sales <span>→</span> Claims/Returns <span>→</span> Scan Claims/Returns</div>
+                
+                <div class="steps-list" style="margin-top: 20px;">
+                    <div class="step-item">
+                        <div><strong>Søg efter ordren</strong> via en af de oplyste parametre.</div>
+                    </div>
+                    <div class="step-item">
+                        <div><strong>Tryk "Create Return"</strong> – vælg Credit Note Date, Claim Cause, og evt. kommentarer.</div>
+                    </div>
+                    <div class="step-item">
+                        <div><strong>Vælg varerne</strong> der skal registreres på returen ved at scanne eller trykke.</div>
+                    </div>
+                    <div class="step-item">
+                        <div><strong>Konfigurér hver varelinje:</strong><br>
+                            • Claim Cause, Claim Type, og om der skal printes ny label.
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div><strong>Tryk "Continue"</strong> når alle linjer er registreret.</div>
+                    </div>
+                    <div class="step-item">
+                        <div><strong>Bekræft:</strong> Brug evt. "Update Freight Refund Amount" til automatisk fragtbeløb. Tryk "Confirm".</div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-box-title">📝 Note om fragt</div>
+                    <p style="margin: 0;">Hvis slutkunden selv skal betale for returfragten, skal værdien i "Freight Refund" være <strong>negativ</strong>.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Method 3 -->
+        <section class="section">
+            <div class="method-card">
+                <div class="method-header">
+                    <div class="method-num">3</div>
+                    <div>
+                        <div class="method-title">Eksternt Lager Integration</div>
+                        <div class="method-when">Når I har en integration til et eksternt lager</div>
+                    </div>
+                </div>
+                
+                <p>Har I en ekstern lagerintegration, der allerede behandler B2B-retur via eksportfunktionen (RECADV/Entry), gør en returportal det endnu nemmere – flowet er automatisk:</p>
+                
+                <div class="flow-diagram" style="margin: 24px 0;">
+                    <div class="flow-box">
+                        <div class="flow-box-title">Returportal</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">
+                        <div class="flow-box-title">SPY eksport</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">
+                        <div class="flow-box-title">Eksternt lager</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box highlight">
+                        <div class="flow-box-title">Auto-kreditnota</div>
+                    </div>
+                </div>
+                
+                <p>Returen eksporteres til lageret som en B2B-retur. Når lageret tilbagemelder, dannes kreditnota og tilbagebetaling automatisk.</p>
+                
+                <div class="info-box">
+                    <div class="info-box-title">📞 Vigtigt</div>
+                    <p style="margin: 0;">Kontakt jeres lager og indgå aftale om den nye håndtering – det påvirker deres arbejdsgang. Returen vil ligge under Sales → Delivered, indtil lageret tilbagemelder.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips Section -->
+        <section class="section">
+            <h2 class="section-title"><span class="section-title-icon">💡</span> Tip & Tricks</h2>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon gold">🖨️</div>
+                    <div>
+                        <div class="card-title">Print Action Barcodes</div>
+                        <div class="card-subtitle">Hurtigere workflow med stregkoder</div>
+                    </div>
+                </div>
+                <p>I kan printe jeres "Claim Causes" og "Claim Types" ud som stregkoder. På den måde slipper I for at trykke på PC'en – i stedet vælger I ved at scanne den relevante stregkode. Perfekt til at speede arbejdsgangen op!</p>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-box-title">🔄 Toggle Label via scanner</div>
+                <p style="margin: 0;">Ligesom det er muligt at navigere med bordscanneren ved at scanne funktioner med stregkoder, kan I også skifte "Needs Label" til/fra ved at scanne på "Toggle Label".</p>
+            </div>
+        </section>
+
+        <!-- Activation -->
+        <section class="section">
+            <div class="card" style="border: 2px solid var(--spy-gold); background: rgba(201, 162, 39, 0.05);">
+                <div class="card-header">
+                    <div class="card-icon gold">⚙️</div>
+                    <div>
+                        <div class="card-title">Sådan aktiverer I returhåndtering</div>
+                        <div class="card-subtitle">Shopify Return-filteret vises først, når det er aktiveret</div>
+                    </div>
+                </div>
+                <div class="nav-path">Admin <span>→</span> Settings <span>→</span> Integration <span>→</span> Shopify <span>→</span> Shops <span>→</span> Edit</div>
+                <p style="margin-top: 16px; margin-bottom: 0;">Aktivér feltet: <strong>"Handle Returns"</strong></p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-title">De bedste hilsner fra SPY Teamet</div>
+            <div class="footer-contacts">
+                <div class="footer-contact">
+                    <div class="footer-contact-flag">🇩🇰</div>
+                    <div class="footer-contact-title">Danmark</div>
+                    <div class="footer-contact-info">
+                        support@spysystem.dk<br>
+                        +45 97 99 77 76
+                    </div>
+                </div>
+                <div class="footer-contact">
+                    <div class="footer-contact-flag">🇳🇱</div>
+                    <div class="footer-contact-title">Holland</div>
+                    <div class="footer-contact-info">
+                        supportnl@spy-system.com<br>
+                        +31 318 798 210
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
