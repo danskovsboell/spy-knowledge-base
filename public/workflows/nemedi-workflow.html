@@ -620,28 +620,12 @@
             );
         };
         
-        // i18n integration
-        (function() {
-            const params = new URLSearchParams(window.location.search);
-            const locale = params.get('lang') || 'da';
-            
-            if (locale === 'da') {
-                ReactDOM.render(<NemEDIWorkflow t={(k) => k} locale="da" />, document.getElementById('root'));
-                document.body.style.opacity = '1';
-                return;
-            }
-            
-            // For other languages, use i18n.js
-            if (typeof window.i18nReady !== 'undefined') {
-                window.i18nReady.then(() => {
-                    const t = window.t || ((k) => k);
-                    ReactDOM.render(<NemEDIWorkflow t={t} locale={locale} />, document.getElementById('root'));
-                    document.body.style.opacity = '1';
-                });
-            } else {
-                ReactDOM.render(<NemEDIWorkflow t={(k) => k} locale={locale} />, document.getElementById('root'));
-                document.body.style.opacity = '1';
-            }
+        // Initialize i18n and render with translations
+        (async function() {
+            const { locale, t } = await window.i18n.initI18n('nemedi-workflow');
+            ReactDOM.render(<NemEDIWorkflow t={t} locale={locale} />, document.getElementById('root'));
+            document.body.style.opacity = '1';
+            window.i18n.autoApplyTranslations(200);
         })();
     </script>
 </body>

@@ -292,11 +292,11 @@
             font-size: 0.9em;
         }
         .info-card-list li::before {
-            content: "\2192  ";
+            content: "→ ";
             color: var(--spy-gold);
         }
         .info-card-list li.active::before {
-            content: "\2713  ";
+            content: "✓ ";
             color: var(--ongoing-green);
         }
         
@@ -346,7 +346,7 @@
     <div id="root"></div>
     
     <script type="text/babel">
-        const Arrow = ({ reverse }) => <span className={`arrow ${reverse ? 'reverse' : ''}`}>{reverse ? '\u2190' : '\u2192'}</span>;
+        const Arrow = ({ reverse }) => <span className={`arrow ${reverse ? 'reverse' : ''}`}>{reverse ? '←' : '→'}</span>;
         
         const FlowBox = ({ icon, title, desc, type }) => (
             <div className={`flow-box ${type}`}>
@@ -393,255 +393,255 @@
                         </div>
                         <div className="legend-item">
                             <div className="legend-color supplier"></div>
-                            <span>Leverand&oslash;r</span>
+                            <span>{t("Leverandør")}</span>
                         </div>
                     </div>
                     
                     {/* ============ UDGÅENDE ORDRE ============ */}
                     <div className="workflow-section">
-                        <h2 className="section-title">&#x1F4E6; Udg&aring;ende ordre (Salgsordre &rarr; Lager &rarr; Kunde)</h2>
+                        <h2 className="section-title">{t("📦 Udgående ordre (Salgsordre → Lager → Kunde)")}</h2>
                         <div className="flow-container">
-                            <FlowBox icon="&#x1F6D2;" title="Ordre i SPY" desc="Packing klar" type="spy" />
+                            <FlowBox icon="🛒" title={t("Ordre i SPY")} desc={t("Packing klar")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="&#x1F4CB;" title="PRICAT" desc="Artikeldata" type="spy" />
+                            <FlowBox icon="📋" title="PRICAT" desc={t("Artikeldata")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="&#x1F4E4;" title="Order Export" desc="Send til Ongoing" type="spy" />
+                            <FlowBox icon="📤" title={t("Order Export")} desc={t("Send til Ongoing")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="&#x1F3ED;" title="Ongoing" desc="Modtager ordre" type="ongoing" />
+                            <FlowBox icon="🏭" title="Ongoing" desc={t("Modtager ordre")} type="ongoing" />
                             <Arrow />
-                            <FlowBox icon="&#x1F4E6;" title="Pick &amp; Pack" desc="Lagerarbejde" type="warehouse" />
+                            <FlowBox icon="📦" title={t("Pick & Pack")} desc={t("Lagerarbejde")} type="warehouse" />
                             <Arrow />
-                            <FlowBox icon="&#x1F514;" title="Webhook" desc="Status: Sent" type="ongoing" />
+                            <FlowBox icon="🔔" title="Webhook" desc={t("Status: Sent")} type="ongoing" />
                             <Arrow />
-                            <FlowBox icon="&#x2705;" title="SPY opdateret" desc="DESADV modtaget" type="spy" />
+                            <FlowBox icon="✅" title={t("SPY opdateret")} desc={t("DESADV modtaget")} type="spy" />
                         </div>
                         
                         <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>{t("Ordrestatus-flow i Ongoing (Sales Orders):")}</h4>
                         <div className="status-flow">
                             <div className="status-box">CustomerSpecific (0)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box error">Error (150)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box">Open (200)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box">Released (300)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box">Allocated (320)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box active">Picked (400)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box active">Sent (450)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box active">Retrieved (500)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box" style={{borderColor: '#e67e22', color: '#e67e22'}}>Returned (800)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box error">Shredded (1000)</div>
                         </div>
                         <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '8px'}}>
-                            &#x1F7E2; Gr&oslash;n = SPY opretter packing/levering &nbsp; | &nbsp; &#x1F7E0; Orange = Retur-h&aring;ndtering &nbsp; | &nbsp; &#x1F534; R&oslash;d = Fejl / slettet
+                            {t("🟢 Grøn = SPY opretter packing/levering")} | {t("🟠 Orange = Retur-håndtering")} | {t("🔴 Rød = Fejl / slettet")}
                         </p>
                     </div>
                     
                     {/* ============ INDGÅENDE VARER ============ */}
                     <div className="workflow-section">
-                        <h2 className="section-title">&#x1F4E5; Indg&aring;ende varer (Leverand&oslash;r &rarr; Lager)</h2>
+                        <h2 className="section-title">{t("📥 Indgående varer (Leverandør → Lager)")}</h2>
                         <div className="flow-container">
-                            <FlowBox icon="&#x1F3ED;" title="Leverand&oslash;r" desc="Sender varer" type="supplier" />
+                            <FlowBox icon="🏭" title={t("Leverandør")} desc={t("Sender varer")} type="supplier" />
                             <Arrow />
-                            <FlowBox icon="&#x1F4CB;" title="Purchase Order" desc="Forventet modtagelse" type="spy" />
+                            <FlowBox icon="📋" title={t("Purchase Order")} desc={t("Forventet modtagelse")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="&#x1F4E4;" title="PO Export" desc="Send til Ongoing" type="spy" />
+                            <FlowBox icon="📤" title={t("PO Export")} desc={t("Send til Ongoing")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="&#x1F3ED;" title="Ongoing" desc="Forventer varer" type="ongoing" />
+                            <FlowBox icon="🏭" title="Ongoing" desc={t("Forventer varer")} type="ongoing" />
                             <Arrow />
-                            <FlowBox icon="&#x1F4E6;" title="Modtagelse" desc="Varer tjekkes ind" type="warehouse" />
+                            <FlowBox icon="📦" title={t("Modtagelse")} desc={t("Varer tjekkes ind")} type="warehouse" />
                             <Arrow />
-                            <FlowBox icon="&#x1F514;" title="Webhook" desc="PO Status Changed" type="ongoing" />
+                            <FlowBox icon="🔔" title="Webhook" desc={t("PO Status Changed")} type="ongoing" />
                             <Arrow />
-                            <FlowBox icon="&#x2705;" title="SPY opdateret" desc="Lager justeret" type="spy" />
+                            <FlowBox icon="✅" title={t("SPY opdateret")} desc={t("Lager justeret")} type="spy" />
                         </div>
                         
                         <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>{t("Purchase Order status-flow i Ongoing:")}</h4>
                         <div className="status-flow">
                             <div className="status-box">CustomerSpecific (0)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box">Notified (100)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box">ArrivalAtLocation (200)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box">HandOver (300)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box active">Deviation (400)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box active">Received (500)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box error">Shredded (900)</div>
                         </div>
                         <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '8px'}}>
-                            &#x1F7E2; Gr&oslash;n = SPY modtager PShipping (Deviation k&oslash;rer ogs&aring; receive-flow med korrektion)
+                            {t("🟢 Grøn = SPY modtager PShipping (Deviation kører også receive-flow med korrektion)")}
                         </p>
                     </div>
                     
                     {/* ============ RETURNERINGER ============ */}
                     <div className="workflow-section">
-                        <h2 className="section-title">&#x1F504; Returneringer</h2>
+                        <h2 className="section-title">{t("🔄 Returneringer")}</h2>
                         
                         <div className="scenario-label">{t("Scenarie A: Retur starter i SPY")}</div>
                         <div className="flow-container" style={{marginBottom: '25px'}}>
-                            <FlowBox icon="&#x21A9;&#xFE0F;" title="Claim i SPY" desc="Retur oprettet" type="spy" />
+                            <FlowBox icon="↩️" title={t("Claim i SPY")} desc={t("Retur oprettet")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="&#x1F4E4;" title="Return Order" desc="Send til Ongoing" type="spy" />
+                            <FlowBox icon="📤" title={t("Return Order")} desc={t("Send til Ongoing")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="&#x1F3ED;" title="Ongoing" desc="Forventer retur" type="ongoing" />
+                            <FlowBox icon="🏭" title="Ongoing" desc={t("Forventer retur")} type="ongoing" />
                             <Arrow />
-                            <FlowBox icon="&#x1F4E6;" title="Modtagelse" desc="Retur tjekkes ind" type="warehouse" />
+                            <FlowBox icon="📦" title={t("Modtagelse")} desc={t("Retur tjekkes ind")} type="warehouse" />
                             <Arrow />
-                            <FlowBox icon="&#x1F514;" title="Webhook" desc="PO Status Changed (return PO)" type="ongoing" />
+                            <FlowBox icon="🔔" title="Webhook" desc={t("PO Status Changed (return PO)")} type="ongoing" />
                             <Arrow />
-                            <FlowBox icon="&#x2705;" title="Claim bekr&aelig;ftet" desc="ClaimConfirmer" type="spy" />
+                            <FlowBox icon="✅" title={t("Claim bekræftet")} desc="ClaimConfirmer" type="spy" />
                         </div>
                         
                         <div className="scenario-label ongoing-label">{t("Scenarie B: Retur starter i Ongoing")}</div>
                         <div className="flow-container">
-                            <FlowBox icon="&#x1F4E6;" title="Retur modtaget" desc="Vare returneret" type="warehouse" />
+                            <FlowBox icon="📦" title={t("Retur modtaget")} desc={t("Vare returneret")} type="warehouse" />
                             <Arrow />
-                            <FlowBox icon="&#x1F514;" title="Return Webhook" desc="Artikel returneret" type="ongoing" />
+                            <FlowBox icon="🔔" title={t("Return Webhook")} desc={t("Artikel returneret")} type="ongoing" />
                             <Arrow />
-                            <FlowBox icon="&#x1F4DD;" title="Opret Claim" desc="ClaimImporter" type="spy" />
+                            <FlowBox icon="📝" title={t("Opret Claim")} desc="ClaimImporter" type="spy" />
                             <Arrow />
-                            <FlowBox icon="&#x1F504;" title="Order Returned" desc="Status 800" type="ongoing" />
+                            <FlowBox icon="🔄" title={t("Order Returned")} desc={t("Status 800")} type="ongoing" />
                             <Arrow />
-                            <FlowBox icon="&#x1F4E7;" title="Email notifikation" desc="Ny claim i SPY" type="spy" />
+                            <FlowBox icon="📧" title={t("Email notifikation")} desc={t("Ny claim i SPY")} type="spy" />
                         </div>
                         
                         <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>{t("Return Order status-flow i Ongoing:")}</h4>
                         <div className="status-flow">
                             <div className="status-box">CustomerSpecific (0)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box">Notified (200)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box">ArrivalAtLocation (300)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box error">Deviation (400)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box active">Returned (500)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box error">Shredded (1000)</div>
                         </div>
                         <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '8px'}}>
-                            &#x1F7E2; Gr&oslash;n = Claim bekr&aelig;ftes i SPY &nbsp; | &nbsp; &#x1F534; R&oslash;d = Fejl / annullering
+                            {t("🟢 Grøn = Claim bekræftes i SPY")} | {t("🔴 Rød = Fejl / annullering")}
                         </p>
                     </div>
                     
                     {/* ============ PRODUCTION ORDERS ============ */}
                     <div className="workflow-section">
-                        <h2 className="section-title">&#x1F3ED; Production Orders (Assortment Splits)</h2>
+                        <h2 className="section-title">{t("🏭 Production Orders (Assortment Splits)")}</h2>
                         <div className="flow-container">
-                            <FlowBox icon="&#x1F4CA;" title="Assortment Split" desc="Opret i SPY" type="spy" />
+                            <FlowBox icon="📊" title={t("Assortment Split")} desc={t("Opret i SPY")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="&#x1F4E4;" title="Production Order" desc="Send til Ongoing" type="spy" />
+                            <FlowBox icon="📤" title={t("Production Order")} desc={t("Send til Ongoing")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="&#x1F3ED;" title="Ongoing" desc="Produktionsordre" type="ongoing" />
+                            <FlowBox icon="🏭" title="Ongoing" desc={t("Produktionsordre")} type="ongoing" />
                             <Arrow />
-                            <FlowBox icon="&#x1F4E6;" title="Ompak/Split" desc="Lagerarbejde" type="warehouse" />
+                            <FlowBox icon="📦" title={t("Ompak/Split")} desc={t("Lagerarbejde")} type="warehouse" />
                             <Arrow />
-                            <FlowBox icon="&#x1F514;" title="Webhook" desc="Status changed" type="ongoing" />
+                            <FlowBox icon="🔔" title="Webhook" desc={t("Status changed")} type="ongoing" />
                             <Arrow />
-                            <FlowBox icon="&#x2705;" title="SPY opdateret" desc="Split godkendt" type="spy" />
+                            <FlowBox icon="✅" title={t("SPY opdateret")} desc={t("Split godkendt")} type="spy" />
                         </div>
                         
                         <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>{t("Production Order status-flow i Ongoing:")}</h4>
                         <div className="status-flow">
                             <div className="status-box">CustomerSpecific (0)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box">Open (100)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box">Released (200)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box">InProgress (300)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box active">Completed (500)</div>
-                            <span className="status-arrow">&rarr;</span>
+                            <span className="status-arrow">→</span>
                             <div className="status-box error">Shredded (1000)</div>
                         </div>
                         <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '8px'}}>
-                            &#x1F7E2; Gr&oslash;n = Split markeres som godkendt i SPY
+                            {t("🟢 Grøn = Split markeres som godkendt i SPY")}
                         </p>
                     </div>
                     
                     {/* ============ DOKUMENTTYPER ============ */}
                     <div className="workflow-section">
-                        <h2 className="section-title">&#x1F4CB; Dokumenttyper</h2>
+                        <h2 className="section-title">{t("📋 Dokumenttyper")}</h2>
                         
-                        <h3 style={{marginTop: '20px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>&#x1F4E4; Export til Ongoing (SPY &rarr; Ongoing)</h3>
+                        <h3 style={{marginTop: '20px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>{t("📤 Export til Ongoing (SPY → Ongoing)")}</h3>
                         <div className="doc-types">
                             <DocCard 
                                 code="Articles (PRICAT)" 
-                                fullName="Product Master Data" 
-                                desc="Artikeldata: EAN, navn, st&oslash;rrelse, farve, v&aelig;gt. Sendes via POST/PUT til Ongoing n&aring;r PRICAT genereres." 
+                                fullName={t("Product Master Data")} 
+                                desc={t("Artikeldata: EAN, navn, størrelse, farve, vægt. Sendes via POST/PUT til Ongoing når PRICAT genereres.")} 
                                 direction="export" 
                                 path="OngoingExportPRICATTask"
                             />
                             <DocCard 
                                 code="Orders" 
-                                fullName="Sales Orders" 
-                                desc="Udg&aring;ende ordrer til picking og forsendelse" 
+                                fullName={t("Sales Orders")} 
+                                desc={t("Udgående ordrer til picking og forsendelse")} 
                                 direction="export" 
                                 path="OngoingExportOrderTask"
                             />
                             <DocCard 
                                 code="Purchase Orders" 
-                                fullName="Inbound Purchase Orders" 
-                                desc="Forventede varemodtagelser fra leverand&oslash;rer" 
+                                fullName={t("Inbound Purchase Orders")} 
+                                desc={t("Forventede varemodtagelser fra leverandører")} 
                                 direction="export" 
                                 path="OngoingExportPurchaseOrderTask"
                             />
                             <DocCard 
                                 code="Production Orders" 
-                                fullName="Assortment Splits" 
-                                desc="Ompaknings- og split-ordrer" 
+                                fullName={t("Assortment Splits")} 
+                                desc={t("Ompaknings- og split-ordrer")} 
                                 direction="export" 
                                 path="OngoingExportProductionOrderTask"
                             />
                             <DocCard 
                                 code="Return Orders" 
-                                fullName="Expected Returns" 
-                                desc="Forventede returneringer (B2C og B2B)" 
+                                fullName={t("Expected Returns")} 
+                                desc={t("Forventede returneringer (B2C og B2B)")} 
                                 direction="export" 
                                 path="OngoingExportReturnOrderTask"
                             />
                         </div>
                         
-                        <h3 style={{marginTop: '30px', marginBottom: '15px', color: 'var(--ongoing-green)', fontSize: '1.1em'}}>&#x1F4E5; Webhooks fra Ongoing (Ongoing &rarr; SPY)</h3>
+                        <h3 style={{marginTop: '30px', marginBottom: '15px', color: 'var(--ongoing-green)', fontSize: '1.1em'}}>{t("📥 Webhooks fra Ongoing (Ongoing → SPY)")}</h3>
                         <div className="webhook-grid">
-                            <WebhookItem title="OrderStatusIsChanged" desc="Ordre picked, sendt, hentet, returneret, etc." />
-                            <WebhookItem title="PurchaseOrderStatusIsChanged" desc="Varer modtaget p&aring; lager (inkl. return PO)" />
-                            <WebhookItem title="Return" desc="Returvare modtaget (opretter claim i SPY)" />
-                            <WebhookItem title="InventoryTransaction" desc="Lagerjusteringer, opt&aelig;lling" />
-                            <WebhookItem title="ProductionOrderStatusIsChanged" desc="Split/ompak fuldf&oslash;rt" />
+                            <WebhookItem title="OrderStatusIsChanged" desc={t("Ordre picked, sendt, hentet, returneret, etc.")} />
+                            <WebhookItem title="PurchaseOrderStatusIsChanged" desc={t("Varer modtaget på lager (inkl. return PO)")} />
+                            <WebhookItem title="Return" desc={t("Returvare modtaget (opretter claim i SPY)")} />
+                            <WebhookItem title="InventoryTransaction" desc={t("Lagerjusteringer, optælling")} />
+                            <WebhookItem title="ProductionOrderStatusIsChanged" desc={t("Split/ompak fuldført")} />
                         </div>
                         <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '10px'}}>
-                            NB: Artikler synkroniseres kun &eacute;n vej &mdash; SPY sender artikeldata til Ongoing via PRICAT (POST/PUT). ArticleIsCreated/Updated webhooks bruges ikke.
+                            {t("NB: Artikler synkroniseres kun én vej — SPY sender artikeldata til Ongoing via PRICAT (POST/PUT). ArticleIsCreated/Updated webhooks bruges ikke.")}
                         </p>
                     </div>
                     
                     {/* ============ TEKNISK OVERSIGT ============ */}
                     <div className="workflow-section">
-                        <h2 className="section-title">&#x2699;&#xFE0F; Teknisk oversigt</h2>
+                        <h2 className="section-title">{t("⚙️ Teknisk oversigt")}</h2>
                         <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title">&#x1F50C; API Integration</div>
+                                <div className="info-card-title">{t("🔌 API Integration")}</div>
                                 <ul className="info-card-list">
                                     <li>{t("REST API med JSON payloads")}</li>
                                     <li>{t("Webhook callbacks til SPY")}</li>
-                                    <li>Retry-logik p&aring; rate limit og server errors (GuzzleRetryMiddleware)</li>
+                                    <li>{t("Retry-logik på rate limit og server errors (GuzzleRetryMiddleware)")}</li>
                                     <li>{t("Error handler middleware (typed API exceptions)")}</li>
                                     <li>{t("Async job queue (Tasks)")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">&#x1F4E6; Order Statuses</div>
+                                <div className="info-card-title">{t("📦 Order Statuses")}</div>
                                 <ul className="info-card-list">
                                     <li>0: CustomerSpecific</li>
                                     <li>150: Error</li>
@@ -656,7 +656,7 @@
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">&#x1F4E5; Purchase Order Statuses</div>
+                                <div className="info-card-title">{t("📥 Purchase Order Statuses")}</div>
                                 <ul className="info-card-list">
                                     <li>0: CustomerSpecific</li>
                                     <li>100: Notified</li>
@@ -668,7 +668,7 @@
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">&#x21A9;&#xFE0F; Return Order Statuses</div>
+                                <div className="info-card-title">{t("↩️ Return Order Statuses")}</div>
                                 <ul className="info-card-list">
                                     <li>0: CustomerSpecific</li>
                                     <li>200: Notified</li>
@@ -679,7 +679,7 @@
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">&#x1F3ED; Production Order Statuses</div>
+                                <div className="info-card-title">{t("🏭 Production Order Statuses")}</div>
                                 <ul className="info-card-list">
                                     <li>0: CustomerSpecific</li>
                                     <li>100: Open</li>
@@ -690,11 +690,11 @@
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">&#x1F3ED; Ongoing Entiteter</div>
+                                <div className="info-card-title">{t("🏭 Ongoing Entiteter")}</div>
                                 <ul className="info-card-list">
                                     <li>{t("Articles (produkter)")}</li>
-                                    <li>Orders (udg&aring;ende)</li>
-                                    <li>Purchase Orders (indg&aring;ende)</li>
+                                    <li>{t("Orders (udgående)")}</li>
+                                    <li>{t("Purchase Orders (indgående)")}</li>
                                     <li>{t("Production Orders (splits)")}</li>
                                     <li>{t("Returns")}</li>
                                     <li>{t("Inventory")}</li>
@@ -705,27 +705,27 @@
                     
                     {/* ============ STATUS GRUPPER / RANGES ============ */}
                     <div className="workflow-section">
-                        <h2 className="section-title">&#x1F4CA; Status-grupper / Ranges &mdash; S&aring;dan virker Ongoing statuses</h2>
+                        <h2 className="section-title">{t("📊 Status-grupper / Ranges — Sådan virker Ongoing statuses")}</h2>
                         
                         <div className="range-important-note">
-                            <strong>&#x26A0;&#xFE0F; Vigtigt koncept:</strong> Ongoing statuses fungerer som <strong>GRUPPER / RANGES</strong> &mdash; ikke individuelle v&aelig;rdier.<br/>
-                            Alle statusnumre fra starten af en gruppe og indtil n&aelig;ste gruppe starter, tilh&oslash;rer samme gruppe.<br/><br/>
-                            <strong>{t("Eksempel:")}</strong> Hvis <code>Notified = 100</code> og n&aelig;ste gruppe er <code>ArrivalAtLocation = 200</code>, 
-                            s&aring; er status <code>100</code>, <code>101</code>, <code>142</code>, <code>199</code> ALLE "Notified".<br/>
-                            Det betyder at din kode skal tjekke med <strong>ranges</strong> (fx <code>status &gt;= 100 &amp;&amp; status &lt; 200</code>) &mdash; ikke blot <code>status === 100</code>.
+                            <strong>{t("⚠️ Vigtigt koncept:")}</strong> {t("Ongoing statuses fungerer som")} <strong>{t("GRUPPER / RANGES")}</strong> — {t("ikke individuelle værdier.")}<br/>
+                            {t("Alle statusnumre fra starten af en gruppe og indtil næste gruppe starter, tilhører samme gruppe.")}<br/><br/>
+                            <strong>{t("Eksempel:")}</strong> {t("Hvis")} <code>Notified = 100</code> {t("og næste gruppe er")} <code>ArrivalAtLocation = 200</code>, 
+                            {t("så er status")} <code>100</code>, <code>101</code>, <code>142</code>, <code>199</code> {t("ALLE \"Notified\".")}<br/>
+                            {t("Det betyder at din kode skal tjekke med")} <strong>{t("ranges")}</strong> ({t("fx")} <code>status &gt;= 100 &amp;&amp; status &lt; 200</code>) — {t("ikke blot")} <code>status === 100</code>.
                             <div className="range-example">
-                                <strong>&#x1F4A1; Praktisk konsekvens:</strong> N&aring;r du modtager en webhook med fx <code>orderStatus: 175</code>, 
-                                tilh&oslash;rer den gruppen <strong>CustomerSpecific</strong> (for Orders, 0&ndash;199), selvom 175 ikke er en "navngivet" v&aelig;rdi. 
-                                Undtagelse: <code>150</code> er altid <strong>Error</strong> for Orders.
+                                <strong>{t("💡 Praktisk konsekvens:")}</strong> {t("Når du modtager en webhook med fx")} <code>orderStatus: 175</code>, 
+                                {t("tilhører den gruppen")} <strong>CustomerSpecific</strong> ({t("for Orders, 0–199")}), {t("selvom 175 ikke er en \"navngivet\" værdi.")} 
+                                {t("Undtagelse:")} <code>150</code> {t("er altid")} <strong>Error</strong> {t("for Orders.")}
                             </div>
                         </div>
                         
                         <div className="range-section">
-                            <div className="range-title">&#x1F4E6; Order Statuses (Salgsordrer)</div>
+                            <div className="range-title">{t("📦 Order Statuses (Salgsordrer)")}</div>
                             <div className="range-bar-container">
                                 <div className="range-segment seg-customer" style={{flex: '20'}}>
                                     <span className="range-label">CustomerSpecific</span>
-                                    <span className="range-nums">0&ndash;149</span>
+                                    <span className="range-nums">0–149</span>
                                 </div>
                                 <div className="range-segment seg-error" style={{flex: '1'}}>
                                     <span className="range-label">Err</span>
@@ -733,35 +733,35 @@
                                 </div>
                                 <div className="range-segment seg-customer" style={{flex: '5'}}>
                                     <span className="range-label">CustSpec</span>
-                                    <span className="range-nums">151&ndash;199</span>
+                                    <span className="range-nums">151–199</span>
                                 </div>
                                 <div className="range-segment seg-open" style={{flex: '10'}}>
                                     <span className="range-label">Open</span>
-                                    <span className="range-nums">200&ndash;299</span>
+                                    <span className="range-nums">200–299</span>
                                 </div>
                                 <div className="range-segment seg-released" style={{flex: '2'}}>
                                     <span className="range-label">Released</span>
-                                    <span className="range-nums">300&ndash;319</span>
+                                    <span className="range-nums">300–319</span>
                                 </div>
                                 <div className="range-segment seg-allocated" style={{flex: '8'}}>
                                     <span className="range-label">Allocated</span>
-                                    <span className="range-nums">320&ndash;399</span>
+                                    <span className="range-nums">320–399</span>
                                 </div>
                                 <div className="range-segment seg-picked" style={{flex: '5'}}>
                                     <span className="range-label">Picked</span>
-                                    <span className="range-nums">400&ndash;449</span>
+                                    <span className="range-nums">400–449</span>
                                 </div>
                                 <div className="range-segment seg-sent" style={{flex: '5'}}>
                                     <span className="range-label">Sent</span>
-                                    <span className="range-nums">450&ndash;499</span>
+                                    <span className="range-nums">450–499</span>
                                 </div>
                                 <div className="range-segment seg-retrieved" style={{flex: '30'}}>
                                     <span className="range-label">Retrieved</span>
-                                    <span className="range-nums">500&ndash;799</span>
+                                    <span className="range-nums">500–799</span>
                                 </div>
                                 <div className="range-segment seg-returned" style={{flex: '20'}}>
                                     <span className="range-label">Returned</span>
-                                    <span className="range-nums">800&ndash;999</span>
+                                    <span className="range-nums">800–999</span>
                                 </div>
                                 <div className="range-segment seg-shredded" style={{flex: '5'}}>
                                     <span className="range-label">Shredded</span>
@@ -769,36 +769,36 @@
                                 </div>
                             </div>
                             <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '6px'}}>
-                                &#x26A0;&#xFE0F; CustomerSpecific d&aelig;kker 0&ndash;199, men status <strong>150 er altid Error</strong> (undtagelse i rangen)
+                                {t("⚠️ CustomerSpecific dækker 0–199, men status")} <strong>{t("150 er altid Error")}</strong> {t("(undtagelse i rangen)")}
                             </p>
                         </div>
                         
                         <div className="range-section">
-                            <div className="range-title">&#x1F4E5; Purchase Order Statuses (Indg&aring;ende varer)</div>
+                            <div className="range-title">{t("📥 Purchase Order Statuses (Indgående varer)")}</div>
                             <div className="range-bar-container">
                                 <div className="range-segment seg-customer" style={{flex: '10'}}>
                                     <span className="range-label">CustomerSpecific</span>
-                                    <span className="range-nums">0&ndash;99</span>
+                                    <span className="range-nums">0–99</span>
                                 </div>
                                 <div className="range-segment seg-notified" style={{flex: '10'}}>
                                     <span className="range-label">Notified</span>
-                                    <span className="range-nums">100&ndash;199</span>
+                                    <span className="range-nums">100–199</span>
                                 </div>
                                 <div className="range-segment seg-arrival" style={{flex: '10'}}>
                                     <span className="range-label">ArrivalAtLocation</span>
-                                    <span className="range-nums">200&ndash;299</span>
+                                    <span className="range-nums">200–299</span>
                                 </div>
                                 <div className="range-segment seg-handover" style={{flex: '10'}}>
                                     <span className="range-label">HandOver</span>
-                                    <span className="range-nums">300&ndash;399</span>
+                                    <span className="range-nums">300–399</span>
                                 </div>
                                 <div className="range-segment seg-deviation" style={{flex: '10'}}>
                                     <span className="range-label">Deviation</span>
-                                    <span className="range-nums">400&ndash;499</span>
+                                    <span className="range-nums">400–499</span>
                                 </div>
                                 <div className="range-segment seg-received" style={{flex: '40'}}>
                                     <span className="range-label">Received</span>
-                                    <span className="range-nums">500&ndash;899</span>
+                                    <span className="range-nums">500–899</span>
                                 </div>
                                 <div className="range-segment seg-shredded" style={{flex: '10'}}>
                                     <span className="range-label">Shredded</span>
@@ -806,32 +806,32 @@
                                 </div>
                             </div>
                             <p style={{fontSize: '0.75em', color: 'var(--spy-gray)', marginTop: '6px'}}>
-                                CustomerSpecific: 0&ndash;99 | Alle numre i et interval tilh&oslash;rer den gruppe
+                                {t("CustomerSpecific: 0–99 | Alle numre i et interval tilhører den gruppe")}
                             </p>
                         </div>
                         
                         <div className="range-section">
-                            <div className="range-title">&#x21A9;&#xFE0F; Return Order Statuses</div>
+                            <div className="range-title">{t("↩️ Return Order Statuses")}</div>
                             <div className="range-bar-container">
                                 <div className="range-segment seg-customer" style={{flex: '20'}}>
                                     <span className="range-label">CustomerSpecific</span>
-                                    <span className="range-nums">0&ndash;199</span>
+                                    <span className="range-nums">0–199</span>
                                 </div>
                                 <div className="range-segment seg-notified" style={{flex: '10'}}>
                                     <span className="range-label">Notified</span>
-                                    <span className="range-nums">200&ndash;299</span>
+                                    <span className="range-nums">200–299</span>
                                 </div>
                                 <div className="range-segment seg-arrival" style={{flex: '10'}}>
                                     <span className="range-label">ArrivalAtLoc.</span>
-                                    <span className="range-nums">300&ndash;399</span>
+                                    <span className="range-nums">300–399</span>
                                 </div>
                                 <div className="range-segment seg-deviation" style={{flex: '10'}}>
                                     <span className="range-label">Deviation</span>
-                                    <span className="range-nums">400&ndash;499</span>
+                                    <span className="range-nums">400–499</span>
                                 </div>
                                 <div className="range-segment seg-received" style={{flex: '50'}}>
                                     <span className="range-label">Returned</span>
-                                    <span className="range-nums">500&ndash;999</span>
+                                    <span className="range-nums">500–999</span>
                                 </div>
                                 <div className="range-segment seg-shredded" style={{flex: '5'}}>
                                     <span className="range-label">Shredded</span>
@@ -841,27 +841,27 @@
                         </div>
                         
                         <div className="range-section">
-                            <div className="range-title">&#x1F3ED; Production Order Statuses</div>
+                            <div className="range-title">{t("🏭 Production Order Statuses")}</div>
                             <div className="range-bar-container">
                                 <div className="range-segment seg-customer" style={{flex: '10'}}>
                                     <span className="range-label">CustomerSpecific</span>
-                                    <span className="range-nums">0&ndash;99</span>
+                                    <span className="range-nums">0–99</span>
                                 </div>
                                 <div className="range-segment seg-open" style={{flex: '10'}}>
                                     <span className="range-label">Open</span>
-                                    <span className="range-nums">100&ndash;199</span>
+                                    <span className="range-nums">100–199</span>
                                 </div>
                                 <div className="range-segment seg-released" style={{flex: '10'}}>
                                     <span className="range-label">Released</span>
-                                    <span className="range-nums">200&ndash;299</span>
+                                    <span className="range-nums">200–299</span>
                                 </div>
                                 <div className="range-segment seg-inprogress" style={{flex: '20'}}>
                                     <span className="range-label">InProgress</span>
-                                    <span className="range-nums">300&ndash;499</span>
+                                    <span className="range-nums">300–499</span>
                                 </div>
                                 <div className="range-segment seg-completed" style={{flex: '50'}}>
                                     <span className="range-label">Completed</span>
-                                    <span className="range-nums">500&ndash;999</span>
+                                    <span className="range-nums">500–999</span>
                                 </div>
                                 <div className="range-segment seg-shredded" style={{flex: '5'}}>
                                     <span className="range-label">Shredded</span>
@@ -873,42 +873,42 @@
                     
                     {/* ============ KODESTRUKTUR ============ */}
                     <div className="workflow-section">
-                        <h2 className="section-title">&#x1F5C2;&#xFE0F; Kodestruktur</h2>
+                        <h2 className="section-title">{t("🗂️ Kodestruktur")}</h2>
                         <div className="code-structure">
                             <span className="folder">class/Integration/ExternalWarehouse/Ongoing/</span><br/>
-                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingExternalWarehouseIntegrationManager.php <span className="comment">&larr; Hovedlogik</span><br/>
-                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingProvider.php <span className="comment">&larr; API klient (Guzzle + retry-logik)</span><br/>
-                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingManager.php <span className="comment">&larr; Business logic</span><br/>
-                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; Data/ <span className="comment">&larr; Data objekter</span><br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; Enum/ <span className="comment">&larr; Statuses &amp; types</span><br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingOrderStatus.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingPurchaseOrderStatus.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingReturnOrderStatus.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingProductionOrderStatus.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2514;&#x2500;&#x2500; OngoingWebhookTemplate.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; RemoteArticleData.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2514;&#x2500;&#x2500; RemoteOrderData.php<br/>
-                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; Jobs/ <span className="comment">&larr; Async tasks</span><br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingExportOrderTask.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingExportPurchaseOrderTask.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingExportPRICATTask.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingExportProductionOrderTask.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingExportReturnOrderTask.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingOrderStatusIsChangedHandler.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingPurchaseOrderStatusIsChangedHandler.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingReturnWebhookTaskHandler.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x251C;&#x2500;&#x2500; OngoingProductionOrderWebhookTaskHandler.php<br/>
-                            &nbsp;&nbsp;&#x2502;&nbsp;&nbsp;&nbsp;&#x2514;&#x2500;&#x2500; OngoingInventoryTransactionWebhookTaskHandler.php<br/>
-                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; Flow/ <span className="comment">&larr; Workflow handlers</span><br/>
-                            &nbsp;&nbsp;&#x251C;&#x2500;&#x2500; Exceptions/ <span className="comment">&larr; Typed API exceptions</span><br/>
-                            &nbsp;&nbsp;&#x2514;&#x2500;&#x2500; Middleware/ <span className="comment">&larr; Error handling (ErrorHandlerMiddleware)</span><br/><br/>
+                            &nbsp;&nbsp;├── OngoingExternalWarehouseIntegrationManager.php <span className="comment">← {t("Hovedlogik")}</span><br/>
+                            &nbsp;&nbsp;├── OngoingProvider.php <span className="comment">← {t("API klient (Guzzle + retry-logik)")}</span><br/>
+                            &nbsp;&nbsp;├── OngoingManager.php <span className="comment">← {t("Business logic")}</span><br/>
+                            &nbsp;&nbsp;├── Data/ <span className="comment">← {t("Data objekter")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── Enum/ <span className="comment">← {t("Statuses & types")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingOrderStatus.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingPurchaseOrderStatus.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingReturnOrderStatus.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingProductionOrderStatus.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── OngoingWebhookTemplate.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── RemoteArticleData.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── RemoteOrderData.php<br/>
+                            &nbsp;&nbsp;├── Jobs/ <span className="comment">← {t("Async tasks")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingExportOrderTask.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingExportPurchaseOrderTask.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingExportPRICATTask.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingExportProductionOrderTask.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingExportReturnOrderTask.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingOrderStatusIsChangedHandler.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingPurchaseOrderStatusIsChangedHandler.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingReturnWebhookTaskHandler.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OngoingProductionOrderWebhookTaskHandler.php<br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── OngoingInventoryTransactionWebhookTaskHandler.php<br/>
+                            &nbsp;&nbsp;├── Flow/ <span className="comment">← {t("Workflow handlers")}</span><br/>
+                            &nbsp;&nbsp;├── Exceptions/ <span className="comment">← {t("Typed API exceptions")}</span><br/>
+                            &nbsp;&nbsp;└── Middleware/ <span className="comment">← {t("Error handling (ErrorHandlerMiddleware)")}</span><br/><br/>
                             <span className="folder">applications/API/V1/Controller/Webhook/Ongoing/</span><br/>
-                            &nbsp;&nbsp;&#x2514;&#x2500;&#x2500; Controller.php <span className="comment">&larr; Webhook endpoint</span>
+                            &nbsp;&nbsp;└── Controller.php <span className="comment">← {t("Webhook endpoint")}</span>
                         </div>
                     </div>
                     
                     <p className="footer-text">
-                        Genereret af <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString('da-DK')}
+                        {t("Genereret af")} <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString(locale === 'en' ? 'en-GB' : 'da-DK')}
                     </p>
                 </div>
             );

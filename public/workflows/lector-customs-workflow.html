@@ -365,102 +365,100 @@
             <span className={`status-badge ${status}`}>{children}</span>
         );
         
-        const LectorWorkflow = () => {
+        const LectorWorkflow = ({ t = (k) => k, locale = 'da' }) => {
             return (
                 <div className="container">
-                    <h1>🛃 Lector Told-Integration</h1>
-                    <p className="subtitle">Sådan fungerer toldoplag og Lector-integrationen i SPY</p>
+                    <h1>{t("🛃 Lector Told-Integration")}</h1>
+                    <p className="subtitle">{t("Sådan fungerer toldoplag og Lector-integrationen i SPY")}</p>
                     
                     <div className="key-concept">
-                        <h3>💡 Det vigtigste at forstå</h3>
+                        <h3>{t("💡 Det vigtigste at forstå")}</h3>
                         <p>
-                            Når kunden har et <strong>toldoplag</strong>, betales der <strong>IKKE told ved import</strong> til Danmark.<br/><br/>
-                            Told betales <strong>først når varerne sendes ud</strong> – fordi man så ved, 
-                            hvor de skal hen, og hvor tolden skal betales.
+                            {t("Når kunden har et")} <strong>{t("toldoplag")}</strong>{t(", betales der")} <strong>{t("IKKE told ved import")}</strong> {t("til Danmark.")}<br/><br/>
+                            {t("Told betales")} <strong>{t("først når varerne sendes ud")}</strong> {t("– fordi man så ved, hvor de skal hen, og hvor tolden skal betales.")}
                         </p>
                     </div>
                     
                     <div className="intro-box">
-                        <h3>Hvad er Lector?</h3>
+                        <h3>{t("Hvad er Lector?")}</h3>
                         <p>
-                            Lector er et <strong>told-system</strong> der håndterer dokumentation for varer på toldoplag. 
-                            SPY sender automatisk information til Lector, når varer ankommer og når de sendes ud.
+                            {t("Lector er et")} <strong>{t("told-system")}</strong> {t("der håndterer dokumentation for varer på toldoplag. SPY sender automatisk information til Lector, når varer ankommer og når de sendes ud.")}
                             <br/><br/>
-                            <strong>Kommunikationen er tovejs:</strong> SPY sender data → Lector svarer med bekræftelse, told-beregning eller fejlbesked.
+                            <strong>{t("Kommunikationen er tovejs:")}</strong> {t("SPY sender data → Lector svarer med bekræftelse, told-beregning eller fejlbesked.")}
                         </p>
                     </div>
                     
                     <div className="legend">
                         <div className="legend-item">
                             <div className="legend-color supplier"></div>
-                            <span>Leverandør/Inbound</span>
+                            <span>{t("Leverandør/Inbound")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color spy"></div>
-                            <span>SPY System</span>
+                            <span>{t("SPY System")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color warehouse"></div>
-                            <span>Toldoplag</span>
+                            <span>{t("Toldoplag")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color customs"></div>
-                            <span>Lector (Told)</span>
+                            <span>{t("Lector (Told)")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color customer"></div>
-                            <span>Kunde/Success</span>
+                            <span>{t("Kunde/Success")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color warning"></div>
-                            <span>Advarsel</span>
+                            <span>{t("Advarsel")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color error"></div>
-                            <span>Fejl</span>
+                            <span>{t("Fejl")}</span>
                         </div>
                     </div>
                     
                     {/* TOVEJS KOMMUNIKATION */}
                     <div className="workflow-section">
-                        <h2 className="section-title">🔄 SPY ↔ Lector Kommunikation</h2>
-                        <p className="section-subtitle">Integrationen er tovejs – SPY sender data, og Lector svarer tilbage</p>
+                        <h2 className="section-title">{t("🔄 SPY ↔ Lector Kommunikation")}</h2>
+                        <p className="section-subtitle">{t("Integrationen er tovejs – SPY sender data, og Lector svarer tilbage")}</p>
                         
                         <div className="flow-container">
-                            <FlowBox icon="📤" title="SPY sender" desc="Inbound, Outbound, Warehouse" type="spy" />
+                            <FlowBox icon="📤" title={t("SPY sender")} desc={t("Inbound, Outbound, Warehouse")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🛃" title="Lector" desc="Modtager og behandler" type="customs" />
+                            <FlowBox icon="🛃" title={t("Lector")} desc={t("Modtager og behandler")} type="customs" />
                             <ArrowResponse />
-                            <FlowBox icon="📥" title="SPY modtager" desc="Svar fra Lector" type="spy" />
+                            <FlowBox icon="📥" title={t("SPY modtager")} desc={t("Svar fra Lector")} type="spy" />
                         </div>
                         
-                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--customs-blue-light)'}}>Hvad sender Lector tilbage?</h4>
+                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--customs-blue-light)'}}>{t("Hvad sender Lector tilbage?")}</h4>
                         <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title" style={{color: 'var(--success-color)'}}>✅ Bekræftelser</div>
+                                <div className="info-card-title" style={{color: 'var(--success-color)'}}>{t("✅ Bekræftelser")}</div>
                                 <ul className="info-card-list">
-                                    <li>Besked modtaget korrekt</li>
-                                    <li>Data valideret OK</li>
-                                    <li>Registrering gennemført</li>
-                                    <li>Told-dokument genereret</li>
+                                    <li>{t("Besked modtaget korrekt")}</li>
+                                    <li>{t("Data valideret OK")}</li>
+                                    <li>{t("Registrering gennemført")}</li>
+                                    <li>{t("Told-dokument genereret")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title" style={{color: 'var(--spy-gold)'}}>💰 Told-beregninger</div>
+                                <div className="info-card-title" style={{color: 'var(--spy-gold)'}}>{t("💰 Told-beregninger")}</div>
                                 <ul className="info-card-list">
-                                    <li>Beregnet toldbeløb</li>
-                                    <li>Anvendt toldsats</li>
-                                    <li>Moms-beregning</li>
-                                    <li>Reference til told-dokument</li>
+                                    <li>{t("Beregnet toldbeløb")}</li>
+                                    <li>{t("Anvendt toldsats")}</li>
+                                    <li>{t("Moms-beregning")}</li>
+                                    <li>{t("Reference til told-dokument")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title" style={{color: 'var(--error-color)'}}>❌ Fejlbeskeder</div>
+                                <div className="info-card-title" style={{color: 'var(--error-color)'}}>{t("❌ Fejlbeskeder")}</div>
                                 <ul className="info-card-list">
-                                    <li>Valideringsfejl</li>
-                                    <li>Manglende data</li>
-                                    <li>Ugyldig toldkode</li>
-                                    <li>Systemfejl fra Lector</li>
+                                    <li>{t("Valideringsfejl")}</li>
+                                    <li>{t("Manglende data")}</li>
+                                    <li>{t("Ugyldig toldkode")}</li>
+                                    <li>{t("Systemfejl fra Lector")}</li>
                                 </ul>
                             </div>
                         </div>
@@ -468,440 +466,439 @@
                     
                     {/* STATUS-FLOW FOR EN BESKED */}
                     <div className="workflow-section">
-                        <h2 className="section-title">📊 Livscyklus for en Lector-besked</h2>
-                        <p className="section-subtitle">Sådan bevæger en besked sig gennem systemet</p>
+                        <h2 className="section-title">{t("📊 Livscyklus for en Lector-besked")}</h2>
+                        <p className="section-subtitle">{t("Sådan bevæger en besked sig gennem systemet")}</p>
                         
-                        <h4 style={{marginTop: '15px', marginBottom: '15px', color: 'var(--success-color)'}}>✅ Normal flow (success):</h4>
+                        <h4 style={{marginTop: '15px', marginBottom: '15px', color: 'var(--success-color)'}}>{t("✅ Normal flow (success):")}</h4>
                         <div className="status-flow">
-                            <StatusBadge status="pending">Afventer</StatusBadge>
+                            <StatusBadge status="pending">{t("Afventer")}</StatusBadge>
                             <StatusArrow />
-                            <StatusBadge status="sent">Sendt</StatusBadge>
+                            <StatusBadge status="sent">{t("Sendt")}</StatusBadge>
                             <StatusArrow />
-                            <StatusBadge status="received">Modtaget</StatusBadge>
+                            <StatusBadge status="received">{t("Modtaget")}</StatusBadge>
                             <StatusArrow />
-                            <StatusBadge status="validated">Valideret</StatusBadge>
+                            <StatusBadge status="validated">{t("Valideret")}</StatusBadge>
                             <StatusArrow />
-                            <StatusBadge status="confirmed">Bekræftet</StatusBadge>
+                            <StatusBadge status="confirmed">{t("Bekræftet")}</StatusBadge>
                         </div>
                         
-                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--error-color)'}}>❌ Fejl-flow:</h4>
+                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--error-color)'}}>{t("❌ Fejl-flow:")}</h4>
                         <div className="status-flow">
-                            <StatusBadge status="pending">Afventer</StatusBadge>
+                            <StatusBadge status="pending">{t("Afventer")}</StatusBadge>
                             <StatusArrow />
-                            <StatusBadge status="sent">Sendt</StatusBadge>
+                            <StatusBadge status="sent">{t("Sendt")}</StatusBadge>
                             <StatusArrow />
-                            <StatusBadge status="received">Modtaget</StatusBadge>
+                            <StatusBadge status="received">{t("Modtaget")}</StatusBadge>
                             <StatusArrow />
-                            <StatusBadge status="rejected">Afvist</StatusBadge>
+                            <StatusBadge status="rejected">{t("Afvist")}</StatusBadge>
                         </div>
                         
-                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--warning-color)'}}>⚠️ Timeout/Retry-flow:</h4>
+                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--warning-color)'}}>{t("⚠️ Timeout/Retry-flow:")}</h4>
                         <div className="status-flow">
-                            <StatusBadge status="pending">Afventer</StatusBadge>
+                            <StatusBadge status="pending">{t("Afventer")}</StatusBadge>
                             <StatusArrow />
-                            <StatusBadge status="sent">Sendt</StatusBadge>
+                            <StatusBadge status="sent">{t("Sendt")}</StatusBadge>
                             <StatusArrow />
-                            <StatusBadge status="warning">Timeout</StatusBadge>
+                            <StatusBadge status="warning">{t("Timeout")}</StatusBadge>
                             <StatusArrow />
-                            <StatusBadge status="sent">Retry</StatusBadge>
+                            <StatusBadge status="sent">{t("Retry")}</StatusBadge>
                         </div>
                         
                         <div className="example-box">
-                            <h5>💡 Tip</h5>
+                            <h5>{t("💡 Tip")}</h5>
                             <p>
-                                Alle statusser kan ses i <strong>SPY → Integrationsloggen</strong>. 
-                                Se efter "Lector" beskeder og tjek deres status.
+                                {t("Alle statusser kan ses i")} <strong>{t("SPY → Integrationsloggen")}</strong>. 
+                                {t("Se efter \"Lector\" beskeder og tjek deres status.")}
                             </p>
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">📥 Trin 1: Varer ankommer (INGEN TOLD)</h2>
-                        <p className="section-subtitle">Varer fra leverandør udenfor EU ankommer til toldoplaget</p>
+                        <h2 className="section-title">{t("📥 Trin 1: Varer ankommer (INGEN TOLD)")}</h2>
+                        <p className="section-subtitle">{t("Varer fra leverandør udenfor EU ankommer til toldoplaget")}</p>
                         
                         <div className="flow-container">
-                            <FlowBox icon="🏭" title="Leverandør" desc="Sender varer fra f.eks. Kina" type="supplier" />
+                            <FlowBox icon="🏭" title={t("Leverandør")} desc={t("Sender varer fra f.eks. Kina")} type="supplier" />
                             <Arrow />
-                            <FlowBox icon="🚢" title="Transport" desc="Varer på vej til DK" type="supplier" />
+                            <FlowBox icon="🚢" title={t("Transport")} desc={t("Varer på vej til DK")} type="supplier" />
                             <Arrow />
-                            <FlowBox icon="📋" title="SPY registrerer" desc="Inbound til Lector" type="spy" />
+                            <FlowBox icon="📋" title={t("SPY registrerer")} desc={t("Inbound til Lector")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🛃" title="Lector" desc="Dokumenterer ankomst" type="customs" />
+                            <FlowBox icon="🛃" title={t("Lector")} desc={t("Dokumenterer ankomst")} type="customs" />
                             <Arrow />
-                            <FlowBox icon="🏭" title="Toldoplag" desc="Varer opbevares" type="warehouse" />
+                            <FlowBox icon="🏭" title={t("Toldoplag")} desc={t("Varer opbevares")} type="warehouse" />
                         </div>
                         
                         <div className="flow-container" style={{marginTop: '15px'}}>
-                            <FlowBox icon="✅" title="Lector svarer" desc="Bekræftelse til SPY" type="response" />
+                            <FlowBox icon="✅" title={t("Lector svarer")} desc={t("Bekræftelse til SPY")} type="response" />
                             <ArrowResponse />
-                            <FlowBox icon="📋" title="SPY opdateres" desc="Status: Registreret" type="spy" />
+                            <FlowBox icon="📋" title={t("SPY opdateres")} desc={t("Status: Registreret")} type="spy" />
                         </div>
                         
                         <div className="highlight-box">
-                            <p>✅ <strong>Ingen told betales!</strong> Varerne ligger på toldoplag med "suspenderet" told.</p>
+                            <p>✅ <strong>{t("Ingen told betales!")}</strong> {t("Varerne ligger på toldoplag med \"suspenderet\" told.")}</p>
                         </div>
                         
                         <div className="example-box">
-                            <h5>💡 Eksempel</h5>
+                            <h5>{t("💡 Eksempel")}</h5>
                             <p>
-                                1.000 jakker ankommer fra Kina. De registreres i Lector og placeres på toldoplaget. 
-                                Der betales IKKE told endnu – jakkerne "venter" bare på at blive solgt.
+                                {t("1.000 jakker ankommer fra Kina. De registreres i Lector og placeres på toldoplaget. Der betales IKKE told endnu – jakkerne \"venter\" bare på at blive solgt.")}
                             </p>
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">📤 Trin 2: Varer sendes ud (NU BETALES TOLD)</h2>
-                        <p className="section-subtitle">Når en kunde bestiller, sendes varerne ud og told betales baseret på destination</p>
+                        <h2 className="section-title">{t("📤 Trin 2: Varer sendes ud (NU BETALES TOLD)")}</h2>
+                        <p className="section-subtitle">{t("Når en kunde bestiller, sendes varerne ud og told betales baseret på destination")}</p>
                         
                         <div className="flow-container">
-                            <FlowBox icon="🛒" title="Ordre" desc="Kunde bestiller" type="spy" />
+                            <FlowBox icon="🛒" title={t("Ordre")} desc={t("Kunde bestiller")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🏭" title="Toldoplag" desc="Varer plukkes" type="warehouse" />
+                            <FlowBox icon="🏭" title={t("Toldoplag")} desc={t("Varer plukkes")} type="warehouse" />
                             <Arrow />
-                            <FlowBox icon="📤" title="SPY sender" desc="Outbound til Lector" type="spy" />
+                            <FlowBox icon="📤" title={t("SPY sender")} desc={t("Outbound til Lector")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🛃" title="Lector" desc="Beregner told" type="customs" />
+                            <FlowBox icon="🛃" title={t("Lector")} desc={t("Beregner told")} type="customs" />
                         </div>
                         
                         <div className="flow-container" style={{marginTop: '15px'}}>
-                            <FlowBox icon="💰" title="Lector svarer" desc="Told-beregning" type="response" />
+                            <FlowBox icon="💰" title={t("Lector svarer")} desc={t("Told-beregning")} type="response" />
                             <ArrowResponse />
-                            <FlowBox icon="📋" title="SPY modtager" desc="Beløb registreres" type="spy" />
+                            <FlowBox icon="📋" title={t("SPY modtager")} desc={t("Beløb registreres")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🏠" title="Kunde" desc="Modtager varer" type="customer" />
+                            <FlowBox icon="🏠" title={t("Kunde")} desc={t("Modtager varer")} type="customer" />
                         </div>
                         
                         <div className="highlight-box">
-                            <p>💰 <strong>NU betales told!</strong> Toldsatsen afhænger af hvor varerne sendes hen.</p>
+                            <p>💰 <strong>{t("NU betales told!")}</strong> {t("Toldsatsen afhænger af hvor varerne sendes hen.")}</p>
                         </div>
                         
-                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)'}}>Told afhænger af destination:</h4>
+                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)'}}>{t("Told afhænger af destination:")}</h4>
                         <div className="destination-grid">
                             <div className="destination-card">
                                 <h4>🇩🇰</h4>
-                                <div className="country">Danmark / EU</div>
-                                <div className="duty">EU-told betales (typisk 12% på tøj)</div>
+                                <div className="country">{t("Danmark / EU")}</div>
+                                <div className="duty">{t("EU-told betales (typisk 12% på tøj)")}</div>
                             </div>
                             <div className="destination-card">
                                 <h4>🇳🇴</h4>
-                                <div className="country">Norge</div>
-                                <div className="duty">Norsk told (varen eksporteres)</div>
+                                <div className="country">{t("Norge")}</div>
+                                <div className="duty">{t("Norsk told (varen eksporteres)")}</div>
                             </div>
                             <div className="destination-card">
                                 <h4>🇺🇸</h4>
-                                <div className="country">USA</div>
-                                <div className="duty">Amerikansk told (varen eksporteres)</div>
+                                <div className="country">{t("USA")}</div>
+                                <div className="duty">{t("Amerikansk told (varen eksporteres)")}</div>
                             </div>
                             <div className="destination-card">
                                 <h4>🇨🇭</h4>
-                                <div className="country">Schweiz</div>
-                                <div className="duty">Schweizisk told (varen eksporteres)</div>
+                                <div className="country">{t("Schweiz")}</div>
+                                <div className="duty">{t("Schweizisk told (varen eksporteres)")}</div>
                             </div>
                         </div>
                         
                         <div className="example-box">
-                            <h5>💡 Eksempel</h5>
+                            <h5>{t("💡 Eksempel")}</h5>
                             <p>
-                                En dansk butik bestiller 50 jakker → <strong>EU-told betales</strong><br/>
-                                En norsk butik bestiller 30 jakker → <strong>Varen eksporteres</strong>, norsk told betales i Norge
+                                {t("En dansk butik bestiller 50 jakker →")} <strong>{t("EU-told betales")}</strong><br/>
+                                {t("En norsk butik bestiller 30 jakker →")} <strong>{t("Varen eksporteres")}</strong>{t(", norsk told betales i Norge")}
                             </p>
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">📊 Trin 3: Løbende lagerrapportering</h2>
-                        <p className="section-subtitle">SPY rapporterer løbende hvad der ligger på toldoplaget</p>
+                        <h2 className="section-title">{t("📊 Trin 3: Løbende lagerrapportering")}</h2>
+                        <p className="section-subtitle">{t("SPY rapporterer løbende hvad der ligger på toldoplaget")}</p>
                         
                         <div className="flow-container">
-                            <FlowBox icon="📊" title="SPY Lager" desc="Varer på toldoplag" type="spy" />
+                            <FlowBox icon="📊" title={t("SPY Lager")} desc={t("Varer på toldoplag")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="📤" title="Warehouse" desc="Rapport sendes" type="spy" />
+                            <FlowBox icon="📤" title={t("Warehouse")} desc={t("Rapport sendes")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🛃" title="Lector" desc="Modtager rapport" type="customs" />
+                            <FlowBox icon="🛃" title={t("Lector")} desc={t("Modtager rapport")} type="customs" />
                             <Arrow />
-                            <FlowBox icon="✅" title="Bekræftet" desc="Lector svarer OK" type="success" />
+                            <FlowBox icon="✅" title={t("Bekræftet")} desc={t("Lector svarer OK")} type="success" />
                         </div>
                         
                         <div className="why-box">
-                            <h4>Hvorfor rapportere lagerbeholdning?</h4>
+                            <h4>{t("Hvorfor rapportere lagerbeholdning?")}</h4>
                             <ul>
-                                <li>Toldmyndighederne skal vide hvad der ligger på toldoplaget</li>
-                                <li>Varer uden betalt told skal dokumenteres</li>
-                                <li>Sikrer at alt er korrekt når varer sendes ud</li>
+                                <li>{t("Toldmyndighederne skal vide hvad der ligger på toldoplaget")}</li>
+                                <li>{t("Varer uden betalt told skal dokumenteres")}</li>
+                                <li>{t("Sikrer at alt er korrekt når varer sendes ud")}</li>
                             </ul>
                         </div>
                     </div>
                     
                     {/* POST IMPORT UPDATE - NY SEKTION */}
                     <div className="workflow-section">
-                        <h2 className="section-title">🔄 Post Import Update (Rettelser)</h2>
-                        <p className="section-subtitle">Når der skal rettes i data efter den oprindelige registrering</p>
+                        <h2 className="section-title">{t("🔄 Post Import Update (Rettelser)")}</h2>
+                        <p className="section-subtitle">{t("Når der skal rettes i data efter den oprindelige registrering")}</p>
                         
                         <div className="flow-container">
-                            <FlowBox icon="✏️" title="Fejl opdages" desc="Data skal rettes" type="warning" />
+                            <FlowBox icon="✏️" title={t("Fejl opdages")} desc={t("Data skal rettes")} type="warning" />
                             <Arrow />
-                            <FlowBox icon="📝" title="SPY sender" desc="Post Import Update" type="spy" />
+                            <FlowBox icon="📝" title={t("SPY sender")} desc={t("Post Import Update")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🛃" title="Lector" desc="Behandler rettelse" type="customs" />
+                            <FlowBox icon="🛃" title={t("Lector")} desc={t("Behandler rettelse")} type="customs" />
                             <Arrow />
-                            <FlowBox icon="✅" title="Opdateret" desc="Rettelse bekræftet" type="success" />
+                            <FlowBox icon="✅" title={t("Opdateret")} desc={t("Rettelse bekræftet")} type="success" />
                         </div>
                         
-                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)'}}>Hvornår bruges Post Import Update?</h4>
+                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)'}}>{t("Hvornår bruges Post Import Update?")}</h4>
                         <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title">📦 Mængder</div>
+                                <div className="info-card-title">{t("📦 Mængder")}</div>
                                 <ul className="info-card-list">
-                                    <li>Antal stk var forkert</li>
-                                    <li>Vægt skal justeres</li>
-                                    <li>Kartoner talt forkert</li>
+                                    <li>{t("Antal stk var forkert")}</li>
+                                    <li>{t("Vægt skal justeres")}</li>
+                                    <li>{t("Kartoner talt forkert")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">🏷️ Varedata</div>
+                                <div className="info-card-title">{t("🏷️ Varedata")}</div>
                                 <ul className="info-card-list">
-                                    <li>Toldkode skal ændres</li>
-                                    <li>Oprindelsesland forkert</li>
-                                    <li>Varebeskrivelse mangelfuld</li>
+                                    <li>{t("Toldkode skal ændres")}</li>
+                                    <li>{t("Oprindelsesland forkert")}</li>
+                                    <li>{t("Varebeskrivelse mangelfuld")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">💰 Værdier</div>
+                                <div className="info-card-title">{t("💰 Værdier")}</div>
                                 <ul className="info-card-list">
-                                    <li>Fakturabeløb ændret</li>
-                                    <li>Valutakurs justeret</li>
-                                    <li>Fragtomkostninger rettet</li>
+                                    <li>{t("Fakturabeløb ændret")}</li>
+                                    <li>{t("Valutakurs justeret")}</li>
+                                    <li>{t("Fragtomkostninger rettet")}</li>
                                 </ul>
                             </div>
                         </div>
                         
                         <div className="example-box">
-                            <h5>💡 Eksempel: Typiske scenarier</h5>
+                            <h5>{t("💡 Eksempel: Typiske scenarier")}</h5>
                             <p>
-                                <strong>Scenario 1:</strong> Ved ankomst registreres 1.000 jakker, men ved optælling er der kun 980 stk. → Send Post Import Update med korrekt antal.<br/><br/>
-                                <strong>Scenario 2:</strong> Leverandøren sender rettet faktura med nyt beløb → Send Post Import Update med ny værdi.<br/><br/>
-                                <strong>Scenario 3:</strong> Toldkoden på en style viser sig at være forkert → Ret i SPY og send Post Import Update.
+                                <strong>{t("Scenario 1:")}</strong> {t("Ved ankomst registreres 1.000 jakker, men ved optælling er der kun 980 stk. → Send Post Import Update med korrekt antal.")}<br/><br/>
+                                <strong>{t("Scenario 2:")}</strong> {t("Leverandøren sender rettet faktura med nyt beløb → Send Post Import Update med ny værdi.")}<br/><br/>
+                                <strong>{t("Scenario 3:")}</strong> {t("Toldkoden på en style viser sig at være forkert → Ret i SPY og send Post Import Update.")}
                             </p>
                         </div>
                         
                         <div className="highlight-box warning">
-                            <p>⚠️ <strong>Vigtigt:</strong> Post Import Update skal sendes hurtigst muligt efter fejlen opdages. Told-myndigheder kræver korrekt dokumentation.</p>
+                            <p>⚠️ <strong>{t("Vigtigt:")}</strong> {t("Post Import Update skal sendes hurtigst muligt efter fejlen opdages. Told-myndigheder kræver korrekt dokumentation.")}</p>
                         </div>
                     </div>
                     
                     {/* FEJLHÅNDTERING - NY SEKTION */}
                     <div className="workflow-section">
-                        <h2 className="section-title">⚠️ Fejlhåndtering</h2>
-                        <p className="section-subtitle">Hvad sker når noget går galt?</p>
+                        <h2 className="section-title">{t("⚠️ Fejlhåndtering")}</h2>
+                        <p className="section-subtitle">{t("Hvad sker når noget går galt?")}</p>
                         
-                        <h4 style={{marginTop: '15px', marginBottom: '15px', color: 'var(--error-color)'}}>Typiske fejlkoder fra Lector:</h4>
+                        <h4 style={{marginTop: '15px', marginBottom: '15px', color: 'var(--error-color)'}}>{t("Typiske fejlkoder fra Lector:")}</h4>
                         <table className="error-code-table">
                             <thead>
                                 <tr>
-                                    <th>Kode</th>
-                                    <th>Beskrivelse</th>
-                                    <th>Løsning</th>
+                                    <th>{t("Kode")}</th>
+                                    <th>{t("Beskrivelse")}</th>
+                                    <th>{t("Løsning")}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td className="code">VAL001</td>
-                                    <td>Manglende toldkode</td>
-                                    <td>Tilføj HS-kode på style i SPY</td>
+                                    <td>{t("Manglende toldkode")}</td>
+                                    <td>{t("Tilføj HS-kode på style i SPY")}</td>
                                 </tr>
                                 <tr>
                                     <td className="code">VAL002</td>
-                                    <td>Ugyldig toldkode</td>
-                                    <td>Kontrollér at HS-koden er korrekt</td>
+                                    <td>{t("Ugyldig toldkode")}</td>
+                                    <td>{t("Kontrollér at HS-koden er korrekt")}</td>
                                 </tr>
                                 <tr>
                                     <td className="code">VAL003</td>
-                                    <td>Manglende oprindelsesland</td>
-                                    <td>Tilføj country of origin på stylen</td>
+                                    <td>{t("Manglende oprindelsesland")}</td>
+                                    <td>{t("Tilføj country of origin på stylen")}</td>
                                 </tr>
                                 <tr>
                                     <td className="warning-code">WARN001</td>
-                                    <td>Unormalt høj værdi</td>
-                                    <td>Verificér at fakturabeløb er korrekt</td>
+                                    <td>{t("Unormalt høj værdi")}</td>
+                                    <td>{t("Verificér at fakturabeløb er korrekt")}</td>
                                 </tr>
                                 <tr>
                                     <td className="code">SYS001</td>
-                                    <td>Lector utilgængelig</td>
-                                    <td>System prøver automatisk igen</td>
+                                    <td>{t("Lector utilgængelig")}</td>
+                                    <td>{t("System prøver automatisk igen")}</td>
                                 </tr>
                                 <tr>
                                     <td className="code">SYS002</td>
-                                    <td>Timeout</td>
-                                    <td>Afvent eller kontakt support</td>
+                                    <td>{t("Timeout")}</td>
+                                    <td>{t("Afvent eller kontakt support")}</td>
                                 </tr>
                             </tbody>
                         </table>
                         
-                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--warning-color)'}}>Retry-strategi:</h4>
+                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--warning-color)'}}>{t("Retry-strategi:")}</h4>
                         <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title">🔄 Automatisk retry</div>
+                                <div className="info-card-title">{t("🔄 Automatisk retry")}</div>
                                 <ul className="info-card-list">
-                                    <li>Ved timeout: 3 forsøg</li>
-                                    <li>Interval: 30 sek, 2 min, 10 min</li>
-                                    <li>Ved systemfejl: 5 forsøg</li>
-                                    <li>Derefter: Manuel håndtering</li>
+                                    <li>{t("Ved timeout: 3 forsøg")}</li>
+                                    <li>{t("Interval: 30 sek, 2 min, 10 min")}</li>
+                                    <li>{t("Ved systemfejl: 5 forsøg")}</li>
+                                    <li>{t("Derefter: Manuel håndtering")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">⏱️ Timeout-grænser</div>
+                                <div className="info-card-title">{t("⏱️ Timeout-grænser")}</div>
                                 <ul className="info-card-list">
-                                    <li>API-kald: 30 sekunder</li>
-                                    <li>Batch-upload: 5 minutter</li>
-                                    <li>Warehouse-rapport: 10 minutter</li>
-                                    <li>Ved overskridelse: SYS002-fejl</li>
+                                    <li>{t("API-kald: 30 sekunder")}</li>
+                                    <li>{t("Batch-upload: 5 minutter")}</li>
+                                    <li>{t("Warehouse-rapport: 10 minutter")}</li>
+                                    <li>{t("Ved overskridelse: SYS002-fejl")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">🔍 Find fejl i SPY</div>
+                                <div className="info-card-title">{t("🔍 Find fejl i SPY")}</div>
                                 <ul className="info-card-list">
-                                    <li>Gå til: Administration → Integration</li>
-                                    <li>Vælg: Lector i filteret</li>
-                                    <li>Se: Fejlbeskeder og status</li>
-                                    <li>Eksportér: Fejllog til analyse</li>
+                                    <li>{t("Gå til: Administration → Integration")}</li>
+                                    <li>{t("Vælg: Lector i filteret")}</li>
+                                    <li>{t("Se: Fejlbeskeder og status")}</li>
+                                    <li>{t("Eksportér: Fejllog til analyse")}</li>
                                 </ul>
                             </div>
                         </div>
                         
                         <div className="highlight-box error">
-                            <p>❌ <strong>Ved vedvarende fejl:</strong> Tjek integrationsloggen i SPY. Hvis fejlen ikke kan løses, kontakt Lector support med fejlkode og tidspunkt.</p>
+                            <p>❌ <strong>{t("Ved vedvarende fejl:")}</strong> {t("Tjek integrationsloggen i SPY. Hvis fejlen ikke kan løses, kontakt Lector support med fejlkode og tidspunkt.")}</p>
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">🎯 Fordelen ved toldoplag</h2>
+                        <h2 className="section-title">{t("🎯 Fordelen ved toldoplag")}</h2>
                         
                         <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title">💰 Likviditet</div>
+                                <div className="info-card-title">{t("💰 Likviditet")}</div>
                                 <ul className="info-card-list">
-                                    <li>Told betales først ved salg</li>
-                                    <li>Ingen penge bundet i told</li>
-                                    <li>Bedre cash flow</li>
+                                    <li>{t("Told betales først ved salg")}</li>
+                                    <li>{t("Ingen penge bundet i told")}</li>
+                                    <li>{t("Bedre cash flow")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">🎯 Fleksibilitet</div>
+                                <div className="info-card-title">{t("🎯 Fleksibilitet")}</div>
                                 <ul className="info-card-list">
-                                    <li>Varer kan sendes til alle lande</li>
-                                    <li>Told beregnes ved afsendelse</li>
-                                    <li>Eksport slipper for EU-told</li>
+                                    <li>{t("Varer kan sendes til alle lande")}</li>
+                                    <li>{t("Told beregnes ved afsendelse")}</li>
+                                    <li>{t("Eksport slipper for EU-told")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">📋 Dokumentation</div>
+                                <div className="info-card-title">{t("📋 Dokumentation")}</div>
                                 <ul className="info-card-list">
-                                    <li>Alt registreres automatisk</li>
-                                    <li>Lector holder styr på told</li>
-                                    <li>Revision-sikkert</li>
+                                    <li>{t("Alt registreres automatisk")}</li>
+                                    <li>{t("Lector holder styr på told")}</li>
+                                    <li>{t("Revision-sikkert")}</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">📋 De 4 typer data SPY sender til Lector</h2>
+                        <h2 className="section-title">{t("📋 De 4 typer data SPY sender til Lector")}</h2>
                         
                         <div className="summary-grid">
                             <div className="summary-card import">
-                                <h4>📥 Inbound</h4>
-                                <p>Varer ankommer til toldoplag (INGEN told endnu)</p>
+                                <h4>{t("📥 Inbound")}</h4>
+                                <p>{t("Varer ankommer til toldoplag (INGEN told endnu)")}</p>
                             </div>
                             <div className="summary-card export">
-                                <h4>📤 Outbound</h4>
-                                <p>Varer sendes ud (NU betales told)</p>
+                                <h4>{t("📤 Outbound")}</h4>
+                                <p>{t("Varer sendes ud (NU betales told)")}</p>
                             </div>
                             <div className="summary-card warehouse">
-                                <h4>🏭 Warehouse</h4>
-                                <p>Løbende rapport over lagerbeholdning</p>
+                                <h4>{t("🏭 Warehouse")}</h4>
+                                <p>{t("Løbende rapport over lagerbeholdning")}</p>
                             </div>
                             <div className="summary-card update">
-                                <h4>🔄 Post Import Update</h4>
-                                <p>Rettelser efter registrering (antal, værdier, koder)</p>
+                                <h4>{t("🔄 Post Import Update")}</h4>
+                                <p>{t("Rettelser efter registrering (antal, værdier, koder)")}</p>
                             </div>
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">❓ Ofte stillede spørgsmål</h2>
+                        <h2 className="section-title">{t("❓ Ofte stillede spørgsmål")}</h2>
                         
                         <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title">Hvornår bruges toldoplag?</div>
+                                <div className="info-card-title">{t("Hvornår bruges toldoplag?")}</div>
                                 <ul className="info-card-list">
-                                    <li>Ved import fra lande udenfor EU</li>
-                                    <li>Når man vil udskyde told</li>
-                                    <li>Når man sælger til flere lande</li>
+                                    <li>{t("Ved import fra lande udenfor EU")}</li>
+                                    <li>{t("Når man vil udskyde told")}</li>
+                                    <li>{t("Når man sælger til flere lande")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">Hvad er en toldkode?</div>
+                                <div className="info-card-title">{t("Hvad er en toldkode?")}</div>
                                 <ul className="info-card-list">
-                                    <li>Et nummer der beskriver varetypen</li>
-                                    <li>Bruges til at beregne toldsats</li>
-                                    <li>Sættes på hver style i SPY</li>
+                                    <li>{t("Et nummer der beskriver varetypen")}</li>
+                                    <li>{t("Bruges til at beregne toldsats")}</li>
+                                    <li>{t("Sættes på hver style i SPY")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">Hvad sker automatisk?</div>
+                                <div className="info-card-title">{t("Hvad sker automatisk?")}</div>
                                 <ul className="info-card-list">
-                                    <li>SPY sender data til Lector</li>
-                                    <li>Lector validerer og bekræfter</li>
-                                    <li>Fejl vises i integrationslog</li>
+                                    <li>{t("SPY sender data til Lector")}</li>
+                                    <li>{t("Lector validerer og bekræfter")}</li>
+                                    <li>{t("Fejl vises i integrationslog")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">Hvad hvis noget går galt?</div>
+                                <div className="info-card-title">{t("Hvad hvis noget går galt?")}</div>
                                 <ul className="info-card-list">
-                                    <li>Tjek integrationsloggen først</li>
-                                    <li>Se fejlkode og beskrivelse</li>
-                                    <li>Ret data i SPY og gensend</li>
-                                    <li>Kontakt support ved systemfejl</li>
+                                    <li>{t("Tjek integrationsloggen først")}</li>
+                                    <li>{t("Se fejlkode og beskrivelse")}</li>
+                                    <li>{t("Ret data i SPY og gensend")}</li>
+                                    <li>{t("Kontakt support ved systemfejl")}</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">📌 Vigtige begreber</h2>
+                        <h2 className="section-title">{t("📌 Vigtige begreber")}</h2>
                         
                         <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title">🏭 Toldoplag</div>
+                                <div className="info-card-title">{t("🏭 Toldoplag")}</div>
                                 <ul className="info-card-list">
-                                    <li>Lager hvor told ikke er betalt</li>
-                                    <li>Varer "venter" på at blive solgt</li>
-                                    <li>Told betales ved udlevering</li>
+                                    <li>{t("Lager hvor told ikke er betalt")}</li>
+                                    <li>{t("Varer \"venter\" på at blive solgt")}</li>
+                                    <li>{t("Told betales ved udlevering")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">🏷️ Toldkode / HS-kode</div>
+                                <div className="info-card-title">{t("🏷️ Toldkode / HS-kode")}</div>
                                 <ul className="info-card-list">
-                                    <li>Internationalt varenummer</li>
-                                    <li>Bestemmer toldsatsen</li>
-                                    <li>F.eks. 6204.43 = damekjoler</li>
+                                    <li>{t("Internationalt varenummer")}</li>
+                                    <li>{t("Bestemmer toldsatsen")}</li>
+                                    <li>{t("F.eks. 6204.43 = damekjoler")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">🌍 Oprindelse</div>
+                                <div className="info-card-title">{t("🌍 Oprindelse")}</div>
                                 <ul className="info-card-list">
-                                    <li>Hvor varen er produceret</li>
-                                    <li>Påvirker toldsatsen</li>
-                                    <li>Skal dokumenteres</li>
+                                    <li>{t("Hvor varen er produceret")}</li>
+                                    <li>{t("Påvirker toldsatsen")}</li>
+                                    <li>{t("Skal dokumenteres")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">📜 Incoterms</div>
+                                <div className="info-card-title">{t("📜 Incoterms")}</div>
                                 <ul className="info-card-list">
-                                    <li>Leveringsbetingelser</li>
-                                    <li>Hvem betaler fragt/told</li>
-                                    <li>F.eks. FOB, CIF, DAP</li>
+                                    <li>{t("Leveringsbetingelser")}</li>
+                                    <li>{t("Hvem betaler fragt/told")}</li>
+                                    <li>{t("F.eks. FOB, CIF, DAP")}</li>
                                 </ul>
                             </div>
                         </div>
@@ -909,44 +906,43 @@
                     
                     {/* API DOKUMENTATION */}
                     <div className="workflow-section">
-                        <h2 className="section-title">📚 Dokumentation og Support</h2>
+                        <h2 className="section-title">{t("📚 Dokumentation og Support")}</h2>
                         
                         <div className="docs-box">
-                            <h4>📖 Lector API-dokumentation</h4>
+                            <h4>{t("📖 Lector API-dokumentation")}</h4>
                             <p>
-                                For teknisk dokumentation af Lector-integrationen, 
-                                kontakt Lector support for adgang til deres API-dokumentation.
+                                {t("For teknisk dokumentation af Lector-integrationen, kontakt Lector support for adgang til deres API-dokumentation.")}
                             </p>
                             <p style={{marginTop: '15px'}}>
-                                <strong>Lector Support:</strong><br/>
-                                📧 E-mail: support@lector.dk<br/>
-                                📞 Telefon: Se kontrakt-dokumenter
+                                <strong>{t("Lector Support:")}</strong><br/>
+                                📧 {t("E-mail:")} support@lector.dk<br/>
+                                📞 {t("Telefon:")} {t("Se kontrakt-dokumenter")}
                             </p>
                         </div>
                         
                         <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title">🔧 SPY Support</div>
+                                <div className="info-card-title">{t("🔧 SPY Support")}</div>
                                 <ul className="info-card-list">
-                                    <li>Ved spørgsmål om SPY-opsætning</li>
-                                    <li>Hjælp til fejlfinding</li>
-                                    <li>Kontakt: support@spysystem.dk</li>
+                                    <li>{t("Ved spørgsmål om SPY-opsætning")}</li>
+                                    <li>{t("Hjælp til fejlfinding")}</li>
+                                    <li>{t("Kontakt:")} support@spysystem.dk</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">📋 Nyttige links i SPY</div>
+                                <div className="info-card-title">{t("📋 Nyttige links i SPY")}</div>
                                 <ul className="info-card-list">
-                                    <li>Administration → Integrationer</li>
-                                    <li>Lager → Toldoplag</li>
-                                    <li>Rapporter → Told-oversigt</li>
+                                    <li>{t("Administration → Integrationer")}</li>
+                                    <li>{t("Lager → Toldoplag")}</li>
+                                    <li>{t("Rapporter → Told-oversigt")}</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     
                     <p className="footer-text">
-                        Genereret af <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString('da-DK')}<br/>
-                        <em style={{fontSize: '0.9em'}}>Guide til support-teamet</em>
+                        {t("Genereret af")} <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString(locale === 'en' ? 'en-GB' : 'da-DK')}<br/>
+                        <em style={{fontSize: '0.9em'}}>{t("Guide til support-teamet")}</em>
                     </p>
                 </div>
             );
@@ -955,7 +951,7 @@
         // Initialize i18n and render with translations
         (async function() {
             const { locale, t } = await window.i18n.initI18n('lector-customs-workflow');
-            ReactDOM.render(<LectorWorkflow />, document.getElementById('root'));
+            ReactDOM.render(<LectorWorkflow t={t} locale={locale} />, document.getElementById('root'));
             window.i18n.autoApplyTranslations(200);
         })();
     </script>
