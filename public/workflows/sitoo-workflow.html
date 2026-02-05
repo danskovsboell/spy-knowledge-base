@@ -233,162 +233,162 @@
             </div>
         );
         
-        const SitooWorkflow = () => {
+        const SitooWorkflow = ({ t = (k) => k, locale = 'da' }) => {
             return (
                 <div className="container">
-                    <h1>Sitoo POS Integration Workflow</h1>
-                    <p className="subtitle">Visualisering af SPY's integration med Sitoo kassesystem</p>
+                    <h1>{t("Sitoo POS Integration Workflow")}</h1>
+                    <p className="subtitle">{t("Visualisering af SPY's integration med Sitoo kassesystem")}</p>
                     
                     <div className="legend">
                         <div className="legend-item">
                             <div className="legend-color sitoo"></div>
-                            <span>Sitoo POS</span>
+                            <span>{t("Sitoo POS")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color spy"></div>
-                            <span>SPY System</span>
+                            <span>{t("SPY System")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color store"></div>
-                            <span>Butik/Lager</span>
+                            <span>{t("Butik/Lager")}</span>
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">🏷️ Produktsynkronisering (SPY → Sitoo)</h2>
+                        <h2 className="section-title">{t("🏷️ Produktsynkronisering (SPY → Sitoo)")}</h2>
                         <div className="flow-container">
-                            <FlowBox icon="👗" title="Style oprettet" desc="Nyt produkt i SPY" type="spy" />
+                            <FlowBox icon="👗" title={t("Style oprettet")} desc={t("Nyt produkt i SPY")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="📋" title="PRICAT genereres" desc="Priskatalog med varianter" type="spy" />
+                            <FlowBox icon="📋" title={t("PRICAT genereres")} desc={t("Priskatalog med varianter")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🔄" title="API Push" desc="Products & Variants" type="spy" />
+                            <FlowBox icon="🔄" title={t("API Push")} desc={t("Products & Variants")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🏪" title="Sitoo" desc="Produkt synkroniseret" type="sitoo" />
+                            <FlowBox icon="🏪" title={t("Sitoo")} desc={t("Produkt synkroniseret")} type="sitoo" />
                             <Arrow />
-                            <FlowBox icon="📱" title="Kasse" desc="Klar til salg" type="store" />
+                            <FlowBox icon="📱" title={t("Kasse")} desc={t("Klar til salg")} type="store" />
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">📦 Lagersynkronisering (SPY → Sitoo)</h2>
+                        <h2 className="section-title">{t("📦 Lagersynkronisering (SPY → Sitoo)")}</h2>
                         <div className="flow-container">
-                            <FlowBox icon="📊" title="Lagerændring" desc="Stock update i SPY" type="spy" />
+                            <FlowBox icon="📊" title={t("Lagerændring")} desc={t("Stock update i SPY")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="📄" title="STKUPD" desc="Stock Update dokument" type="spy" />
+                            <FlowBox icon="📄" title={t("STKUPD")} desc={t("Stock Update dokument")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🔄" title="Warehouse API" desc="Opdater lagerbeholdning" type="spy" />
+                            <FlowBox icon="🔄" title={t("Warehouse API")} desc={t("Opdater lagerbeholdning")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🏪" title="Sitoo" desc="Lager opdateret" type="sitoo" />
+                            <FlowBox icon="🏪" title={t("Sitoo")} desc={t("Lager opdateret")} type="sitoo" />
                             <Arrow />
-                            <FlowBox icon="📱" title="Butikslager" desc="Viser korrekt antal" type="store" />
+                            <FlowBox icon="📱" title={t("Butikslager")} desc={t("Viser korrekt antal")} type="store" />
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">🚚 Forsendelse til butik (SPY → Sitoo)</h2>
+                        <h2 className="section-title">{t("🚚 Forsendelse til butik (SPY → Sitoo)")}</h2>
                         <div className="flow-container">
-                            <FlowBox icon="📦" title="Pakket ordre" desc="Consignment klar" type="spy" />
+                            <FlowBox icon="📦" title={t("Pakket ordre")} desc={t("Consignment klar")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🏷️" title="PRICAT" desc="Produktdata for forsendelsen" type="spy" />
+                            <FlowBox icon="🏷️" title={t("PRICAT")} desc={t("Produktdata for forsendelsen")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="📄" title="DESADV" desc="Forsendelsesadvis" type="spy" />
+                            <FlowBox icon="📄" title={t("DESADV")} desc={t("Forsendelsesadvis")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🔄" title="Shipment API" desc="Push PRICAT + DESADV" type="spy" />
+                            <FlowBox icon="🔄" title={t("Shipment API")} desc={t("Push PRICAT + DESADV")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🏪" title="Sitoo" desc="Shipment registreret" type="sitoo" />
+                            <FlowBox icon="🏪" title={t("Sitoo")} desc={t("Shipment registreret")} type="sitoo" />
                             <Arrow />
-                            <FlowBox icon="✅" title="Butik modtager" desc="Varer checket ind" type="store" />
+                            <FlowBox icon="✅" title={t("Butik modtager")} desc={t("Varer checket ind")} type="store" />
                         </div>
                         <div style={{marginTop: '12px', padding: '10px 16px', background: 'rgba(201,162,39,0.08)', borderRadius: '8px', fontSize: '0.85em', color: '#b3b3b3'}}>
-                            <strong style={{color: '#c9a227'}}>💡 Bemærk:</strong> <code>SitooQueueProducer::scheduleDESADVExport()</code> kalder først <code>scheduleDeliveryPRICAT()</code> for at sikre at Sitoo har produktdata for alle varer i forsendelsen, før selve DESADV'en sendes.
+                            <strong style={{color: '#c9a227'}}>{t("💡 Bemærk:")}</strong> <code>SitooQueueProducer::scheduleDESADVExport()</code> {t("kalder først")} <code>scheduleDeliveryPRICAT()</code> {t("for at sikre at Sitoo har produktdata for alle varer i forsendelsen, før selve DESADV'en sendes.")}
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">💰 Salgsrapportering (Sitoo → SPY)</h2>
+                        <h2 className="section-title">{t("💰 Salgsrapportering (Sitoo → SPY)")}</h2>
                         <div className="flow-container">
-                            <FlowBox icon="🛒" title="Salg i butik" desc="Transaktion gennemført" type="store" />
+                            <FlowBox icon="🛒" title={t("Salg i butik")} desc={t("Transaktion gennemført")} type="store" />
                             <Arrow />
-                            <FlowBox icon="🏪" title="Sitoo" desc="Ordre registreret" type="sitoo" />
+                            <FlowBox icon="🏪" title={t("Sitoo")} desc={t("Ordre registreret")} type="sitoo" />
                             <Arrow />
-                            <FlowBox icon="🔔" title="Webhook" desc="order.closed event" type="sitoo" />
+                            <FlowBox icon="🔔" title={t("Webhook")} desc={t("order.closed event")} type="sitoo" />
                             <Arrow />
-                            <FlowBox icon="📄" title="SLSRPT" desc="Sales Report" type="spy" />
+                            <FlowBox icon="📄" title={t("SLSRPT")} desc={t("Sales Report")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="📊" title="SPY bogfører" desc="Salg + lager opdateret" type="spy" />
+                            <FlowBox icon="📊" title={t("SPY bogfører")} desc={t("Salg + lager opdateret")} type="spy" />
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">🔄 Lagerbevægelser (Sitoo → SPY)</h2>
+                        <h2 className="section-title">{t("🔄 Lagerbevægelser (Sitoo → SPY)")}</h2>
                         <div className="flow-container">
-                            <FlowBox icon="📋" title="Optælling/Manuel" desc="Stock transaction i butik" type="store" />
+                            <FlowBox icon="📋" title={t("Optælling/Manuel")} desc={t("Stock transaction i butik")} type="store" />
                             <Arrow />
-                            <FlowBox icon="🏪" title="Sitoo" desc="Transaction logged" type="sitoo" />
+                            <FlowBox icon="🏪" title={t("Sitoo")} desc={t("Transaction logged")} type="sitoo" />
                             <Arrow />
-                            <FlowBox icon="🔔" title="Webhook" desc="warehousetransaction event" type="sitoo" />
+                            <FlowBox icon="🔔" title={t("Webhook")} desc={t("warehousetransaction event")} type="sitoo" />
                             <Arrow />
-                            <FlowBox icon="⚙️" title="SPY Processing" desc="Juster beholdning" type="spy" />
+                            <FlowBox icon="⚙️" title={t("SPY Processing")} desc={t("Juster beholdning")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="✅" title="Synkroniseret" desc="Lager matcher" type="spy" />
+                            <FlowBox icon="✅" title={t("Synkroniseret")} desc={t("Lager matcher")} type="spy" />
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">📋 Dokumenttyper</h2>
+                        <h2 className="section-title">{t("📋 Dokumenttyper")}</h2>
                         
-                        <h3 style={{marginTop: '20px', marginBottom: '15px', color: '#2ecc71', fontSize: '1.1em'}}>📤 Export til Sitoo (SPY → Sitoo)</h3>
+                        <h3 style={{marginTop: '20px', marginBottom: '15px', color: '#2ecc71', fontSize: '1.1em'}}>{t("📤 Export til Sitoo (SPY → Sitoo)")}</h3>
                         <div className="doc-types">
                             <DocCard 
                                 code="PRICAT" 
-                                fullName="Price Catalogue" 
-                                desc="Produkter, varianter, priser, kategorier, billeder" 
+                                fullName={t("Price Catalogue")} 
+                                desc={t("Produkter, varianter, priser, kategorier, billeder")} 
                                 direction="export" 
                                 path="POSExchangePRICATInterface"
                             />
                             <DocCard 
                                 code="DESADV" 
-                                fullName="Despatch Advice" 
-                                desc="Forsendelser/shipments til butikker" 
+                                fullName={t("Despatch Advice")} 
+                                desc={t("Forsendelser/shipments til butikker")} 
                                 direction="export" 
                                 path="POSExchangeDESADVInterface"
                             />
                             <DocCard 
                                 code="STKUPD" 
-                                fullName="Stock Update" 
-                                desc="Lagerbeholdninger per lokation" 
+                                fullName={t("Stock Update")} 
+                                desc={t("Lagerbeholdninger per lokation")} 
                                 direction="export" 
                                 path="class/EDI/POS/Documents/STKUPDBuilder"
                             />
                         </div>
                         
-                        <h3 style={{marginTop: '30px', marginBottom: '15px', color: 'var(--sitoo-blue)', fontSize: '1.1em'}}>📥 Import fra Sitoo (Sitoo → SPY via Webhook)</h3>
+                        <h3 style={{marginTop: '30px', marginBottom: '15px', color: 'var(--sitoo-blue)', fontSize: '1.1em'}}>{t("📥 Import fra Sitoo (Sitoo → SPY via Webhook)")}</h3>
                         <div className="doc-types">
                             <DocCard 
                                 code="SLSRPT" 
-                                fullName="Sales Report" 
-                                desc="Salgsrapporter fra kasser (ordrer, betalinger)" 
+                                fullName={t("Sales Report")} 
+                                desc={t("Salgsrapporter fra kasser (ordrer, betalinger)")} 
                                 direction="import" 
                                 path="class/EDI/POS/XML/SLSRPT"
                             />
                             <DocCard 
                                 code="Orders" 
-                                fullName="Sitoo Orders" 
-                                desc="Lukkede ordrer med linjer og betalinger" 
+                                fullName={t("Sitoo Orders")} 
+                                desc={t("Lukkede ordrer med linjer og betalinger")} 
                                 direction="import" 
                                 path="Webhook: order.closed"
                             />
                             <DocCard 
                                 code="Refunds" 
-                                fullName="Refund Transactions" 
-                                desc="Returneringer og claims" 
+                                fullName={t("Refund Transactions")} 
+                                desc={t("Returneringer og claims")} 
                                 direction="import" 
                                 path="TransactionType: 40"
                             />
                             <DocCard 
                                 code="Stock Transactions" 
-                                fullName="Inventory Movements" 
-                                desc="Manuel ind/ud, optælling, justeringer" 
+                                fullName={t("Inventory Movements")} 
+                                desc={t("Manuel ind/ud, optælling, justeringer")} 
                                 direction="import" 
                                 path="Webhook: warehousetransaction"
                             />
@@ -396,74 +396,74 @@
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">⚙️ Teknisk oversigt</h2>
+                        <h2 className="section-title">{t("⚙️ Teknisk oversigt")}</h2>
                         <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title">🔌 API Integration</div>
+                                <div className="info-card-title">{t("🔌 API Integration")}</div>
                                 <ul className="info-card-list">
-                                    <li>REST API (v2 + v3)</li>
-                                    <li>Rate limiting middleware</li>
-                                    <li>Batch operations (2000 items/call)</li>
-                                    <li>Webhook callbacks</li>
+                                    <li>{t("REST API (v2 + v3)")}</li>
+                                    <li>{t("Rate limiting middleware")}</li>
+                                    <li>{t("Batch operations (2000 items/call)")}</li>
+                                    <li>{t("Webhook callbacks")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">📦 Sitoo Entiteter</div>
+                                <div className="info-card-title">{t("📦 Sitoo Entiteter")}</div>
                                 <ul className="info-card-list">
-                                    <li>Products & Variants</li>
-                                    <li>Categories & Manufacturers</li>
-                                    <li>Warehouses & Stock</li>
-                                    <li>Shipments & Orders</li>
+                                    <li>{t("Products & Variants")}</li>
+                                    <li>{t("Categories & Manufacturers")}</li>
+                                    <li>{t("Warehouses & Stock")}</li>
+                                    <li>{t("Shipments & Orders")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">🔄 Transaction Types</div>
+                                <div className="info-card-title">{t("🔄 Transaction Types")}</div>
                                 <ul className="info-card-list">
-                                    <li>10: Manual In</li>
-                                    <li>20: Manual Out</li>
-                                    <li>30: Sales</li>
-                                    <li>40: Refund</li>
-                                    <li>50: Stocktaking</li>
+                                    <li>{t("10: Manual In")}</li>
+                                    <li>{t("20: Manual Out")}</li>
+                                    <li>{t("30: Sales")}</li>
+                                    <li>{t("40: Refund")}</li>
+                                    <li>{t("50: Stocktaking")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">📊 Custom Attributes</div>
+                                <div className="info-card-title">{t("📊 Custom Attributes")}</div>
                                 <ul className="info-card-list">
-                                    <li>Season (sæson)</li>
-                                    <li>Style No (varenummer)</li>
-                                    <li>Color (variant attribute)</li>
-                                    <li>Size (variant attribute)</li>
+                                    <li>{t("Season (sæson)")}</li>
+                                    <li>{t("Style No (varenummer)")}</li>
+                                    <li>{t("Color (variant attribute)")}</li>
+                                    <li>{t("Size (variant attribute)")}</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     
                     <div className="workflow-section">
-                        <h2 className="section-title">🗂️ Kodestruktur</h2>
+                        <h2 className="section-title">{t("🗂️ Kodestruktur")}</h2>
                         <div className="code-structure">
                             <span className="folder">class/Integration/POS/Systems/Sitoo/</span><br/>
-                            &nbsp;&nbsp;├── SitooIntegrationManager.php <span className="comment">← Hovedlogik</span><br/>
-                            &nbsp;&nbsp;├── SitooProvider.php <span className="comment">← API v2 klient</span><br/>
-                            &nbsp;&nbsp;├── SitooV3Provider.php <span className="comment">← API v3 klient</span><br/>
-                            &nbsp;&nbsp;├── SitooQueueProducer.php <span className="comment">← Job queue</span><br/>
-                            &nbsp;&nbsp;├── BaseSitooProvider.php <span className="comment">← Fælles funktionalitet</span><br/>
-                            &nbsp;&nbsp;├── Data/ <span className="comment">← Data objekter</span><br/>
+                            &nbsp;&nbsp;├── SitooIntegrationManager.php <span className="comment">← {t("Hovedlogik")}</span><br/>
+                            &nbsp;&nbsp;├── SitooProvider.php <span className="comment">← {t("API v2 klient")}</span><br/>
+                            &nbsp;&nbsp;├── SitooV3Provider.php <span className="comment">← {t("API v3 klient")}</span><br/>
+                            &nbsp;&nbsp;├── SitooQueueProducer.php <span className="comment">← {t("Job queue")}</span><br/>
+                            &nbsp;&nbsp;├── BaseSitooProvider.php <span className="comment">← {t("Fælles funktionalitet")}</span><br/>
+                            &nbsp;&nbsp;├── Data/ <span className="comment">← {t("Data objekter")}</span><br/>
                             &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── SitooPOSData.php<br/>
                             &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── ProductsAndVariantsData.php<br/>
                             &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── ShipmentActionData.php<br/>
-                            &nbsp;&nbsp;├── Exception/ <span className="comment">← Fejlhåndtering</span><br/>
-                            &nbsp;&nbsp;└── Middleware/ <span className="comment">← Rate limiting</span><br/><br/>
+                            &nbsp;&nbsp;├── Exception/ <span className="comment">← {t("Fejlhåndtering")}</span><br/>
+                            &nbsp;&nbsp;└── Middleware/ <span className="comment">← {t("Rate limiting")}</span><br/><br/>
                             <span className="folder">applications/API/V1/Controller/Webhook/Sitoo/</span><br/>
-                            &nbsp;&nbsp;└── Controller.php <span className="comment">← Webhook endpoint</span><br/><br/>
+                            &nbsp;&nbsp;└── Controller.php <span className="comment">← {t("Webhook endpoint")}</span><br/><br/>
                             <span className="folder">class/Entity/Integration/POS/Systems/Sitoo/</span><br/>
-                            &nbsp;&nbsp;└── SitooCustomerConfiguration.php <span className="comment">← Kundeopsætning</span>
+                            &nbsp;&nbsp;└── SitooCustomerConfiguration.php <span className="comment">← {t("Kundeopsætning")}</span>
                         </div>
                     </div>
                     
                     <div className="workflow-section" style={{textAlign: 'center'}}>
-                        <h2 className="section-title">🔗 Ekstern dokumentation</h2>
+                        <h2 className="section-title">{t("🔗 Ekstern dokumentation")}</h2>
                         <p style={{color: '#b3b3b3', marginBottom: '12px'}}>
-                            Sitoo's officielle API-dokumentation:
+                            {t("Sitoo's officielle API-dokumentation:")}
                         </p>
                         <a href="https://developer.sitoo.com/api-reference/overview/" target="_blank" 
                            style={{color: '#3399ff', fontSize: '1.1em', textDecoration: 'none', borderBottom: '1px solid #3399ff'}}>
@@ -472,7 +472,7 @@
                     </div>
                     
                     <p className="footer-text">
-                        Genereret af <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString('da-DK')} | Opdateret med feedback fra Jakob Larsen
+                        {t("Genereret af")} <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString(locale === 'en' ? 'en-GB' : 'da-DK')} | {t("Opdateret med feedback fra Jakob Larsen")}
                     </p>
                 </div>
             );

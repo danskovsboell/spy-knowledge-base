@@ -313,134 +313,133 @@
             </div>
         );
         
-        const NemEDIWorkflow = () => {
+        const NemEDIWorkflow = ({ t = (k) => k, locale = 'da' }) => {
             return (
                 <div className="container">
-                    <h1>NemEDI Integration Workflow</h1>
-                    <p className="subtitle">Visualisering af SPY's EDI dokumentflow med NemEDI</p>
+                    <h1>{t("NemEDI Integration Workflow")}</h1>
+                    <p className="subtitle">{t("Visualisering af SPY's EDI dokumentflow med NemEDI")}</p>
                     
                     <div className="legend">
                         <div className="legend-item">
                             <div className="legend-color external"></div>
-                            <span>Ekstern part (leverandør)</span>
+                            <span>{t("Ekstern part (leverandør)")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color spy"></div>
-                            <span>SPY System</span>
+                            <span>{t("SPY System")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color customer"></div>
-                            <span>Kunde</span>
+                            <span>{t("Kunde")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color error"></div>
-                            <span>Fejltilstand</span>
+                            <span>{t("Fejltilstand")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color ack"></div>
-                            <span>Kvittering</span>
+                            <span>{t("Kvittering")}</span>
                         </div>
                     </div>
                     
                     {/* INDKØBSFLOW */}
                     <div className="workflow-section">
-                        <h2 className="section-title">📦 Indkøbsflow (SPY køber fra leverandør)</h2>
-                        <p className="flow-label">Happy path: Ordre → Bekræftelse → Levering → Faktura</p>
+                        <h2 className="section-title">{t("📦 Indkøbsflow (SPY køber fra leverandør)")}</h2>
+                        <p className="flow-label">{t("Happy path: Ordre → Bekræftelse → Levering → Faktura")}</p>
                         <div className="flow-container">
-                            <FlowBox icon="🏢" title="SPY" desc="Opretter indkøbsordre" type="spy" />
+                            <FlowBox icon="🏢" title="SPY" desc={t("Opretter indkøbsordre")} type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📤" title="ORDERS" desc="Send til leverandør" type="spy" />
+                            <FlowBox icon="📤" title="ORDERS" desc={t("Send til leverandør")} type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="🏭" title="Leverandør" desc="Bekræfter" type="external" />
+                            <FlowBox icon="🏭" title={t("Leverandør")} desc={t("Bekræfter")} type="external" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📄" title="ORDRSP" desc="Ordrebekræftelse" type="spy" />
+                            <FlowBox icon="📄" title="ORDRSP" desc={t("Ordrebekræftelse")} type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📄" title="DESADV" desc="Forsendelsesadvis" type="spy" />
+                            <FlowBox icon="📄" title="DESADV" desc={t("Forsendelsesadvis")} type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📄" title="INVOIC" desc="Købsfaktura" type="spy" />
+                            <FlowBox icon="📄" title="INVOIC" desc={t("Købsfaktura")} type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="✅" title="Komplet" desc="Ordre afsluttet" type="spy" />
+                            <FlowBox icon="✅" title={t("Komplet")} desc={t("Ordre afsluttet")} type="spy" />
                         </div>
                         
-                        <p className="flow-label" style={{marginTop: '20px', color: 'var(--spy-red)'}}>Fejlscenarie: Leverandør kan ikke levere</p>
+                        <p className="flow-label" style={{marginTop: '20px', color: 'var(--spy-red)'}}>{t("Fejlscenarie: Leverandør kan ikke levere")}</p>
                         <div className="flow-container">
-                            <FlowBox icon="🏭" title="Leverandør" desc="Afviser ordre" type="external" />
+                            <FlowBox icon="🏭" title={t("Leverandør")} desc={t("Afviser ordre")} type="external" />
                             <Arrow direction="right" error />
-                            <FlowBox icon="📄" title="ORDRSP" desc="Negativ bekræftelse" type="spy" />
+                            <FlowBox icon="📄" title="ORDRSP" desc={t("Negativ bekræftelse")} type="spy" />
                             <Arrow direction="right" error />
-                            <FlowBox icon="❌" title="Afvist" desc="Kræver manuel handling" type="error" />
+                            <FlowBox icon="❌" title={t("Afvist")} desc={t("Kræver manuel handling")} type="error" />
                         </div>
                     </div>
                     
                     {/* SALGSFLOW */}
                     <div className="workflow-section">
-                        <h2 className="section-title">💰 Salgsflow (Kunde køber fra SPY)</h2>
-                        <p className="flow-label">Happy path: Ordre → Bekræftelse → Levering → Faktura → Kvittering</p>
+                        <h2 className="section-title">{t("💰 Salgsflow (Kunde køber fra SPY)")}</h2>
+                        <p className="flow-label">{t("Happy path: Ordre → Bekræftelse → Levering → Faktura → Kvittering")}</p>
                         <div className="flow-container">
-                            <FlowBox icon="🛒" title="Kunde" desc="Sender ordre" type="customer" />
+                            <FlowBox icon="🛒" title={t("Kunde")} desc={t("Sender ordre")} type="customer" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📄" title="ORDERS" desc="Kundeordre ind" type="spy" />
+                            <FlowBox icon="📄" title="ORDERS" desc={t("Kundeordre ind")} type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📤" title="ORDRSP" desc="Bekræftelse ud" type="spy" />
+                            <FlowBox icon="📤" title="ORDRSP" desc={t("Bekræftelse ud")} type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📦" title="Pakkeri" desc="Varer pakkes" type="spy" />
+                            <FlowBox icon="📦" title={t("Pakkeri")} desc={t("Varer pakkes")} type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📤" title="DESADV" desc="Forsendelsesadvis" type="spy" />
+                            <FlowBox icon="📤" title="DESADV" desc={t("Forsendelsesadvis")} type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📤" title="INVOIC" desc="Faktura ud" type="spy" />
+                            <FlowBox icon="📤" title="INVOIC" desc={t("Faktura ud")} type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="📄" title="RECADV" desc="Kvittering ind" type="spy" />
+                            <FlowBox icon="📄" title="RECADV" desc={t("Kvittering ind")} type="spy" />
                             <Arrow direction="right" />
-                            <FlowBox icon="✅" title="Komplet" desc="Ordre afsluttet" type="spy" />
+                            <FlowBox icon="✅" title={t("Komplet")} desc={t("Ordre afsluttet")} type="spy" />
                         </div>
                         
-                        <p className="flow-label" style={{marginTop: '20px', color: 'var(--spy-red)'}}>Fejlscenarie: Varer ikke på lager</p>
+                        <p className="flow-label" style={{marginTop: '20px', color: 'var(--spy-red)'}}>{t("Fejlscenarie: Varer ikke på lager")}</p>
                         <div className="flow-container">
-                            <FlowBox icon="📄" title="ORDERS" desc="Modtager ordre" type="spy" />
+                            <FlowBox icon="📄" title="ORDERS" desc={t("Modtager ordre")} type="spy" />
                             <Arrow direction="right" error />
-                            <FlowBox icon="⚠️" title="Lagermangel" desc="Ikke tilgængelig" type="error" />
+                            <FlowBox icon="⚠️" title={t("Lagermangel")} desc={t("Ikke tilgængelig")} type="error" />
                             <Arrow direction="right" error />
-                            <FlowBox icon="📤" title="ORDRSP" desc="Negativ bekræftelse" type="spy" />
+                            <FlowBox icon="📤" title="ORDRSP" desc={t("Negativ bekræftelse")} type="spy" />
                         </div>
                     </div>
                     
                     {/* RECADV SCENARIER */}
                     <div className="workflow-section">
-                        <h2 className="section-title">📋 RECADV Scenarier (Receiving Advice)</h2>
+                        <h2 className="section-title">{t("📋 RECADV Scenarier (Receiving Advice)")}</h2>
                         <p style={{color: 'var(--spy-gray)', marginBottom: '20px'}}>
-                            RECADV bruges til at kommunikere modtagelsesstatus fra kunde til leverandør. 
-                            Her er de forskellige scenarier:
+                            {t("RECADV bruges til at kommunikere modtagelsesstatus fra kunde til leverandør. Her er de forskellige scenarier:")}
                         </p>
                         
                         <div className="scenario-grid">
                             <ScenarioCard 
-                                title="✅ Fuld modtagelse" 
-                                desc="Alle varer modtaget i god stand. RECADV sendes med status 'accepteret' for alle linjer. Ordren kan afsluttes."
+                                title={t("✅ Fuld modtagelse")} 
+                                desc={t("Alle varer modtaget i god stand. RECADV sendes med status 'accepteret' for alle linjer. Ordren kan afsluttes.")}
                                 type="success"
                             />
                             <ScenarioCard 
-                                title="⚠️ Delvis modtagelse" 
-                                desc="Kun nogle varer modtaget. RECADV indeholder modtaget antal pr. linje. Restordre kan oprettes automatisk."
+                                title={t("⚠️ Delvis modtagelse")} 
+                                desc={t("Kun nogle varer modtaget. RECADV indeholder modtaget antal pr. linje. Restordre kan oprettes automatisk.")}
                                 type="warning"
                             />
                             <ScenarioCard 
-                                title="📦 Beskadigede varer" 
-                                desc="Varer modtaget med skader. RECADV angiver beskadiget antal og årsagskode. Kan udløse reklamation."
+                                title={t("📦 Beskadigede varer")} 
+                                desc={t("Varer modtaget med skader. RECADV angiver beskadiget antal og årsagskode. Kan udløse reklamation.")}
                                 type="error"
                             />
                             <ScenarioCard 
-                                title="❓ Forkerte varer" 
-                                desc="Modtaget andre varer end bestilt. RECADV med afvisningskode. Kræver manuel håndtering og evt. returnering."
+                                title={t("❓ Forkerte varer")} 
+                                desc={t("Modtaget andre varer end bestilt. RECADV med afvisningskode. Kræver manuel håndtering og evt. returnering.")}
                                 type="error"
                             />
                             <ScenarioCard 
-                                title="🚫 Afvist levering" 
-                                desc="Hele leveringen afvises (f.eks. temperaturkrav ikke overholdt). RECADV med komplet afvisning af alle linjer."
+                                title={t("🚫 Afvist levering")} 
+                                desc={t("Hele leveringen afvises (f.eks. temperaturkrav ikke overholdt). RECADV med komplet afvisning af alle linjer.")}
                                 type="error"
                             />
                             <ScenarioCard 
-                                title="⏰ For sen levering" 
-                                desc="Varer modtaget efter aftalt tid. RECADV med note om forsinkelse. Kan påvirke fremtidige ordrer."
+                                title={t("⏰ For sen levering")} 
+                                desc={t("Varer modtaget efter aftalt tid. RECADV med note om forsinkelse. Kan påvirke fremtidige ordrer.")}
                                 type="warning"
                             />
                         </div>
@@ -448,168 +447,166 @@
                     
                     {/* FEJLHÅNDTERING */}
                     <div className="workflow-section">
-                        <h2 className="section-title">🔧 Fejlhåndtering og Retry</h2>
+                        <h2 className="section-title">{t("🔧 Fejlhåndtering og Retry")}</h2>
                         
                         <div className="info-box">
-                            <strong>💡 Integrationslog:</strong> Alle EDI-transaktioner logges i SPY under 
+                            <strong>{t("💡 Integrationslog:")}</strong> {t("Alle EDI-transaktioner logges i SPY under")} 
                             <code style={{background: 'rgba(201,162,39,0.2)', padding: '2px 6px', borderRadius: '4px', margin: '0 5px'}}>
-                                Værktøjer → NemEDI → Integrationslog
+                                {t("Værktøjer → NemEDI → Integrationslog")}
                             </code>
-                            Her kan du se status, fejlbeskeder og genprocessere fejlede transaktioner.
+                            {t("Her kan du se status, fejlbeskeder og genprocessere fejlede transaktioner.")}
                         </div>
                         
-                        <h3 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>Retry-strategi</h3>
+                        <h3 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>{t("Retry-strategi")}</h3>
                         <ul className="error-list">
                             <li>
-                                <span className="error-code">Automatisk retry:</span>
-                                <span className="error-desc"> Ved timeout eller midlertidige fejl forsøges afsendelse igen op til 3 gange med eksponentiel backoff (1, 5, 15 minutter)</span>
+                                <span className="error-code">{t("Automatisk retry:")}</span>
+                                <span className="error-desc"> {t("Ved timeout eller midlertidige fejl forsøges afsendelse igen op til 3 gange med eksponentiel backoff (1, 5, 15 minutter)")}</span>
                             </li>
                             <li>
-                                <span className="error-code">Manuel retry:</span>
-                                <span className="error-desc"> Fejlede transaktioner kan gensendes manuelt fra integrationsloggen efter fejlrettelse</span>
+                                <span className="error-code">{t("Manuel retry:")}</span>
+                                <span className="error-desc"> {t("Fejlede transaktioner kan gensendes manuelt fra integrationsloggen efter fejlrettelse")}</span>
                             </li>
                             <li>
-                                <span className="error-code">Batch-retry:</span>
-                                <span className="error-desc"> Flere fejlede transaktioner kan vælges og genprocesseres samlet</span>
+                                <span className="error-code">{t("Batch-retry:")}</span>
+                                <span className="error-desc"> {t("Flere fejlede transaktioner kan vælges og genprocesseres samlet")}</span>
                             </li>
                         </ul>
                         
-                        <h3 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>Timeout-håndtering</h3>
+                        <h3 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>{t("Timeout-håndtering")}</h3>
                         <ul className="error-list">
                             <li>
-                                <span className="error-code">Afsendelse:</span>
-                                <span className="error-desc"> 30 sekunders timeout for API-kald til NemEDI. Ved timeout markeres transaktionen som "afventer" og retry påbegyndes.</span>
+                                <span className="error-code">{t("Afsendelse:")}</span>
+                                <span className="error-desc"> {t("30 sekunders timeout for API-kald til NemEDI. Ved timeout markeres transaktionen som \"afventer\" og retry påbegyndes.")}</span>
                             </li>
                             <li>
-                                <span className="error-code">Modtagelse:</span>
-                                <span className="error-desc"> Polling hvert 5. minut for nye dokumenter. Ved fejl alarmeres via e-mail efter 3 fejlede forsøg.</span>
+                                <span className="error-code">{t("Modtagelse:")}</span>
+                                <span className="error-desc"> {t("Polling hvert 5. minut for nye dokumenter. Ved fejl alarmeres via e-mail efter 3 fejlede forsøg.")}</span>
                             </li>
                             <li>
                                 <span className="error-code">CONTRL/APERAK:</span>
-                                <span className="error-desc"> Kvittering forventes inden 24 timer. Manglende kvittering markeres som advarsel i loggen.</span>
+                                <span className="error-desc"> {t("Kvittering forventes inden 24 timer. Manglende kvittering markeres som advarsel i loggen.")}</span>
                             </li>
                         </ul>
                         
-                        <h3 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-red)', fontSize: '1.1em'}}>Almindelige fejltyper</h3>
+                        <h3 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-red)', fontSize: '1.1em'}}>{t("Almindelige fejltyper")}</h3>
                         <ul className="error-list">
                             <li>
                                 <span className="error-code">VALIDATION_ERROR:</span>
-                                <span className="error-desc"> Dokumentet overholder ikke EDI-format. Tjek påkrævede felter (GLN, varenumre, mængder).</span>
+                                <span className="error-desc"> {t("Dokumentet overholder ikke EDI-format. Tjek påkrævede felter (GLN, varenumre, mængder).")}</span>
                             </li>
                             <li>
                                 <span className="error-code">AUTH_ERROR:</span>
-                                <span className="error-desc"> Autentificering fejlet. Tjek API-nøgle og certifikater i NemEDI-opsætning.</span>
+                                <span className="error-desc"> {t("Autentificering fejlet. Tjek API-nøgle og certifikater i NemEDI-opsætning.")}</span>
                             </li>
                             <li>
                                 <span className="error-code">PARTNER_NOT_FOUND:</span>
-                                <span className="error-desc"> Modtagers GLN-nummer ikke fundet hos NemEDI. Bekræft partnerkonfiguration.</span>
+                                <span className="error-desc"> {t("Modtagers GLN-nummer ikke fundet hos NemEDI. Bekræft partnerkonfiguration.")}</span>
                             </li>
                             <li>
                                 <span className="error-code">DUPLICATE_ERROR:</span>
-                                <span className="error-desc"> Dokument med samme ID allerede sendt. Tjek om det er en reel dublet eller systemfejl.</span>
+                                <span className="error-desc"> {t("Dokument med samme ID allerede sendt. Tjek om det er en reel dublet eller systemfejl.")}</span>
                             </li>
                             <li>
                                 <span className="error-code">TIMEOUT_ERROR:</span>
-                                <span className="error-desc"> NemEDI svarede ikke i tide. Automatisk retry igangsættes.</span>
+                                <span className="error-desc"> {t("NemEDI svarede ikke i tide. Automatisk retry igangsættes.")}</span>
                             </li>
                             <li>
                                 <span className="error-code">REJECTED_BY_PARTNER:</span>
-                                <span className="error-desc"> Modtager har afvist dokumentet. Se APERAK-besked for detaljer.</span>
+                                <span className="error-desc"> {t("Modtager har afvist dokumentet. Se APERAK-besked for detaljer.")}</span>
                             </li>
                         </ul>
                     </div>
                     
                     {/* DOKUMENTTYPER */}
                     <div className="workflow-section">
-                        <h2 className="section-title">📋 EDI Dokumenttyper</h2>
+                        <h2 className="section-title">{t("📋 EDI Dokumenttyper")}</h2>
                         
-                        <h3 style={{marginTop: '20px', marginBottom: '15px', color: '#3498db', fontSize: '1.1em'}}>📥 Import (modtages fra eksterne parter)</h3>
+                        <h3 style={{marginTop: '20px', marginBottom: '15px', color: '#3498db', fontSize: '1.1em'}}>{t("📥 Import (modtages fra eksterne parter)")}</h3>
                         <div className="doc-types">
-                            <DocCard code="ORDERS" fullName="Purchase Order" desc="Indgående kundeordrer til SPY" direction="import" path="class/EDI/NemEDI/.../Import/ORDERS/"/>
-                            <DocCard code="ORDRSP" fullName="Order Response" desc="Ordrebekræftelse fra leverandør på SPY's indkøbsordrer" direction="import" path="class/EDI/NemEDI/.../Import/ORDRSP/"/>
-                            <DocCard code="DESADV" fullName="Despatch Advice" desc="Forsendelsesadvis - leverandør har afsendt varer" direction="import" path="class/EDI/NemEDI/.../Import/DESADV/"/>
-                            <DocCard code="RECADV" fullName="Receiving Advice" desc="Modtagelseskvittering fra kunde (accept, claims, retur)" direction="import" path="class/EDI/NemEDI/.../Import/RECADV/"/>
-                            <DocCard code="INVOIC" fullName="Invoice" desc="Indgående købsfakturaer fra leverandører" direction="import" path="class/EDI/NemEDI/.../Import/INVOIC/"/>
+                            <DocCard code="ORDERS" fullName="Purchase Order" desc={t("Indgående kundeordrer til SPY")} direction="import" path="class/EDI/NemEDI/.../Import/ORDERS/"/>
+                            <DocCard code="ORDRSP" fullName="Order Response" desc={t("Ordrebekræftelse fra leverandør på SPY's indkøbsordrer")} direction="import" path="class/EDI/NemEDI/.../Import/ORDRSP/"/>
+                            <DocCard code="DESADV" fullName="Despatch Advice" desc={t("Forsendelsesadvis - leverandør har afsendt varer")} direction="import" path="class/EDI/NemEDI/.../Import/DESADV/"/>
+                            <DocCard code="RECADV" fullName="Receiving Advice" desc={t("Modtagelseskvittering fra kunde (accept, claims, retur)")} direction="import" path="class/EDI/NemEDI/.../Import/RECADV/"/>
+                            <DocCard code="INVOIC" fullName="Invoice" desc={t("Indgående købsfakturaer fra leverandører")} direction="import" path="class/EDI/NemEDI/.../Import/INVOIC/"/>
                         </div>
                         
-                        <h3 style={{marginTop: '30px', marginBottom: '15px', color: '#2ecc71', fontSize: '1.1em'}}>📤 Export (sendes til eksterne parter)</h3>
+                        <h3 style={{marginTop: '30px', marginBottom: '15px', color: '#2ecc71', fontSize: '1.1em'}}>{t("📤 Export (sendes til eksterne parter)")}</h3>
                         <div className="doc-types">
-                            <DocCard code="ORDERS" fullName="Purchase Order" desc="Udgående indkøbsordrer til leverandører" direction="export" path="class/EDI/NemEDI/.../Export/ORDERS/"/>
-                            <DocCard code="ORDRSP" fullName="Order Response" desc="Ordrebekræftelse til kunder på deres ordrer" direction="export" path="class/EDI/NemEDI/.../Export/ORDRSP/"/>
-                            <DocCard code="DESADV" fullName="Despatch Advice" desc="Forsendelsesadvis til kunder - varer afsendt" direction="export" path="class/EDI/NemEDI/.../Export/DESADV/"/>
-                            <DocCard code="INVOIC" fullName="Invoice" desc="Salgsfakturaer til kunder" direction="export" path="class/EDI/NemEDI/.../Export/INVOIC/"/>
-                            <DocCard code="PRICAT" fullName="Price Catalogue" desc="Prisliste og produktkatalog til kunder" direction="export" path="class/EDI/NemEDI/.../Export/PRICAT/"/>
-                            <DocCard code="INVRPT" fullName="Inventory Report" desc="Lagerrapport til samarbejdspartnere" direction="export" path="class/EDI/NemEDI/.../Export/INVRPT/"/>
+                            <DocCard code="ORDERS" fullName="Purchase Order" desc={t("Udgående indkøbsordrer til leverandører")} direction="export" path="class/EDI/NemEDI/.../Export/ORDERS/"/>
+                            <DocCard code="ORDRSP" fullName="Order Response" desc={t("Ordrebekræftelse til kunder på deres ordrer")} direction="export" path="class/EDI/NemEDI/.../Export/ORDRSP/"/>
+                            <DocCard code="DESADV" fullName="Despatch Advice" desc={t("Forsendelsesadvis til kunder - varer afsendt")} direction="export" path="class/EDI/NemEDI/.../Export/DESADV/"/>
+                            <DocCard code="INVOIC" fullName="Invoice" desc={t("Salgsfakturaer til kunder")} direction="export" path="class/EDI/NemEDI/.../Export/INVOIC/"/>
+                            <DocCard code="PRICAT" fullName="Price Catalogue" desc={t("Prisliste og produktkatalog til kunder")} direction="export" path="class/EDI/NemEDI/.../Export/PRICAT/"/>
+                            <DocCard code="INVRPT" fullName="Inventory Report" desc={t("Lagerrapport til samarbejdspartnere")} direction="export" path="class/EDI/NemEDI/.../Export/INVRPT/"/>
                         </div>
                         
-                        <h3 style={{marginTop: '30px', marginBottom: '15px', color: '#9b59b6', fontSize: '1.1em'}}>📨 Kvitteringer (CONTRL/APERAK)</h3>
+                        <h3 style={{marginTop: '30px', marginBottom: '15px', color: '#9b59b6', fontSize: '1.1em'}}>{t("📨 Kvitteringer (CONTRL/APERAK)")}</h3>
                         <div className="doc-types">
-                            <DocCard code="CONTRL" fullName="Syntax Control" desc="Teknisk kvittering - bekræfter at besked er modtaget syntaktisk korrekt" direction="ack"/>
-                            <DocCard code="APERAK" fullName="Application Error/Acknowledgement" desc="Applikationskvittering - bekræfter at besked er behandlet eller afvist med fejlkode" direction="ack"/>
+                            <DocCard code="CONTRL" fullName="Syntax Control" desc={t("Teknisk kvittering - bekræfter at besked er modtaget syntaktisk korrekt")} direction="ack"/>
+                            <DocCard code="APERAK" fullName="Application Error/Acknowledgement" desc={t("Applikationskvittering - bekræfter at besked er behandlet eller afvist med fejlkode")} direction="ack"/>
                         </div>
                         
                         <div className="info-box" style={{marginTop: '20px'}}>
-                            <strong>📝 Note om kvitteringer:</strong> CONTRL sendes automatisk ved modtagelse og bekræfter syntaks. 
-                            APERAK sendes efter forretningsvalidering og kan indeholde fejlkoder hvis dokumentet afvises. 
-                            Begge håndteres automatisk af NemEDI-integrationen.
+                            <strong>{t("📝 Note om kvitteringer:")}</strong> {t("CONTRL sendes automatisk ved modtagelse og bekræfter syntaks. APERAK sendes efter forretningsvalidering og kan indeholde fejlkoder hvis dokumentet afvises. Begge håndteres automatisk af NemEDI-integrationen.")}
                         </div>
                     </div>
                     
                     {/* API DOKUMENTATION */}
                     <div className="workflow-section">
-                        <h2 className="section-title">🔗 API-dokumentation og Ressourcer</h2>
+                        <h2 className="section-title">{t("🔗 API-dokumentation og Ressourcer")}</h2>
                         
                         <div className="link-section">
                             <a href="https://nemedi.dk/dokumentation" target="_blank" className="link-card">
-                                <div className="link-card-title">📚 NemEDI Dokumentation</div>
-                                <div className="link-card-desc">Officiel dokumentation for NemEDI API'et inkl. autentificering, endpoints og eksempler</div>
+                                <div className="link-card-title">{t("📚 NemEDI Dokumentation")}</div>
+                                <div className="link-card-desc">{t("Officiel dokumentation for NemEDI API'et inkl. autentificering, endpoints og eksempler")}</div>
                             </a>
                             <a href="https://nemedi.dk/testmiljo" target="_blank" className="link-card">
-                                <div className="link-card-title">🧪 NemEDI Testmiljø</div>
-                                <div className="link-card-desc">Sandbox-miljø til test af EDI-integration uden at påvirke produktion</div>
+                                <div className="link-card-title">{t("🧪 NemEDI Testmiljø")}</div>
+                                <div className="link-card-desc">{t("Sandbox-miljø til test af EDI-integration uden at påvirke produktion")}</div>
                             </a>
                             <a href="https://www.gs1.dk/standarder/edi/eancom" target="_blank" className="link-card">
-                                <div className="link-card-title">📋 GS1 EANCOM Standard</div>
-                                <div className="link-card-desc">Detaljeret beskrivelse af EANCOM-meddelelsestyper og formatkrav</div>
+                                <div className="link-card-title">{t("📋 GS1 EANCOM Standard")}</div>
+                                <div className="link-card-desc">{t("Detaljeret beskrivelse af EANCOM-meddelelsestyper og formatkrav")}</div>
                             </a>
                             <a href="https://nemedi.dk/partnere" target="_blank" className="link-card">
-                                <div className="link-card-title">🤝 NemEDI Partnerportal</div>
-                                <div className="link-card-desc">Administrer partnere, GLN-numre og kommunikationsaftaler</div>
+                                <div className="link-card-title">{t("🤝 NemEDI Partnerportal")}</div>
+                                <div className="link-card-desc">{t("Administrer partnere, GLN-numre og kommunikationsaftaler")}</div>
                             </a>
                             <a href="https://nemedi.dk/support" target="_blank" className="link-card">
-                                <div className="link-card-title">🆘 NemEDI Support</div>
-                                <div className="link-card-desc">Kontakt NemEDI support ved tekniske problemer eller spørgsmål</div>
+                                <div className="link-card-title">{t("🆘 NemEDI Support")}</div>
+                                <div className="link-card-desc">{t("Kontakt NemEDI support ved tekniske problemer eller spørgsmål")}</div>
                             </a>
                             <a href="https://spy-system.com/docs/edi" target="_blank" className="link-card">
-                                <div className="link-card-title">📖 SPY EDI Guide</div>
-                                <div className="link-card-desc">SPY's egen guide til opsætning og brug af NemEDI-integration</div>
+                                <div className="link-card-title">{t("📖 SPY EDI Guide")}</div>
+                                <div className="link-card-desc">{t("SPY's egen guide til opsætning og brug af NemEDI-integration")}</div>
                             </a>
                         </div>
                     </div>
                     
                     {/* KODESTRUKTUR */}
                     <div className="workflow-section">
-                        <h2 className="section-title">🗂️ Kodestruktur i SPY</h2>
+                        <h2 className="section-title">{t("🗂️ Kodestruktur i SPY")}</h2>
                         <div className="code-structure">
                             <span className="folder">class/EDI/NemEDI/</span><br/>
                             &nbsp;&nbsp;├── <span className="folder">Documents/</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── Import/ <span className="comment">← Modtag EDI dokumenter</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── ORDERS/ <span className="comment">← Kundeordrer</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── ORDRSP/ <span className="comment">← Ordrebekræftelser fra leverandør</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── DESADV/ <span className="comment">← Forsendelsesadviser</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── RECADV/ <span className="comment">← Modtagelseskvitteringer</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── INVOIC/ <span className="comment">← Købsfakturaer</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── Export/ <span className="comment">← Send EDI dokumenter</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── ORDERS/ <span className="comment">← Indkøbsordrer</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── ORDRSP/ <span className="comment">← Ordrebekræftelser til kunde</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── DESADV/ <span className="comment">← Forsendelsesadviser</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── INVOIC/ <span className="comment">← Salgsfakturaer</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── PRICAT/ <span className="comment">← Prislister</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── INVRPT/ <span className="comment">← Lagerrapporter</span><br/><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── Import/ <span className="comment">← {t("Modtag EDI dokumenter")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── ORDERS/ <span className="comment">← {t("Kundeordrer")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── ORDRSP/ <span className="comment">← {t("Ordrebekræftelser fra leverandør")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── DESADV/ <span className="comment">← {t("Forsendelsesadviser")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── RECADV/ <span className="comment">← {t("Modtagelseskvitteringer")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── INVOIC/ <span className="comment">← {t("Købsfakturaer")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── Export/ <span className="comment">← {t("Send EDI dokumenter")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── ORDERS/ <span className="comment">← {t("Indkøbsordrer")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── ORDRSP/ <span className="comment">← {t("Ordrebekræftelser til kunde")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── DESADV/ <span className="comment">← {t("Forsendelsesadviser")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── INVOIC/ <span className="comment">← {t("Salgsfakturaer")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── PRICAT/ <span className="comment">← {t("Prislister")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── INVRPT/ <span className="comment">← {t("Lagerrapporter")}</span><br/><br/>
                             <span className="folder">applications/Spy/Controller/Tools/NemEDI/</span><br/>
-                            &nbsp;&nbsp;├── ReceivedFiles/ <span className="comment">← Håndter modtagne filer</span><br/>
-                            &nbsp;&nbsp;├── IntegrationLog/ <span className="comment">← Vis og administrer transaktioner</span><br/>
-                            &nbsp;&nbsp;├── PartnerSetup/ <span className="comment">← Konfigurer partnere og GLN</span><br/>
+                            &nbsp;&nbsp;├── ReceivedFiles/ <span className="comment">← {t("Håndter modtagne filer")}</span><br/>
+                            &nbsp;&nbsp;├── IntegrationLog/ <span className="comment">← {t("Vis og administrer transaktioner")}</span><br/>
+                            &nbsp;&nbsp;├── PartnerSetup/ <span className="comment">← {t("Konfigurer partnere og GLN")}</span><br/>
                             &nbsp;&nbsp;├── SalesDeliveries/<br/>
                             &nbsp;&nbsp;├── SalesInvoices/<br/>
                             &nbsp;&nbsp;└── SalesOrders/
@@ -617,22 +614,35 @@
                     </div>
                     
                     <p className="footer-text">
-                        Genereret af <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString('da-DK')}
+                        {t("Genereret af")} <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString('da-DK')}
                     </p>
                 </div>
             );
         };
         
-        ReactDOM.render(<NemEDIWorkflow />, document.getElementById('root'));
-    </script>
-
-    <script>
-    (function(){
-      var L=new URLSearchParams(window.location.search).get('lang')||'da';
-      if(L==='da'){document.body.style.opacity='1';return}
-      // Translation support for other languages can be added here
-      document.body.style.opacity='1';
-    })();
+        // i18n integration
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const locale = params.get('lang') || 'da';
+            
+            if (locale === 'da') {
+                ReactDOM.render(<NemEDIWorkflow t={(k) => k} locale="da" />, document.getElementById('root'));
+                document.body.style.opacity = '1';
+                return;
+            }
+            
+            // For other languages, use i18n.js
+            if (typeof window.i18nReady !== 'undefined') {
+                window.i18nReady.then(() => {
+                    const t = window.t || ((k) => k);
+                    ReactDOM.render(<NemEDIWorkflow t={t} locale={locale} />, document.getElementById('root'));
+                    document.body.style.opacity = '1';
+                });
+            } else {
+                ReactDOM.render(<NemEDIWorkflow t={(k) => k} locale={locale} />, document.getElementById('root'));
+                document.body.style.opacity = '1';
+            }
+        })();
     </script>
 </body>
 </html>
