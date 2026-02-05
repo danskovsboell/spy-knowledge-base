@@ -202,7 +202,7 @@ Regler:
 Oversæt følgende fra {source_lang} til {target_lang}:
 ```
 
-**Model:** GPT-5-mini (pris TBD – GPT-4.1-mini var $0.40/$1.60 per 1M tokens)
+**Model:** gpt-5-mini ($0.30/$1.20 per 1M tokens - valgt for kvalitet over pris)
 
 ### 3.6 Outdated Detection
 

@@ -44,7 +44,7 @@ async function callOpenAI(messages, maxTokens = 16000) {
         'Authorization': `Bearer ${OPENAI_KEY}`
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-5-mini',
         messages,
         temperature: 0.15,
         max_tokens: maxTokens,
