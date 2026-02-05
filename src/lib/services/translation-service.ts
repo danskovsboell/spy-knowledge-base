@@ -1,6 +1,7 @@
 /**
  * Translation Service - fetches translations from Supabase kb_translations table
  * Falls back to hardcoded translations if DB fetch fails
+ * Cache cleared: 2026-02-05 16:40 UTC
  */
 
 import { supabase, createServerClient } from '../supabase'
