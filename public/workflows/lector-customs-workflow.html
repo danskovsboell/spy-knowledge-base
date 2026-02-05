@@ -20,8 +20,11 @@
             --spy-gray-dark: #333333;
             --customs-blue: #2c5282;
             --customs-blue-light: #4299e1;
-            --import-color: #e53e3e;
-            --export-color: #38a169;
+            --success-color: #38a169;
+            --warning-color: #dd6b20;
+            --error-color: #e53e3e;
+            --inbound-color: #805ad5;
+            --outbound-color: #3182ce;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -109,27 +112,45 @@
         
         .flow-box.spy { border-top: 3px solid var(--spy-gold); }
         .flow-box.customs { border-top: 3px solid var(--customs-blue); }
-        .flow-box.supplier { border-top: 3px solid var(--import-color); }
-        .flow-box.customer { border-top: 3px solid var(--export-color); }
+        .flow-box.supplier { border-top: 3px solid var(--inbound-color); }
+        .flow-box.customer { border-top: 3px solid var(--success-color); }
         .flow-box.warehouse { border-top: 3px solid #805ad5; }
-        .flow-box.notold { border-top: 3px solid #48bb78; background: rgba(72, 187, 120, 0.1); }
+        .flow-box.notold { border-top: 3px solid var(--success-color); background: rgba(72, 187, 120, 0.1); }
+        .flow-box.success { border-top: 3px solid var(--success-color); }
+        .flow-box.warning { border-top: 3px solid var(--warning-color); }
+        .flow-box.error { border-top: 3px solid var(--error-color); }
+        .flow-box.response { border-top: 3px solid var(--customs-blue-light); background: rgba(66, 153, 225, 0.1); }
         
         .flow-box-icon { font-size: 2em; margin-bottom: 8px; }
         .flow-box-title { font-weight: 600; margin-bottom: 5px; color: var(--spy-white); font-size: 0.85em; }
         .flow-box-desc { font-size: 0.75em; color: var(--spy-gray); line-height: 1.4; }
         
         .arrow { font-size: 1.5em; color: var(--spy-gold); }
+        .arrow-response { font-size: 1.5em; color: var(--customs-blue-light); }
+        .arrow-bidirectional { font-size: 1.5em; color: var(--spy-gold); }
         
         .highlight-box {
             background: rgba(72, 187, 120, 0.15);
-            border: 2px solid #48bb78;
+            border: 2px solid var(--success-color);
             border-radius: 10px;
             padding: 15px 20px;
             margin: 20px 0;
             text-align: center;
         }
         .highlight-box p { color: var(--spy-white); font-size: 1em; }
-        .highlight-box strong { color: #48bb78; }
+        .highlight-box strong { color: var(--success-color); }
+        
+        .highlight-box.warning {
+            background: rgba(221, 107, 32, 0.15);
+            border-color: var(--warning-color);
+        }
+        .highlight-box.warning strong { color: var(--warning-color); }
+        
+        .highlight-box.error {
+            background: rgba(229, 62, 62, 0.15);
+            border-color: var(--error-color);
+        }
+        .highlight-box.error strong { color: var(--error-color); }
         
         .why-box {
             background: linear-gradient(135deg, rgba(44, 82, 130, 0.15), rgba(201, 162, 39, 0.1));
@@ -147,7 +168,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .why-box li:last-child { border-bottom: none; }
-        .why-box li::before { content: "✓ "; color: var(--export-color); font-weight: bold; }
+        .why-box li::before { content: "✓ "; color: var(--success-color); font-weight: bold; }
         
         .example-box {
             background: var(--spy-dark);
@@ -228,9 +249,12 @@
         }
         .legend-color.spy { background: var(--spy-gold); }
         .legend-color.customs { background: var(--customs-blue); }
-        .legend-color.supplier { background: var(--import-color); }
-        .legend-color.customer { background: var(--export-color); }
+        .legend-color.supplier { background: var(--inbound-color); }
+        .legend-color.customer { background: var(--success-color); }
         .legend-color.warehouse { background: #805ad5; }
+        .legend-color.success { background: var(--success-color); }
+        .legend-color.warning { background: var(--warning-color); }
+        .legend-color.error { background: var(--error-color); }
         
         .summary-grid {
             display: grid;
@@ -245,12 +269,71 @@
             text-align: center;
             border: 1px solid var(--spy-gray-dark);
         }
-        .summary-card.import { border-top: 3px solid var(--import-color); }
-        .summary-card.export { border-top: 3px solid var(--export-color); }
+        .summary-card.import { border-top: 3px solid var(--inbound-color); }
+        .summary-card.export { border-top: 3px solid var(--outbound-color); }
         .summary-card.warehouse { border-top: 3px solid #805ad5; }
         .summary-card.update { border-top: 3px solid var(--customs-blue-light); }
         .summary-card h4 { font-size: 1em; margin-bottom: 8px; }
         .summary-card p { font-size: 0.8em; color: var(--spy-gray); }
+        
+        .status-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+        .status-badge {
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .status-badge.pending { background: rgba(128, 128, 128, 0.3); border: 1px solid var(--spy-gray); }
+        .status-badge.sent { background: rgba(49, 130, 206, 0.3); border: 1px solid var(--outbound-color); }
+        .status-badge.received { background: rgba(128, 90, 213, 0.3); border: 1px solid var(--inbound-color); }
+        .status-badge.validated { background: rgba(201, 162, 39, 0.3); border: 1px solid var(--spy-gold); }
+        .status-badge.confirmed { background: rgba(56, 161, 105, 0.3); border: 1px solid var(--success-color); }
+        .status-badge.rejected { background: rgba(229, 62, 62, 0.3); border: 1px solid var(--error-color); }
+        .status-badge.warning { background: rgba(221, 107, 32, 0.3); border: 1px solid var(--warning-color); }
+        
+        .status-arrow { color: var(--spy-gray); font-size: 1.2em; }
+        
+        .error-code-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.85em;
+        }
+        .error-code-table th, .error-code-table td {
+            padding: 10px 12px;
+            border: 1px solid var(--spy-gray-dark);
+            text-align: left;
+        }
+        .error-code-table th {
+            background: var(--spy-dark);
+            color: var(--spy-gold);
+        }
+        .error-code-table td {
+            background: rgba(0,0,0,0.2);
+            color: var(--spy-gray-light);
+        }
+        .error-code-table .code { color: var(--error-color); font-family: monospace; }
+        .error-code-table .warning-code { color: var(--warning-color); font-family: monospace; }
+        
+        .docs-box {
+            background: linear-gradient(135deg, rgba(44, 82, 130, 0.2), rgba(44, 82, 130, 0.1));
+            border: 2px solid var(--customs-blue);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .docs-box h4 { color: var(--customs-blue-light); margin-bottom: 15px; }
+        .docs-box p { color: var(--spy-gray-light); margin-bottom: 10px; }
+        .docs-box a { color: var(--customs-blue-light); text-decoration: none; }
+        .docs-box a:hover { text-decoration: underline; }
         
         .footer-text {
             text-align: center;
@@ -266,6 +349,9 @@
     
     <script type="text/babel">
         const Arrow = () => <span className="arrow">→</span>;
+        const ArrowResponse = () => <span className="arrow-response">←</span>;
+        const ArrowBidirectional = () => <span className="arrow-bidirectional">↔</span>;
+        const StatusArrow = () => <span className="status-arrow">→</span>;
         
         const FlowBox = ({ icon, title, desc, type }) => (
             <div className={`flow-box ${type}`}>
@@ -273,6 +359,10 @@
                 <div className="flow-box-title">{title}</div>
                 <div className="flow-box-desc">{desc}</div>
             </div>
+        );
+        
+        const StatusBadge = ({ status, children }) => (
+            <span className={`status-badge ${status}`}>{children}</span>
         );
         
         const LectorWorkflow = () => {
@@ -295,13 +385,15 @@
                         <p>
                             Lector er et <strong>told-system</strong> der håndterer dokumentation for varer på toldoplag. 
                             SPY sender automatisk information til Lector, når varer ankommer og når de sendes ud.
+                            <br/><br/>
+                            <strong>Kommunikationen er tovejs:</strong> SPY sender data → Lector svarer med bekræftelse, told-beregning eller fejlbesked.
                         </p>
                     </div>
                     
                     <div className="legend">
                         <div className="legend-item">
                             <div className="legend-color supplier"></div>
-                            <span>Leverandør (udenfor EU)</span>
+                            <span>Leverandør/Inbound</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color spy"></div>
@@ -317,7 +409,109 @@
                         </div>
                         <div className="legend-item">
                             <div className="legend-color customer"></div>
-                            <span>Kunde</span>
+                            <span>Kunde/Success</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color warning"></div>
+                            <span>Advarsel</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color error"></div>
+                            <span>Fejl</span>
+                        </div>
+                    </div>
+                    
+                    {/* TOVEJS KOMMUNIKATION */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">🔄 SPY ↔ Lector Kommunikation</h2>
+                        <p className="section-subtitle">Integrationen er tovejs – SPY sender data, og Lector svarer tilbage</p>
+                        
+                        <div className="flow-container">
+                            <FlowBox icon="📤" title="SPY sender" desc="Inbound, Outbound, Warehouse" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🛃" title="Lector" desc="Modtager og behandler" type="customs" />
+                            <ArrowResponse />
+                            <FlowBox icon="📥" title="SPY modtager" desc="Svar fra Lector" type="spy" />
+                        </div>
+                        
+                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--customs-blue-light)'}}>Hvad sender Lector tilbage?</h4>
+                        <div className="info-grid">
+                            <div className="info-card">
+                                <div className="info-card-title" style={{color: 'var(--success-color)'}}>✅ Bekræftelser</div>
+                                <ul className="info-card-list">
+                                    <li>Besked modtaget korrekt</li>
+                                    <li>Data valideret OK</li>
+                                    <li>Registrering gennemført</li>
+                                    <li>Told-dokument genereret</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title" style={{color: 'var(--spy-gold)'}}>💰 Told-beregninger</div>
+                                <ul className="info-card-list">
+                                    <li>Beregnet toldbeløb</li>
+                                    <li>Anvendt toldsats</li>
+                                    <li>Moms-beregning</li>
+                                    <li>Reference til told-dokument</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title" style={{color: 'var(--error-color)'}}>❌ Fejlbeskeder</div>
+                                <ul className="info-card-list">
+                                    <li>Valideringsfejl</li>
+                                    <li>Manglende data</li>
+                                    <li>Ugyldig toldkode</li>
+                                    <li>Systemfejl fra Lector</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* STATUS-FLOW FOR EN BESKED */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">📊 Livscyklus for en Lector-besked</h2>
+                        <p className="section-subtitle">Sådan bevæger en besked sig gennem systemet</p>
+                        
+                        <h4 style={{marginTop: '15px', marginBottom: '15px', color: 'var(--success-color)'}}>✅ Normal flow (success):</h4>
+                        <div className="status-flow">
+                            <StatusBadge status="pending">Afventer</StatusBadge>
+                            <StatusArrow />
+                            <StatusBadge status="sent">Sendt</StatusBadge>
+                            <StatusArrow />
+                            <StatusBadge status="received">Modtaget</StatusBadge>
+                            <StatusArrow />
+                            <StatusBadge status="validated">Valideret</StatusBadge>
+                            <StatusArrow />
+                            <StatusBadge status="confirmed">Bekræftet</StatusBadge>
+                        </div>
+                        
+                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--error-color)'}}>❌ Fejl-flow:</h4>
+                        <div className="status-flow">
+                            <StatusBadge status="pending">Afventer</StatusBadge>
+                            <StatusArrow />
+                            <StatusBadge status="sent">Sendt</StatusBadge>
+                            <StatusArrow />
+                            <StatusBadge status="received">Modtaget</StatusBadge>
+                            <StatusArrow />
+                            <StatusBadge status="rejected">Afvist</StatusBadge>
+                        </div>
+                        
+                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--warning-color)'}}>⚠️ Timeout/Retry-flow:</h4>
+                        <div className="status-flow">
+                            <StatusBadge status="pending">Afventer</StatusBadge>
+                            <StatusArrow />
+                            <StatusBadge status="sent">Sendt</StatusBadge>
+                            <StatusArrow />
+                            <StatusBadge status="warning">Timeout</StatusBadge>
+                            <StatusArrow />
+                            <StatusBadge status="sent">Retry</StatusBadge>
+                        </div>
+                        
+                        <div className="example-box">
+                            <h5>💡 Tip</h5>
+                            <p>
+                                Alle statusser kan ses i <strong>SPY → Integrationsloggen</strong>. 
+                                Se efter "Lector" beskeder og tjek deres status.
+                            </p>
                         </div>
                     </div>
                     
@@ -335,6 +529,12 @@
                             <FlowBox icon="🛃" title="Lector" desc="Dokumenterer ankomst" type="customs" />
                             <Arrow />
                             <FlowBox icon="🏭" title="Toldoplag" desc="Varer opbevares" type="warehouse" />
+                        </div>
+                        
+                        <div className="flow-container" style={{marginTop: '15px'}}>
+                            <FlowBox icon="✅" title="Lector svarer" desc="Bekræftelse til SPY" type="response" />
+                            <ArrowResponse />
+                            <FlowBox icon="📋" title="SPY opdateres" desc="Status: Registreret" type="spy" />
                         </div>
                         
                         <div className="highlight-box">
@@ -362,8 +562,12 @@
                             <FlowBox icon="📤" title="SPY sender" desc="Outbound til Lector" type="spy" />
                             <Arrow />
                             <FlowBox icon="🛃" title="Lector" desc="Beregner told" type="customs" />
-                            <Arrow />
-                            <FlowBox icon="💰" title="Told betales" desc="Baseret på destination" type="customs" />
+                        </div>
+                        
+                        <div className="flow-container" style={{marginTop: '15px'}}>
+                            <FlowBox icon="💰" title="Lector svarer" desc="Told-beregning" type="response" />
+                            <ArrowResponse />
+                            <FlowBox icon="📋" title="SPY modtager" desc="Beløb registreres" type="spy" />
                             <Arrow />
                             <FlowBox icon="🏠" title="Kunde" desc="Modtager varer" type="customer" />
                         </div>
@@ -416,7 +620,7 @@
                             <Arrow />
                             <FlowBox icon="🛃" title="Lector" desc="Modtager rapport" type="customs" />
                             <Arrow />
-                            <FlowBox icon="✅" title="Dokumenteret" desc="Told har overblik" type="customs" />
+                            <FlowBox icon="✅" title="Bekræftet" desc="Lector svarer OK" type="success" />
                         </div>
                         
                         <div className="why-box">
@@ -426,6 +630,147 @@
                                 <li>Varer uden betalt told skal dokumenteres</li>
                                 <li>Sikrer at alt er korrekt når varer sendes ud</li>
                             </ul>
+                        </div>
+                    </div>
+                    
+                    {/* POST IMPORT UPDATE - NY SEKTION */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">🔄 Post Import Update (Rettelser)</h2>
+                        <p className="section-subtitle">Når der skal rettes i data efter den oprindelige registrering</p>
+                        
+                        <div className="flow-container">
+                            <FlowBox icon="✏️" title="Fejl opdages" desc="Data skal rettes" type="warning" />
+                            <Arrow />
+                            <FlowBox icon="📝" title="SPY sender" desc="Post Import Update" type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🛃" title="Lector" desc="Behandler rettelse" type="customs" />
+                            <Arrow />
+                            <FlowBox icon="✅" title="Opdateret" desc="Rettelse bekræftet" type="success" />
+                        </div>
+                        
+                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)'}}>Hvornår bruges Post Import Update?</h4>
+                        <div className="info-grid">
+                            <div className="info-card">
+                                <div className="info-card-title">📦 Mængder</div>
+                                <ul className="info-card-list">
+                                    <li>Antal stk var forkert</li>
+                                    <li>Vægt skal justeres</li>
+                                    <li>Kartoner talt forkert</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">🏷️ Varedata</div>
+                                <ul className="info-card-list">
+                                    <li>Toldkode skal ændres</li>
+                                    <li>Oprindelsesland forkert</li>
+                                    <li>Varebeskrivelse mangelfuld</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">💰 Værdier</div>
+                                <ul className="info-card-list">
+                                    <li>Fakturabeløb ændret</li>
+                                    <li>Valutakurs justeret</li>
+                                    <li>Fragtomkostninger rettet</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div className="example-box">
+                            <h5>💡 Eksempel: Typiske scenarier</h5>
+                            <p>
+                                <strong>Scenario 1:</strong> Ved ankomst registreres 1.000 jakker, men ved optælling er der kun 980 stk. → Send Post Import Update med korrekt antal.<br/><br/>
+                                <strong>Scenario 2:</strong> Leverandøren sender rettet faktura med nyt beløb → Send Post Import Update med ny værdi.<br/><br/>
+                                <strong>Scenario 3:</strong> Toldkoden på en style viser sig at være forkert → Ret i SPY og send Post Import Update.
+                            </p>
+                        </div>
+                        
+                        <div className="highlight-box warning">
+                            <p>⚠️ <strong>Vigtigt:</strong> Post Import Update skal sendes hurtigst muligt efter fejlen opdages. Told-myndigheder kræver korrekt dokumentation.</p>
+                        </div>
+                    </div>
+                    
+                    {/* FEJLHÅNDTERING - NY SEKTION */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">⚠️ Fejlhåndtering</h2>
+                        <p className="section-subtitle">Hvad sker når noget går galt?</p>
+                        
+                        <h4 style={{marginTop: '15px', marginBottom: '15px', color: 'var(--error-color)'}}>Typiske fejlkoder fra Lector:</h4>
+                        <table className="error-code-table">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Beskrivelse</th>
+                                    <th>Løsning</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="code">VAL001</td>
+                                    <td>Manglende toldkode</td>
+                                    <td>Tilføj HS-kode på style i SPY</td>
+                                </tr>
+                                <tr>
+                                    <td className="code">VAL002</td>
+                                    <td>Ugyldig toldkode</td>
+                                    <td>Kontrollér at HS-koden er korrekt</td>
+                                </tr>
+                                <tr>
+                                    <td className="code">VAL003</td>
+                                    <td>Manglende oprindelsesland</td>
+                                    <td>Tilføj country of origin på stylen</td>
+                                </tr>
+                                <tr>
+                                    <td className="warning-code">WARN001</td>
+                                    <td>Unormalt høj værdi</td>
+                                    <td>Verificér at fakturabeløb er korrekt</td>
+                                </tr>
+                                <tr>
+                                    <td className="code">SYS001</td>
+                                    <td>Lector utilgængelig</td>
+                                    <td>System prøver automatisk igen</td>
+                                </tr>
+                                <tr>
+                                    <td className="code">SYS002</td>
+                                    <td>Timeout</td>
+                                    <td>Afvent eller kontakt support</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--warning-color)'}}>Retry-strategi:</h4>
+                        <div className="info-grid">
+                            <div className="info-card">
+                                <div className="info-card-title">🔄 Automatisk retry</div>
+                                <ul className="info-card-list">
+                                    <li>Ved timeout: 3 forsøg</li>
+                                    <li>Interval: 30 sek, 2 min, 10 min</li>
+                                    <li>Ved systemfejl: 5 forsøg</li>
+                                    <li>Derefter: Manuel håndtering</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">⏱️ Timeout-grænser</div>
+                                <ul className="info-card-list">
+                                    <li>API-kald: 30 sekunder</li>
+                                    <li>Batch-upload: 5 minutter</li>
+                                    <li>Warehouse-rapport: 10 minutter</li>
+                                    <li>Ved overskridelse: SYS002-fejl</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">🔍 Find fejl i SPY</div>
+                                <ul className="info-card-list">
+                                    <li>Gå til: Administration → Integration</li>
+                                    <li>Vælg: Lector i filteret</li>
+                                    <li>Se: Fejlbeskeder og status</li>
+                                    <li>Eksportér: Fejllog til analyse</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div className="highlight-box error">
+                            <p>❌ <strong>Ved vedvarende fejl:</strong> Tjek integrationsloggen i SPY. Hvis fejlen ikke kan løses, kontakt Lector support med fejlkode og tidspunkt.</p>
                         </div>
                     </div>
                     
@@ -478,7 +823,7 @@
                             </div>
                             <div className="summary-card update">
                                 <h4>🔄 Post Import Update</h4>
-                                <p>Opdateringer/rettelser efter registrering</p>
+                                <p>Rettelser efter registrering (antal, værdier, koder)</p>
                             </div>
                         </div>
                     </div>
@@ -507,16 +852,17 @@
                                 <div className="info-card-title">Hvad sker automatisk?</div>
                                 <ul className="info-card-list">
                                     <li>SPY sender data til Lector</li>
-                                    <li>Lector beregner og dokumenterer</li>
-                                    <li>Ingen manuel indtastning</li>
+                                    <li>Lector validerer og bekræfter</li>
+                                    <li>Fejl vises i integrationslog</li>
                                 </ul>
                             </div>
                             <div className="info-card">
                                 <div className="info-card-title">Hvad hvis noget går galt?</div>
                                 <ul className="info-card-list">
-                                    <li>Tjek at varedata er korrekt</li>
-                                    <li>Kontroller toldkode på stylen</li>
-                                    <li>Se fejl i integrationsloggen</li>
+                                    <li>Tjek integrationsloggen først</li>
+                                    <li>Se fejlkode og beskrivelse</li>
+                                    <li>Ret data i SPY og gensend</li>
+                                    <li>Kontakt support ved systemfejl</li>
                                 </ul>
                             </div>
                         </div>
@@ -556,6 +902,43 @@
                                     <li>Leveringsbetingelser</li>
                                     <li>Hvem betaler fragt/told</li>
                                     <li>F.eks. FOB, CIF, DAP</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* API DOKUMENTATION */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">📚 Dokumentation og Support</h2>
+                        
+                        <div className="docs-box">
+                            <h4>📖 Lector API-dokumentation</h4>
+                            <p>
+                                For teknisk dokumentation af Lector-integrationen, 
+                                kontakt Lector support for adgang til deres API-dokumentation.
+                            </p>
+                            <p style={{marginTop: '15px'}}>
+                                <strong>Lector Support:</strong><br/>
+                                📧 E-mail: support@lector.dk<br/>
+                                📞 Telefon: Se kontrakt-dokumenter
+                            </p>
+                        </div>
+                        
+                        <div className="info-grid">
+                            <div className="info-card">
+                                <div className="info-card-title">🔧 SPY Support</div>
+                                <ul className="info-card-list">
+                                    <li>Ved spørgsmål om SPY-opsætning</li>
+                                    <li>Hjælp til fejlfinding</li>
+                                    <li>Kontakt: support@spysystem.dk</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">📋 Nyttige links i SPY</div>
+                                <ul className="info-card-list">
+                                    <li>Administration → Integrationer</li>
+                                    <li>Lager → Toldoplag</li>
+                                    <li>Rapporter → Told-oversigt</li>
                                 </ul>
                             </div>
                         </div>
