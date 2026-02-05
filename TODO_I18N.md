@@ -39,7 +39,15 @@
 - [x] GET: List alle outdated oversættelser
 - [x] POST: Marker specifikke som outdated
 
-### 6. 🔲 Admin oversættelsesdashboard (optional)
+### 6. ✅ Workflow HTML i18n (DONE)
+- [x] i18n.js helper library med DOM translation
+- [x] Export translations fra Supabase til JSON filer
+- [x] ongoing-workflow.html bruger i18n
+- [x] sitoo-workflow.html bruger i18n  
+- [x] lector-customs-workflow.html bruger i18n
+- [x] nemedi-workflow.html (havde allerede inline i18n)
+
+### 7. 🔲 Admin oversættelsesdashboard (optional)
 - [ ] Matrix view: artikler × sprog
 - [ ] Status-ikoner: ✅ Oversat | ⚠️ Auto | ❌ Mangler | 🔄 Outdated
 - [ ] One-click re-translate
