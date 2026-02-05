@@ -7,6 +7,7 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="/workflows/i18n.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -568,7 +569,12 @@
             );
         };
         
-        ReactDOM.render(<LectorWorkflow />, document.getElementById('root'));
+        // Initialize i18n and render with translations
+        (async function() {
+            const { locale, t } = await window.i18n.initI18n('lector-customs-workflow');
+            ReactDOM.render(<LectorWorkflow />, document.getElementById('root'));
+            window.i18n.autoApplyTranslations(200);
+        })();
     </script>
 </body>
 </html>

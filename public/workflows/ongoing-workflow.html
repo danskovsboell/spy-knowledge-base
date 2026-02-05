@@ -7,6 +7,7 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="/workflows/i18n.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -371,24 +372,24 @@
             </div>
         );
         
-        const OngoingWorkflow = () => {
+        const OngoingWorkflow = ({ t = (k) => k, locale = 'da' }) => {
             return (
                 <div className="container">
-                    <h1>Ongoing WMS Integration Workflow</h1>
-                    <p className="subtitle">Visualisering af SPY's integration med Ongoing Warehouse Management System</p>
+                    <h1>{t("Ongoing WMS Integration Workflow")}</h1>
+                    <p className="subtitle">{t("Visualisering af SPY's integration med Ongoing Warehouse Management System")}</p>
                     
                     <div className="legend">
                         <div className="legend-item">
                             <div className="legend-color ongoing"></div>
-                            <span>Ongoing WMS</span>
+                            <span>{t("Ongoing WMS")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color spy"></div>
-                            <span>SPY System</span>
+                            <span>{t("SPY System")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color warehouse"></div>
-                            <span>Fysisk lager</span>
+                            <span>{t("Fysisk lager")}</span>
                         </div>
                         <div className="legend-item">
                             <div className="legend-color supplier"></div>
@@ -415,7 +416,7 @@
                             <FlowBox icon="&#x2705;" title="SPY opdateret" desc="DESADV modtaget" type="spy" />
                         </div>
                         
-                        <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>Ordrestatus-flow i Ongoing (Sales Orders):</h4>
+                        <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>{t("Ordrestatus-flow i Ongoing (Sales Orders):")}</h4>
                         <div className="status-flow">
                             <div className="status-box">CustomerSpecific (0)</div>
                             <span className="status-arrow">&rarr;</span>
@@ -461,7 +462,7 @@
                             <FlowBox icon="&#x2705;" title="SPY opdateret" desc="Lager justeret" type="spy" />
                         </div>
                         
-                        <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>Purchase Order status-flow i Ongoing:</h4>
+                        <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>{t("Purchase Order status-flow i Ongoing:")}</h4>
                         <div className="status-flow">
                             <div className="status-box">CustomerSpecific (0)</div>
                             <span className="status-arrow">&rarr;</span>
@@ -486,7 +487,7 @@
                     <div className="workflow-section">
                         <h2 className="section-title">&#x1F504; Returneringer</h2>
                         
-                        <div className="scenario-label">Scenarie A: Retur starter i SPY</div>
+                        <div className="scenario-label">{t("Scenarie A: Retur starter i SPY")}</div>
                         <div className="flow-container" style={{marginBottom: '25px'}}>
                             <FlowBox icon="&#x21A9;&#xFE0F;" title="Claim i SPY" desc="Retur oprettet" type="spy" />
                             <Arrow />
@@ -501,7 +502,7 @@
                             <FlowBox icon="&#x2705;" title="Claim bekr&aelig;ftet" desc="ClaimConfirmer" type="spy" />
                         </div>
                         
-                        <div className="scenario-label ongoing-label">Scenarie B: Retur starter i Ongoing</div>
+                        <div className="scenario-label ongoing-label">{t("Scenarie B: Retur starter i Ongoing")}</div>
                         <div className="flow-container">
                             <FlowBox icon="&#x1F4E6;" title="Retur modtaget" desc="Vare returneret" type="warehouse" />
                             <Arrow />
@@ -514,7 +515,7 @@
                             <FlowBox icon="&#x1F4E7;" title="Email notifikation" desc="Ny claim i SPY" type="spy" />
                         </div>
                         
-                        <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>Return Order status-flow i Ongoing:</h4>
+                        <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>{t("Return Order status-flow i Ongoing:")}</h4>
                         <div className="status-flow">
                             <div className="status-box">CustomerSpecific (0)</div>
                             <span className="status-arrow">&rarr;</span>
@@ -550,7 +551,7 @@
                             <FlowBox icon="&#x2705;" title="SPY opdateret" desc="Split godkendt" type="spy" />
                         </div>
                         
-                        <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>Production Order status-flow i Ongoing:</h4>
+                        <h4 style={{marginTop: '20px', marginBottom: '10px', color: 'var(--ongoing-green)'}}>{t("Production Order status-flow i Ongoing:")}</h4>
                         <div className="status-flow">
                             <div className="status-box">CustomerSpecific (0)</div>
                             <span className="status-arrow">&rarr;</span>
@@ -632,11 +633,11 @@
                             <div className="info-card">
                                 <div className="info-card-title">&#x1F50C; API Integration</div>
                                 <ul className="info-card-list">
-                                    <li>REST API med JSON payloads</li>
-                                    <li>Webhook callbacks til SPY</li>
+                                    <li>{t("REST API med JSON payloads")}</li>
+                                    <li>{t("Webhook callbacks til SPY")}</li>
                                     <li>Retry-logik p&aring; rate limit og server errors (GuzzleRetryMiddleware)</li>
-                                    <li>Error handler middleware (typed API exceptions)</li>
-                                    <li>Async job queue (Tasks)</li>
+                                    <li>{t("Error handler middleware (typed API exceptions)")}</li>
+                                    <li>{t("Async job queue (Tasks)")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
@@ -691,12 +692,12 @@
                             <div className="info-card">
                                 <div className="info-card-title">&#x1F3ED; Ongoing Entiteter</div>
                                 <ul className="info-card-list">
-                                    <li>Articles (produkter)</li>
+                                    <li>{t("Articles (produkter)")}</li>
                                     <li>Orders (udg&aring;ende)</li>
                                     <li>Purchase Orders (indg&aring;ende)</li>
-                                    <li>Production Orders (splits)</li>
-                                    <li>Returns</li>
-                                    <li>Inventory</li>
+                                    <li>{t("Production Orders (splits)")}</li>
+                                    <li>{t("Returns")}</li>
+                                    <li>{t("Inventory")}</li>
                                 </ul>
                             </div>
                         </div>
@@ -709,7 +710,7 @@
                         <div className="range-important-note">
                             <strong>&#x26A0;&#xFE0F; Vigtigt koncept:</strong> Ongoing statuses fungerer som <strong>GRUPPER / RANGES</strong> &mdash; ikke individuelle v&aelig;rdier.<br/>
                             Alle statusnumre fra starten af en gruppe og indtil n&aelig;ste gruppe starter, tilh&oslash;rer samme gruppe.<br/><br/>
-                            <strong>Eksempel:</strong> Hvis <code>Notified = 100</code> og n&aelig;ste gruppe er <code>ArrivalAtLocation = 200</code>, 
+                            <strong>{t("Eksempel:")}</strong> Hvis <code>Notified = 100</code> og n&aelig;ste gruppe er <code>ArrivalAtLocation = 200</code>, 
                             s&aring; er status <code>100</code>, <code>101</code>, <code>142</code>, <code>199</code> ALLE "Notified".<br/>
                             Det betyder at din kode skal tjekke med <strong>ranges</strong> (fx <code>status &gt;= 100 &amp;&amp; status &lt; 200</code>) &mdash; ikke blot <code>status === 100</code>.
                             <div className="range-example">
@@ -913,7 +914,16 @@
             );
         };
         
-        ReactDOM.render(<OngoingWorkflow />, document.getElementById('root'));
+        // Initialize i18n and render with translations
+        (async function() {
+            const { locale, t } = await window.i18n.initI18n('ongoing-workflow');
+            
+            // Render React component
+            ReactDOM.render(<OngoingWorkflow t={t} locale={locale} />, document.getElementById('root'));
+            
+            // Apply translations to DOM text after React renders
+            window.i18n.autoApplyTranslations(200);
+        })();
     </script>
 </body>
 </html>
