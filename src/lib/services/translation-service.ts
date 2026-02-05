@@ -26,6 +26,7 @@ export interface WorkflowTranslations {
 // Cache for translations (in-memory, refreshes on page load)
 const translationCache = new Map<string, Map<string, WorkflowTranslations>>()
 const cacheTimestamp = new Map<string, number>()
+const cacheDbTimestamp = new Map<string, string>() // Track DB translated_at timestamp
 const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
 
 /**
@@ -38,14 +39,7 @@ export async function getWorkflowTranslations(
   workflowSlug: string,
   locale: Locale
 ): Promise<WorkflowTranslations | null> {
-  // Check cache first
   const cacheKey = `${workflowSlug}-${locale}`
-  const cached = translationCache.get(workflowSlug)?.get(locale)
-  const timestamp = cacheTimestamp.get(cacheKey)
-  
-  if (cached && timestamp && Date.now() - timestamp < CACHE_TTL) {
-    return cached
-  }
 
   // Use server client for full access (bypasses RLS)
   const client = createServerClient() || supabase
@@ -71,7 +65,7 @@ export async function getWorkflowTranslations(
     // Then get translation for that article and locale
     const { data: translation, error: transError } = await client
       .from('kb_translations')
-      .select('content, title, description')
+      .select('content, title, description, translated_at')
       .eq('article_id', article.id)
       .eq('language_code', locale)
       .single()
@@ -81,11 +75,26 @@ export async function getWorkflowTranslations(
       return null
     }
 
-    console.log(`[translation-service] Found translation for ${workflowSlug}/${locale}:`, {
+    // Check if we have cached version and if DB version is newer
+    const cached = translationCache.get(workflowSlug)?.get(locale)
+    const cachedTimestamp = cacheTimestamp.get(cacheKey)
+    const cachedDbTimestamp = cacheDbTimestamp.get(cacheKey)
+
+    if (cached && cachedTimestamp && Date.now() - cachedTimestamp < CACHE_TTL) {
+      // Check if DB has been updated since cache
+      if (cachedDbTimestamp === translation.translated_at) {
+        console.log(`[translation-service] Using cached translation for ${workflowSlug}/${locale}`)
+        return cached
+      }
+      console.log(`[translation-service] Cache invalidated - DB updated: ${translation.translated_at} vs cached: ${cachedDbTimestamp}`)
+    }
+
+    console.log(`[translation-service] Fetching fresh translation for ${workflowSlug}/${locale}:`, {
       hasContent: !!translation.content,
       contentLength: translation.content?.length || 0,
       title: translation.title,
-      description: translation.description?.substring(0, 50)
+      description: translation.description?.substring(0, 50),
+      translated_at: translation.translated_at
     })
 
     // Parse content JSON
@@ -110,12 +119,13 @@ export async function getWorkflowTranslations(
       translations['__description__'] = translation.description
     }
 
-    // Update cache
+    // Update cache with DB timestamp for invalidation
     if (!translationCache.has(workflowSlug)) {
       translationCache.set(workflowSlug, new Map())
     }
     translationCache.get(workflowSlug)!.set(locale, translations)
     cacheTimestamp.set(cacheKey, Date.now())
+    cacheDbTimestamp.set(cacheKey, translation.translated_at || new Date().toISOString())
 
     return translations
   } catch (error) {
@@ -178,10 +188,12 @@ export function clearTranslationCache(workflowSlug?: string) {
     for (const key of Array.from(cacheTimestamp.keys())) {
       if (key.startsWith(`${workflowSlug}-`)) {
         cacheTimestamp.delete(key)
+        cacheDbTimestamp.delete(key)
       }
     }
   } else {
     translationCache.clear()
     cacheTimestamp.clear()
+    cacheDbTimestamp.clear()
   }
 }
