@@ -18,13 +18,7 @@ interface TranslateRequest {
 const LANGUAGE_NAMES: Record<Locale, string> = {
   da: 'Danish',
   en: 'English',
-  de: 'German',
-  nl: 'Dutch',
-  fr: 'French',
-  it: 'Italian',
-  es: 'Spanish',
-  sv: 'Swedish',
-  no: 'Norwegian Bokmål'
+  nl: 'Dutch'
 }
 
 async function translateWithOpenAI(
