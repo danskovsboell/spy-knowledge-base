@@ -4,7 +4,7 @@
  */
 
 // Supported locales
-const SUPPORTED_LOCALES = ['da', 'en', 'de', 'nl', 'fr', 'it', 'es', 'sv', 'no'];
+const SUPPORTED_LOCALES = ['da', 'en', 'nl'];
 const DEFAULT_LOCALE = 'da';
 
 // Get locale from URL parameter

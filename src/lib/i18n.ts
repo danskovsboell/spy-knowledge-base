@@ -2,7 +2,7 @@
 
 export const defaultLocale = 'da'
 
-export const locales = ['da', 'en', 'de', 'nl', 'fr', 'it', 'es', 'sv', 'no'] as const
+export const locales = ['da', 'en', 'nl'] as const
 
 export type Locale = (typeof locales)[number]
 
@@ -16,13 +16,7 @@ export interface LanguageConfig {
 export const languages: LanguageConfig[] = [
   { code: 'da', name: 'Danish', nativeName: 'Dansk', flag: '🇩🇰' },
   { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
-  { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪' },
   { code: 'nl', name: 'Dutch', nativeName: 'Nederlands', flag: '🇳🇱' },
-  { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷' },
-  { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹' },
-  { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸' },
-  { code: 'sv', name: 'Swedish', nativeName: 'Svenska', flag: '🇸🇪' },
-  { code: 'no', name: 'Norwegian', nativeName: 'Norsk', flag: '🇳🇴' },
 ]
 
 export function isValidLocale(locale: string): locale is Locale {
@@ -52,8 +46,6 @@ export function detectLanguageFromHeader(acceptLanguage: string | null): Locale 
   // Find first matching locale
   for (const { lang } of parts) {
     if (isValidLocale(lang)) return lang
-    // Map Norwegian Bokmål to our 'no'
-    if (lang === 'nb' || lang === 'nn') return 'no'
   }
 
   return defaultLocale
