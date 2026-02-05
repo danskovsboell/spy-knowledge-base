@@ -161,7 +161,7 @@ export function clearTranslationCache(workflowSlug?: string) {
   if (workflowSlug) {
     translationCache.delete(workflowSlug)
     // Clear all related cache timestamps
-    for (const key of cacheTimestamp.keys()) {
+    for (const key of Array.from(cacheTimestamp.keys())) {
       if (key.startsWith(`${workflowSlug}-`)) {
         cacheTimestamp.delete(key)
       }
