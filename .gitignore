@@ -41,3 +41,9 @@ compare-*.mjs
 migrate-*.mjs
 inspect-*.mjs
 *-sample.json
+
+# backup folder (old JSON translation files)
+backup-translations/
+
+# Claude Code settings
+.claude/
