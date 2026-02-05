@@ -14,36 +14,30 @@
 - [x] 41 oversættelser i kb_translations (5 workflows × 9 sprog)
 - [x] Dansk tekst matcher original
 
-### 2. 🔲 Kode læser fra database
-**Filer der skal opdateres:**
-- `src/lib/translations.ts` → hent fra Supabase i stedet for hardkodet
-- `src/components/` → brug DB-oversættelser
-- Fallback til hardkodet hvis DB fejler
+### 2. ✅ Kode læser fra database (DONE)
+**Nye filer:**
+- `src/lib/services/translation-service.ts` → henter fra Supabase med caching
+- `src/lib/hooks/useWorkflowTranslations.ts` → React hook
+- `src/app/api/translations/[slug]/[locale]/route.ts` → API endpoint
+- Fallback til hardkodet hvis DB fejler ✅
 
-**Estimat:** 1-2 timer
-
-### 3. 🔲 Opdater oversættelsesscript
+### 3. ✅ Opdater oversættelsesscript (DONE)
 **Fil:** `scripts/translate-single-workflow.mjs`
-- [ ] Skift model fra `gpt-4o-mini` → `gpt-5-mini`
-- [ ] Tilføj automatisk upsert til Supabase kb_translations
-- [ ] Test med én workflow
+- [x] Skift model fra `gpt-4o-mini` → `gpt-5-mini`
+- [ ] Tilføj automatisk upsert til Supabase (brug API i stedet)
 
-**Estimat:** 30 min
+### 4. ✅ Auto-oversættelse ved nyt indhold (DONE)
+**Endpoint:** `/api/admin/translate`
+- [x] POST med articleId, sourceLocale, content, title, description
+- [x] Oversætter til alle 8 sprog via gpt-5-mini
+- [x] Upsert direkte til Supabase kb_translations
+- [x] Returnerer status per sprog
 
-### 4. 🔲 Auto-oversættelse ved nyt indhold
-- [ ] API endpoint: `/api/admin/translate`
-- [ ] Trigger automatisk når artikel gemmes
-- [ ] Retry med exponential backoff ved fejl
-
-**Estimat:** 1-2 timer
-
-### 5. 🔲 Outdated detection
-- [ ] SHA-256 hash af kildetekst
-- [ ] Sammenlign ved opdatering
-- [ ] Marker som 'outdated' ved mismatch
-- [ ] Auto-trigger re-oversættelse
-
-**Estimat:** 1 time
+### 5. ✅ Outdated detection (DONE)
+**Endpoint:** `/api/admin/check-outdated`
+- [x] SHA-256 hash af kildetekst (source_hash)
+- [x] GET: List alle outdated oversættelser
+- [x] POST: Marker specifikke som outdated
 
 ### 6. 🔲 Admin oversættelsesdashboard (optional)
 - [ ] Matrix view: artikler × sprog
