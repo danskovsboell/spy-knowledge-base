@@ -259,6 +259,22 @@
         }
         .tip-box-title { font-weight: 700; color: var(--green); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
         
+        /* Screenshot */
+        .screenshot {
+            border-radius: 12px;
+            border: 2px solid var(--spy-gray-dark);
+            margin: 20px 0;
+            max-width: 100%;
+            display: block;
+        }
+        .screenshot-caption {
+            font-size: 12px;
+            color: var(--spy-gray);
+            text-align: center;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
         /* Navigation Path */
         .nav-path {
             display: inline-flex;
@@ -496,6 +512,9 @@
                 
                 <div class="nav-path">Sales <span>→</span> Claims/Returns <span>→</span> Scan Shopify Returns</div>
                 
+                <img src="images/image2.png" alt="Scan Shopify Returns" class="screenshot">
+                <div class="screenshot-caption">Søg efter returen og tryk "Process Shopify Return"</div>
+                
                 <div class="steps-list" style="margin-top: 20px;">
                     <div class="step-item">
                         <div><strong>Søg efter returen</strong> ved at scanne returlabelen eller søge efter Shopify-ordren.</div>
@@ -517,6 +536,12 @@
                         <div><strong>Bekræft returen</strong> ved at trykke eller scanne "Confirm". Tilbagebetaling sættes i gang automatisk.</div>
                     </div>
                 </div>
+                
+                <img src="images/image4.png" alt="Registrer vare" class="screenshot">
+                <div class="screenshot-caption">Registrér varen: Vælg Claim Type, Claim Cause, og om der skal printes ny label</div>
+                
+                <img src="images/image5.png" alt="Bekræft retur" class="screenshot">
+                <div class="screenshot-caption">Bekræft returen og se beløbsoversigt</div>
                 
                 <div class="tip-box">
                     <div class="tip-box-title">💰 Tilbagebetaling</div>
@@ -563,6 +588,9 @@
                 
                 <div class="nav-path">Sales <span>→</span> Claims/Returns <span>→</span> Scan Claims/Returns</div>
                 
+                <img src="images/image6.png" alt="Scan Claims/Returns" class="screenshot">
+                <div class="screenshot-caption">Søg efter ordren og tryk "Create Return"</div>
+                
                 <div class="steps-list" style="margin-top: 20px;">
                     <div class="step-item">
                         <div><strong>Søg efter ordren</strong> via en af de oplyste parametre.</div>
@@ -585,6 +613,12 @@
                         <div><strong>Bekræft:</strong> Brug evt. "Update Freight Refund Amount" til automatisk fragtbeløb. Tryk "Confirm".</div>
                     </div>
                 </div>
+                
+                <img src="images/image8.png" alt="Vælg varer" class="screenshot">
+                <div class="screenshot-caption">Vælg de varer der skal registreres på returen</div>
+                
+                <img src="images/image12.png" alt="Bekræft retur" class="screenshot">
+                <div class="screenshot-caption">Bekræft returen med Finance Info og fragtbeløb</div>
                 
                 <div class="info-box">
                     <div class="info-box-title">📝 Note om fragt</div>
@@ -646,11 +680,15 @@
                     </div>
                 </div>
                 <p>I kan printe jeres "Claim Causes" og "Claim Types" ud som stregkoder. På den måde slipper I for at trykke på PC'en – i stedet vælger I ved at scanne den relevante stregkode. Perfekt til at speede arbejdsgangen op!</p>
+                <img src="images/image14.png" alt="Print Action Barcodes" class="screenshot">
+                <div class="screenshot-caption">Klik på "Print Action Barcodes" for at printe stregkoder</div>
             </div>
             
             <div class="tip-box">
                 <div class="tip-box-title">🔄 Toggle Label via scanner</div>
                 <p style="margin: 0;">Ligesom det er muligt at navigere med bordscanneren ved at scanne funktioner med stregkoder, kan I også skifte "Needs Label" til/fra ved at scanne på "Toggle Label".</p>
+                <img src="images/image13.png" alt="Toggle Label" class="screenshot" style="margin-top: 16px;">
+                <div class="screenshot-caption">"Needs Label" kan togles via scanner</div>
             </div>
         </section>
 
@@ -665,7 +703,9 @@
                     </div>
                 </div>
                 <div class="nav-path">Admin <span>→</span> Settings <span>→</span> Integration <span>→</span> Shopify <span>→</span> Shops <span>→</span> Edit</div>
-                <p style="margin-top: 16px; margin-bottom: 0;">Aktivér feltet: <strong>"Handle Returns"</strong></p>
+                <p style="margin-top: 16px;">Aktivér feltet: <strong>"Handle Returns"</strong></p>
+                <img src="images/image1.png" alt="Shopify Settings - Handle Returns" class="screenshot">
+                <div class="screenshot-caption">Aktivér "Handle Returns" under Shopify integration settings</div>
             </div>
         </section>
 
