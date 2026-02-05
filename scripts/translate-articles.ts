@@ -95,7 +95,7 @@ async function translateText(text: string, targetLang: string, targetLangName: s
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-4.1-mini',
+      model: 'gpt-5-mini',
       messages: [
         {
           role: 'system',
@@ -189,7 +189,7 @@ async function main() {
           description,
           content,
           status: 'translated',
-          translated_by: 'openai/gpt-4.1-mini',
+          translated_by: 'openai/gpt-5-mini',
           translated_at: new Date().toISOString(),
         }], 'article_id,language_code')
 

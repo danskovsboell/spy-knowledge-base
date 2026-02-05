@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS translation_jobs (
   source_language VARCHAR(5) NOT NULL,
   target_language VARCHAR(5) NOT NULL,
   status VARCHAR(20) DEFAULT 'pending',
-  model VARCHAR(50) DEFAULT 'gpt-4.1-mini',
+  model VARCHAR(50) DEFAULT 'gpt-5-mini',
   tokens_used INTEGER,
   cost_usd DECIMAL(10,6),
   error_message TEXT,

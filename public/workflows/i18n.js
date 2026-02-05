@@ -3,7 +3,7 @@
  * Supports both React components (via t() function) and DOM text replacement
  */
 
-// Supported locales
+// Supported locales (currently active: da, en, nl)
 const SUPPORTED_LOCALES = ['da', 'en', 'nl'];
 const DEFAULT_LOCALE = 'da';
 
@@ -17,28 +17,39 @@ function getLocale() {
   return DEFAULT_LOCALE;
 }
 
-// Load translations from JSON file
+// Map workflow HTML filenames to article slugs
+const WORKFLOW_SLUG_MAP = {
+  'ongoing-workflow': 'ongoing-wms',
+  'sitoo-workflow': 'sitoo-pos',
+  'nemedi-workflow': 'nemedi',
+  'lector-customs-workflow': 'lector-customs',
+  'dedication': 'dedication'
+};
+
+// Load translations from database API
 async function loadTranslations(workflowName) {
   const locale = getLocale();
-  
-  // Danish is the source language - no translation needed
-  if (locale === 'da') {
-    return { locale, translations: null };
-  }
+
+  // Map workflow name to article slug
+  const slug = WORKFLOW_SLUG_MAP[workflowName] || workflowName;
 
   try {
-    const response = await fetch(`/workflows/${workflowName}-translations.json`);
+    // Fetch from database API
+    const response = await fetch(`/api/translations/${slug}/${locale}`);
     if (!response.ok) {
-      console.warn(`[i18n] Translations file not found for ${workflowName}`);
+      console.warn(`[i18n] Translations not found for ${slug}/${locale}`);
       return { locale, translations: null };
     }
-    const allTranslations = await response.json();
-    const translations = allTranslations[locale] || null;
-    
-    if (!translations) {
+
+    const data = await response.json();
+    const translations = data.translations || null;
+
+    if (!translations || Object.keys(translations).length === 0) {
       console.warn(`[i18n] No translations found for locale: ${locale}`);
+      return { locale, translations: null };
     }
-    
+
+    console.log(`[i18n] Loaded ${Object.keys(translations).length} translations from database for ${slug}/${locale}`);
     return { locale, translations };
   } catch (error) {
     console.error('[i18n] Error loading translations:', error);

@@ -3,7 +3,7 @@
  * Falls back to hardcoded translations if DB fetch fails
  */
 
-import { supabase } from '../supabase'
+import { supabase, createServerClient } from '../supabase'
 import { Locale } from '../i18n'
 
 export interface DBTranslation {
@@ -46,14 +46,17 @@ export async function getWorkflowTranslations(
     return cached
   }
 
-  if (!supabase) {
+  // Use server client for full access (bypasses RLS)
+  const client = createServerClient() || supabase
+
+  if (!client) {
     console.warn('[translation-service] Supabase not configured, using fallback')
     return null
   }
 
   try {
     // First get article_id from slug
-    const { data: article, error: articleError } = await supabase
+    const { data: article, error: articleError } = await client
       .from('kb_articles')
       .select('id')
       .eq('slug', workflowSlug)
@@ -65,7 +68,7 @@ export async function getWorkflowTranslations(
     }
 
     // Then get translation for that article and locale
-    const { data: translation, error: transError } = await supabase
+    const { data: translation, error: transError } = await client
       .from('kb_translations')
       .select('content, title, description')
       .eq('article_id', article.id)
@@ -77,15 +80,25 @@ export async function getWorkflowTranslations(
       return null
     }
 
+    console.log(`[translation-service] Found translation for ${workflowSlug}/${locale}:`, {
+      hasContent: !!translation.content,
+      contentLength: translation.content?.length || 0,
+      title: translation.title,
+      description: translation.description?.substring(0, 50)
+    })
+
     // Parse content JSON
     let translations: WorkflowTranslations = {}
     if (translation.content) {
       try {
         translations = JSON.parse(translation.content)
+        console.log(`[translation-service] Parsed ${Object.keys(translations).length} translation keys`)
       } catch (e) {
-        console.error(`[translation-service] Failed to parse content JSON: ${workflowSlug}/${locale}`)
+        console.error(`[translation-service] Failed to parse content JSON: ${workflowSlug}/${locale}`, e)
         return null
       }
+    } else {
+      console.warn(`[translation-service] No content field for ${workflowSlug}/${locale}`)
     }
 
     // Add title and description to translations

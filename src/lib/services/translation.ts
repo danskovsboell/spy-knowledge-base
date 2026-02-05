@@ -3,7 +3,7 @@ import { createServerClient } from '../supabase'
 import { getGlossaryTerms, formatGlossaryForPrompt } from './glossary'
 import { computeContentHash } from './outdated'
 
-const MODEL = 'gpt-4.1-mini'
+const MODEL = 'gpt-5-mini'
 
 interface TranslationResult {
   title: string

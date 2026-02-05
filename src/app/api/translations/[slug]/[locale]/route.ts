@@ -4,9 +4,9 @@ import { isValidLocale, Locale } from '@/lib/i18n'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string; locale: string } }
+  { params }: { params: Promise<{ slug: string; locale: string }> }
 ) {
-  const { slug, locale } = params
+  const { slug, locale } = await params
 
   // Validate locale
   if (!isValidLocale(locale)) {
