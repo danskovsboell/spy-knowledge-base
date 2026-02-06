@@ -4,29 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPY News – Ny Returhåndtering i SPY</title>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --spy-black: #1a1a1a;
-            --spy-dark: #0f0f0f;
+            --spy-blue: #1a365d;
+            --spy-blue-light: #2c5282;
             --spy-gold: #c9a227;
-            --spy-gold-light: #d4b652;
-            --spy-white: #ffffff;
-            --spy-gray: #888888;
-            --spy-gray-light: #cccccc;
-            --spy-gray-dark: #333333;
-            --green: #27ae60;
-            --blue: #3498db;
-            --purple: #9b59b6;
-            --orange: #e67e22;
+            --spy-gold-light: #ecc94b;
+            --white: #ffffff;
+            --gray-50: #f7fafc;
+            --gray-100: #edf2f7;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e0;
+            --gray-400: #a0aec0;
+            --gray-500: #718096;
+            --gray-600: #4a5568;
+            --gray-700: #2d3748;
+            --gray-800: #1a202c;
+            --green: #38a169;
+            --green-light: #c6f6d5;
+            --blue: #3182ce;
+            --blue-light: #bee3f8;
+            --purple: #805ad5;
+            --purple-light: #e9d8fd;
+            --orange: #dd6b20;
+            --orange-light: #feebc8;
+            --red: #e53e3e;
+            --red-light: #fed7d7;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
-            font-family: 'Raleway', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--spy-black);
-            color: var(--spy-white);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--white);
+            color: var(--gray-700);
             line-height: 1.7;
             font-size: 15px;
         }
@@ -36,18 +48,37 @@
         /* Header */
         .header {
             text-align: center;
-            padding: 60px 0 40px;
-            border-bottom: 2px solid var(--spy-gold);
+            padding: 48px 0 40px;
+            border-bottom: 3px solid var(--spy-blue);
             margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--gray-50), var(--white));
         }
-        .header-logo { font-size: 14px; letter-spacing: 4px; color: var(--spy-gold); margin-bottom: 20px; font-weight: 600; }
-        .header h1 { font-size: 36px; font-weight: 300; margin-bottom: 16px; }
-        .header-subtitle { font-size: 18px; color: var(--spy-gray-light); max-width: 600px; margin: 0 auto; }
+        .header-logo { 
+            font-size: 13px; 
+            letter-spacing: 4px; 
+            color: var(--spy-blue); 
+            margin-bottom: 16px; 
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .header h1 { 
+            font-size: 32px; 
+            font-weight: 700; 
+            margin-bottom: 16px; 
+            color: var(--spy-blue);
+        }
+        .header-subtitle { 
+            font-size: 17px; 
+            color: var(--gray-600); 
+            max-width: 600px; 
+            margin: 0 auto;
+            line-height: 1.6;
+        }
         
         /* Alert Box */
         .alert {
-            background: linear-gradient(135deg, rgba(231, 76, 60, 0.15), rgba(230, 126, 34, 0.15));
-            border: 1px solid rgba(231, 76, 60, 0.3);
+            background: var(--orange-light);
+            border: 2px solid var(--orange);
             border-radius: 12px;
             padding: 20px 24px;
             margin-bottom: 40px;
@@ -56,30 +87,33 @@
             align-items: flex-start;
         }
         .alert-icon { font-size: 24px; }
-        .alert-title { font-weight: 700; color: #e74c3c; margin-bottom: 4px; }
-        .alert-text { font-size: 14px; color: var(--spy-gray-light); }
+        .alert-title { font-weight: 700; color: var(--orange); margin-bottom: 6px; font-size: 16px; }
+        .alert-text { font-size: 14px; color: var(--gray-700); }
         
         /* Section */
         .section { margin-bottom: 48px; }
         .section-title {
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 700;
             margin-bottom: 16px;
-            color: var(--spy-white);
+            color: var(--spy-blue);
             display: flex;
             align-items: center;
             gap: 12px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-200);
         }
-        .section-title-icon { font-size: 28px; }
-        .section-intro { color: var(--spy-gray-light); margin-bottom: 24px; font-size: 16px; }
+        .section-title-icon { font-size: 26px; }
+        .section-intro { color: var(--gray-600); margin-bottom: 24px; font-size: 16px; }
         
         /* Cards */
         .card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--spy-gray-dark);
-            border-radius: 16px;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
             padding: 24px;
             margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
         .card-header {
             display: flex;
@@ -97,64 +131,66 @@
             font-size: 28px;
             flex-shrink: 0;
         }
-        .card-icon.green { background: rgba(39, 174, 96, 0.15); }
-        .card-icon.blue { background: rgba(52, 152, 219, 0.15); }
-        .card-icon.purple { background: rgba(155, 89, 182, 0.15); }
-        .card-icon.gold { background: rgba(201, 162, 39, 0.15); }
-        .card-title { font-size: 18px; font-weight: 700; color: var(--spy-white); }
-        .card-subtitle { font-size: 13px; color: var(--spy-gray); margin-top: 4px; }
+        .card-icon.green { background: var(--green-light); }
+        .card-icon.blue { background: var(--blue-light); }
+        .card-icon.purple { background: var(--purple-light); }
+        .card-icon.gold { background: #fef3c7; }
+        .card-title { font-size: 18px; font-weight: 700; color: var(--gray-800); }
+        .card-subtitle { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
         
         /* Partner Cards */
         .partner-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
         .partner-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--spy-gray-dark);
+            background: var(--white);
+            border: 2px solid var(--gray-200);
             border-radius: 12px;
             padding: 24px;
         }
-        .partner-logo { font-size: 24px; font-weight: 700; color: var(--spy-gold); margin-bottom: 12px; }
+        .partner-logo { font-size: 22px; font-weight: 700; color: var(--spy-blue); margin-bottom: 8px; }
         .partner-offer { 
-            background: rgba(39, 174, 96, 0.1); 
-            border: 1px solid rgba(39, 174, 96, 0.2);
+            background: var(--green-light); 
+            border: 2px solid var(--green);
             border-radius: 8px;
-            padding: 12px 16px;
+            padding: 14px 16px;
             margin: 16px 0;
         }
-        .partner-offer-title { font-size: 12px; color: var(--green); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-        .partner-contact { font-size: 13px; color: var(--spy-gray); margin-top: 16px; }
+        .partner-offer-title { font-size: 12px; color: var(--green); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .partner-contact { font-size: 13px; color: var(--gray-600); margin-top: 16px; }
         
         /* Quick Start Box */
         .quickstart {
-            background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), rgba(201, 162, 39, 0.05));
-            border: 2px solid var(--spy-gold);
+            background: linear-gradient(135deg, #fef3c7, #fefce8);
+            border: 3px solid var(--spy-gold);
             border-radius: 16px;
             padding: 32px;
             margin-bottom: 40px;
         }
-        .quickstart-title { font-size: 20px; font-weight: 700; color: var(--spy-gold); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+        .quickstart-title { font-size: 20px; font-weight: 700; color: var(--gray-800); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
         .quickstart-steps { display: flex; gap: 16px; flex-wrap: wrap; }
         .quickstart-step {
             flex: 1;
             min-width: 200px;
-            background: rgba(0,0,0,0.3);
+            background: var(--white);
             border-radius: 12px;
             padding: 20px;
             text-align: center;
+            border: 2px solid var(--gray-200);
         }
         .quickstart-step-num {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: var(--spy-gold);
-            color: var(--spy-black);
+            background: var(--spy-blue);
+            color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
+            font-size: 18px;
             margin: 0 auto 12px;
         }
-        .quickstart-step-title { font-weight: 600; margin-bottom: 8px; }
-        .quickstart-step-text { font-size: 13px; color: var(--spy-gray-light); }
+        .quickstart-step-title { font-weight: 700; margin-bottom: 8px; color: var(--gray-800); }
+        .quickstart-step-text { font-size: 13px; color: var(--gray-600); }
         
         /* Flow Diagram */
         .flow-diagram {
@@ -164,30 +200,37 @@
             gap: 8px;
             flex-wrap: wrap;
             padding: 24px;
-            background: rgba(0,0,0,0.3);
+            background: var(--gray-50);
             border-radius: 12px;
             margin: 24px 0;
+            border: 2px solid var(--gray-200);
         }
         .flow-box {
-            background: var(--spy-gray-dark);
+            background: var(--white);
+            border: 2px solid var(--gray-300);
             border-radius: 8px;
             padding: 12px 20px;
             text-align: center;
             min-width: 120px;
         }
-        .flow-box.highlight { background: var(--spy-gold); color: var(--spy-black); }
+        .flow-box.highlight { 
+            background: var(--spy-blue); 
+            color: var(--white);
+            border-color: var(--spy-blue);
+        }
         .flow-box-title { font-weight: 600; font-size: 13px; }
         .flow-box-sub { font-size: 11px; opacity: 0.7; margin-top: 4px; }
-        .flow-arrow { font-size: 20px; color: var(--spy-gold); }
+        .flow-arrow { font-size: 20px; color: var(--spy-blue); font-weight: bold; }
         
         /* Method Cards */
         .method-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--spy-gray-dark);
+            background: var(--white);
+            border: 2px solid var(--gray-200);
             border-radius: 16px;
             padding: 28px;
             margin-bottom: 24px;
-            border-left: 4px solid var(--spy-gold);
+            border-left: 5px solid var(--spy-blue);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
         .method-header {
             display: flex;
@@ -196,20 +239,20 @@
             margin-bottom: 20px;
         }
         .method-num {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
-            background: var(--spy-gold);
-            color: var(--spy-black);
+            background: var(--spy-blue);
+            color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
             flex-shrink: 0;
         }
-        .method-title { font-size: 20px; font-weight: 700; }
-        .method-when { font-size: 14px; color: var(--spy-gray); margin-top: 4px; }
+        .method-title { font-size: 20px; font-weight: 700; color: var(--gray-800); }
+        .method-when { font-size: 14px; color: var(--gray-500); margin-top: 4px; }
         
         /* Steps List */
         .steps-list { counter-reset: step; }
@@ -218,8 +261,9 @@
             gap: 16px;
             margin-bottom: 16px;
             padding: 16px;
-            background: rgba(0,0,0,0.2);
+            background: var(--gray-50);
             border-radius: 10px;
+            border: 1px solid var(--gray-200);
         }
         .step-item::before {
             counter-increment: step;
@@ -227,8 +271,8 @@
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: var(--spy-gray-dark);
-            color: var(--spy-gold);
+            background: var(--spy-blue);
+            color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -239,8 +283,8 @@
         
         /* Info Box */
         .info-box {
-            background: rgba(52, 152, 219, 0.1);
-            border: 1px solid rgba(52, 152, 219, 0.2);
+            background: var(--blue-light);
+            border: 2px solid var(--blue);
             border-radius: 10px;
             padding: 16px 20px;
             margin: 20px 0;
@@ -250,8 +294,8 @@
         
         /* Tip Box */
         .tip-box {
-            background: rgba(39, 174, 96, 0.1);
-            border: 1px solid rgba(39, 174, 96, 0.2);
+            background: var(--green-light);
+            border: 2px solid var(--green);
             border-radius: 10px;
             padding: 16px 20px;
             margin: 20px 0;
@@ -261,15 +305,16 @@
         
         /* Screenshot */
         .screenshot {
-            border-radius: 12px;
-            border: 2px solid var(--spy-gray-dark);
+            border-radius: 8px;
+            border: 2px solid var(--gray-300);
             margin: 20px 0;
             max-width: 100%;
             display: block;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         .screenshot-caption {
             font-size: 12px;
-            color: var(--spy-gray);
+            color: var(--gray-500);
             text-align: center;
             margin-top: 8px;
             font-style: italic;
@@ -280,64 +325,81 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: var(--spy-gray-dark);
-            padding: 8px 16px;
+            background: var(--gray-100);
+            padding: 10px 16px;
             border-radius: 8px;
             font-size: 13px;
-            font-family: monospace;
+            font-family: 'SF Mono', Monaco, monospace;
             margin: 8px 0;
+            border: 1px solid var(--gray-300);
         }
-        .nav-path span { color: var(--spy-gold); }
+        .nav-path span { color: var(--spy-blue); font-weight: 600; }
         
         /* Footer */
         .footer {
             margin-top: 60px;
             padding-top: 40px;
-            border-top: 1px solid var(--spy-gray-dark);
+            border-top: 2px solid var(--gray-200);
             text-align: center;
+            background: var(--gray-50);
+            margin-left: -24px;
+            margin-right: -24px;
+            padding-left: 24px;
+            padding-right: 24px;
+            padding-bottom: 40px;
         }
-        .footer-title { font-size: 18px; font-weight: 600; color: var(--spy-gold); margin-bottom: 24px; }
-        .footer-contacts { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+        .footer-title { font-size: 18px; font-weight: 600; color: var(--spy-blue); margin-bottom: 24px; }
+        .footer-contacts { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; }
         .footer-contact { text-align: center; }
-        .footer-contact-flag { font-size: 32px; margin-bottom: 8px; }
-        .footer-contact-title { font-weight: 600; margin-bottom: 4px; }
-        .footer-contact-info { font-size: 13px; color: var(--spy-gray); }
+        .footer-contact-flag { font-size: 36px; margin-bottom: 8px; }
+        .footer-contact-title { font-weight: 700; margin-bottom: 4px; color: var(--gray-800); }
+        .footer-contact-info { font-size: 13px; color: var(--gray-600); line-height: 1.8; }
         
-        /* Print Styles - Keep dark theme */
+        /* Print Styles */
         @media print {
             body { 
-                background: var(--spy-black) !important; 
-                color: var(--spy-white) !important;
+                background: var(--white) !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
-            .card, .method-card, .quickstart, .partner-card { 
-                border-color: var(--spy-gray-dark) !important; 
-                background: rgba(255,255,255,0.03) !important;
-                -webkit-print-color-adjust: exact !important;
+            .container { padding: 20px; }
+            .screenshot { max-width: 100%; }
+            
+            /* Avoid page breaks inside elements */
+            .card, .method-card, .partner-card, .quickstart, .alert, .info-box, .tip-box {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
-            .flow-box { 
-                background: var(--spy-gray-dark) !important;
-                -webkit-print-color-adjust: exact !important;
+            .section {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
-            .flow-box.highlight { 
-                background: var(--spy-gold) !important;
-                -webkit-print-color-adjust: exact !important;
+            .partner-grid {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
-            .container {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
+            
+            /* Keep tips section together */
+            .section:has(.tip-box) {
+                page-break-inside: avoid !important;
             }
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
+        }
+        
+        /* Also apply avoid breaks for screen rendering in Puppeteer */
+        .card, .method-card, .partner-card, .quickstart, .alert, .info-box, .tip-box {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .tip-box {
+            page-break-before: auto;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
 
         ul, ol { margin-left: 20px; margin-bottom: 16px; }
         li { margin-bottom: 8px; }
         p { margin-bottom: 16px; }
-        strong { color: var(--spy-white); }
+        strong { color: var(--gray-800); }
     </style>
 </head>
 <body>
@@ -346,7 +408,7 @@
         <header class="header">
             <div class="header-logo">SPY NEWS</div>
             <h1>Ny Returhåndtering i SPY</h1>
-            <p class="header-subtitle">Direkte integration mellem Shopify Returportaler og SPY – for nemmere og hurtigere håndtering af B2C returneringer</p>
+            <p class="header-subtitle">Direkte integration mellem Shopify-returportaler og SPY – for nemmere og hurtigere håndtering af B2C-returneringer</p>
         </header>
 
         <!-- Alert -->
@@ -354,7 +416,7 @@
             <div class="alert-icon">⚠️</div>
             <div>
                 <div class="alert-title">Vigtigt: Håndscanner-support kommer i uge 7</div>
-                <div class="alert-text">Vi arbejder på at få de almindelige Zebra håndscannere til at understøtte scanning af retur. Indtil da virker scanning kun med en bordscanner, der er fysisk forbundet til PC'en (returstationen).</div>
+                <div class="alert-text">Vi arbejder på at få de almindelige Zebra-håndscannere til at understøtte scanning af retur. Indtil da virker scanning kun med en bordscanner, der er fysisk forbundet til pc'en (returstationen).</div>
             </div>
         </div>
 
@@ -396,13 +458,13 @@
             <div class="partner-grid">
                 <div class="partner-card">
                     <div class="partner-logo">Returnflows</div>
-                    <p style="font-size: 14px; color: var(--spy-gray-light);">returnflows.com</p>
+                    <p style="font-size: 14px; color: var(--gray-500);">returnflows.com</p>
                     <div class="partner-offer">
                         <div class="partner-offer-title">🎁 Særtilbud til SPY-kunder</div>
-                        <ul style="font-size: 13px; margin: 0;">
-                            <li>Intet opsætningsgebyr (normalt 2.500-10.000 kr.)</li>
-                            <li>Ingen ekstra pris pr. marked (normalt 250 kr/md)</li>
-                            <li>30 dages gratis prøveperiode</li>
+                        <ul style="font-size: 13px; margin: 0; padding-left: 18px; color: var(--gray-700); list-style-type: disc;">
+                            <li style="margin-bottom: 4px;">Intet opsætningsgebyr (normalt 2.500-10.000 kr.)</li>
+                            <li style="margin-bottom: 4px;">Ingen ekstra pris pr. marked (normalt 250 kr./md.)</li>
+                            <li style="margin-bottom: 0;">30 dages gratis prøveperiode</li>
                         </ul>
                     </div>
                     <div class="partner-contact">
@@ -413,13 +475,13 @@
                 
                 <div class="partner-card">
                     <div class="partner-logo">Float</div>
-                    <p style="font-size: 14px; color: var(--spy-gray-light);">floatreturns.com</p>
+                    <p style="font-size: 14px; color: var(--gray-500);">floatreturns.com</p>
                     <div class="partner-offer">
                         <div class="partner-offer-title">🎁 Særtilbud til SPY-kunder</div>
-                        <ul style="font-size: 13px; margin: 0;">
-                            <li>Intet opstartsgebyr</li>
-                            <li>Ingen ekstra gebyr for flere shops/markeder</li>
-                            <li>60 dages gratis prøveperiode</li>
+                        <ul style="font-size: 13px; margin: 0; padding-left: 18px; color: var(--gray-700); list-style-type: disc;">
+                            <li style="margin-bottom: 4px;">Intet opstartsgebyr</li>
+                            <li style="margin-bottom: 4px;">Ingen ekstra gebyr for flere shops/markeder</li>
+                            <li style="margin-bottom: 0;">60 dages gratis prøveperiode</li>
                         </ul>
                     </div>
                     <div class="partner-contact">
@@ -467,10 +529,10 @@
             
             <div class="info-box">
                 <div class="info-box-title">📋 Godt at vide</div>
-                <ul style="margin: 0; font-size: 14px;">
-                    <li><strong>Gavekort:</strong> Det er pt. ikke muligt at udstede gavekort i stedet for tilbagebetaling – men vi arbejder på det.</li>
-                    <li><strong>Price Reduction:</strong> Funktionen i SPY understøttes ikke i kombination med Shopify Returportaler.</li>
-                    <li><strong>Copy/Credit:</strong> Via Sales → Invoiced bruges stadig til krediteringer uden returportaler.</li>
+                <ul style="margin: 0; padding-left: 18px; font-size: 14px; list-style-type: disc;">
+                    <li style="margin-bottom: 6px;"><strong>Gavekort:</strong> Det er pt. ikke muligt at udstede gavekort i stedet for tilbagebetaling – men vi arbejder på det.</li>
+                    <li style="margin-bottom: 6px;"><strong>Price Reduction:</strong> Funktionen i SPY understøttes ikke i kombination med Shopify-returportaler.</li>
+                    <li style="margin-bottom: 0;"><strong>Copy/Credit:</strong> Via Sales → Invoiced bruges stadig til krediteringer uden returportaler.</li>
                 </ul>
             </div>
         </section>
@@ -481,20 +543,20 @@
             <p class="section-intro">Der er 3 måder at håndtere B2C-returneringer i SPY. Vælg den, der passer til jeres situation:</p>
             
             <div class="card" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-                <div style="text-align: center; padding: 20px;">
+                <div style="text-align: center; padding: 20px; background: var(--gray-50); border-radius: 12px;">
                     <div style="font-size: 40px; margin-bottom: 12px;">1️⃣</div>
-                    <div style="font-weight: 700; margin-bottom: 8px;">Process Shopify Return</div>
-                    <div style="font-size: 13px; color: var(--spy-gray);">Kunden har brugt en returportal</div>
+                    <div style="font-weight: 700; margin-bottom: 8px; color: var(--gray-800);">Process Shopify Return</div>
+                    <div style="font-size: 13px; color: var(--gray-500);">Kunden har brugt en returportal</div>
                 </div>
-                <div style="text-align: center; padding: 20px;">
+                <div style="text-align: center; padding: 20px; background: var(--gray-50); border-radius: 12px;">
                     <div style="font-size: 40px; margin-bottom: 12px;">2️⃣</div>
-                    <div style="font-weight: 700; margin-bottom: 8px;">Create Return</div>
-                    <div style="font-size: 13px; color: var(--spy-gray);">Manuel registrering uden portal</div>
+                    <div style="font-weight: 700; margin-bottom: 8px; color: var(--gray-800);">Create Return</div>
+                    <div style="font-size: 13px; color: var(--gray-500);">Manuel registrering uden portal</div>
                 </div>
-                <div style="text-align: center; padding: 20px;">
+                <div style="text-align: center; padding: 20px; background: var(--gray-50); border-radius: 12px;">
                     <div style="font-size: 40px; margin-bottom: 12px;">3️⃣</div>
-                    <div style="font-weight: 700; margin-bottom: 8px;">Eksternt Lager</div>
-                    <div style="font-size: 13px; color: var(--spy-gray);">Via ekstern lagerintegration</div>
+                    <div style="font-weight: 700; margin-bottom: 8px; color: var(--gray-800);">Eksternt Lager</div>
+                    <div style="font-size: 13px; color: var(--gray-500);">Via ekstern lagerintegration</div>
                 </div>
             </div>
         </section>
@@ -522,6 +584,12 @@
                     <div class="step-item">
                         <div><strong>Tryk "Process Shopify Return"</strong> – varelinjerne, der er meldt retur, ligger klar til registrering.</div>
                     </div>
+                </div>
+                
+                <img src="images/image3.png" alt="Varelinjer klar til scanning" class="screenshot">
+                <div class="screenshot-caption">Varelinjerne ligger klar – scan stregkoden eller tryk på varen</div>
+                
+                <div class="steps-list">
                     <div class="step-item">
                         <div><strong>Registrér varerne</strong> ved at scanne stregkoden eller trykke på den. Vælg:<br>
                             • <strong>Claim Cause</strong> – årsagskode for returen<br>
@@ -529,6 +597,12 @@
                             • <strong>Needs Label</strong> – slå til, hvis I ønsker print af ny style-label
                         </div>
                     </div>
+                </div>
+                
+                <img src="images/image4.png" alt="Registrer vare" class="screenshot">
+                <div class="screenshot-caption">Registrér varen: Vælg Claim Type, Claim Cause, og om der skal printes ny label</div>
+                
+                <div class="steps-list">
                     <div class="step-item">
                         <div><strong>Gem linjen</strong> ved at trykke eller scanne "Save Item". Gentag for alle varelinjer.</div>
                     </div>
@@ -536,9 +610,6 @@
                         <div><strong>Bekræft returen</strong> ved at trykke eller scanne "Confirm". Tilbagebetaling sættes i gang automatisk.</div>
                     </div>
                 </div>
-                
-                <img src="images/image4.png" alt="Registrer vare" class="screenshot">
-                <div class="screenshot-caption">Registrér varen: Vælg Claim Type, Claim Cause, og om der skal printes ny label</div>
                 
                 <img src="images/image5.png" alt="Bekræft retur" class="screenshot">
                 <div class="screenshot-caption">Bekræft returen og se beløbsoversigt</div>
@@ -552,7 +623,7 @@
 
         <!-- Exchanges Section -->
         <section class="section">
-            <div class="card" style="border-left: 4px solid var(--purple);">
+            <div class="card" style="border-left: 5px solid var(--purple);">
                 <div class="card-header">
                     <div class="card-icon purple">🔄</div>
                     <div>
@@ -596,26 +667,50 @@
                         <div><strong>Søg efter ordren</strong> via en af de oplyste parametre.</div>
                     </div>
                     <div class="step-item">
-                        <div><strong>Tryk "Create Return"</strong> – vælg Credit Note Date, Claim Cause, og evt. kommentarer.</div>
+                        <div><strong>Tryk "Create Return"</strong> – vælg Credit Note Date, Claim Cause og evt. kommentarer.</div>
                     </div>
+                </div>
+                
+                <img src="images/image7.png" alt="Create Scan Claim dialog" class="screenshot">
+                <div class="screenshot-caption">Vælg Credit Note Date, Claim Cause og tilføj evt. kommentarer</div>
+                
+                <div class="steps-list">
                     <div class="step-item">
-                        <div><strong>Vælg varerne</strong> der skal registreres på returen ved at scanne eller trykke.</div>
-                    </div>
-                    <div class="step-item">
-                        <div><strong>Konfigurér hver varelinje:</strong><br>
-                            • Claim Cause, Claim Type, og om der skal printes ny label.
-                        </div>
-                    </div>
-                    <div class="step-item">
-                        <div><strong>Tryk "Continue"</strong> når alle linjer er registreret.</div>
-                    </div>
-                    <div class="step-item">
-                        <div><strong>Bekræft:</strong> Brug evt. "Update Freight Refund Amount" til automatisk fragtbeløb. Tryk "Confirm".</div>
+                        <div><strong>Vælg varerne</strong>, der skal registreres på returen, ved at scanne eller trykke.</div>
                     </div>
                 </div>
                 
                 <img src="images/image8.png" alt="Vælg varer" class="screenshot">
-                <div class="screenshot-caption">Vælg de varer der skal registreres på returen</div>
+                <div class="screenshot-caption">Vælg de varer, der skal registreres på returen</div>
+                
+                <div class="steps-list">
+                    <div class="step-item">
+                        <div><strong>Konfigurér hver varelinje:</strong><br>
+                            • Claim Cause, Claim Type og om der skal printes ny label.
+                        </div>
+                    </div>
+                </div>
+                
+                <img src="images/image9.png" alt="Scanned item details" class="screenshot">
+                <div class="screenshot-caption">Udfyld detaljer for hver vare: Claim Type, Claim Cause og Needs Label</div>
+                
+                <div class="steps-list">
+                    <div class="step-item">
+                        <div><strong>Tryk "Continue"</strong>, når alle linjer er registreret.</div>
+                    </div>
+                </div>
+                
+                <img src="images/image10.png" alt="Scanned Items liste" class="screenshot">
+                <div class="screenshot-caption">Oversigt over scannede varer – tryk Continue for at fortsætte</div>
+                
+                <img src="images/image11.png" alt="Confirm dialog" class="screenshot">
+                <div class="screenshot-caption">Bekræft, hvis ikke alle varer er scannet – de fjernes fra returen</div>
+                
+                <div class="steps-list">
+                    <div class="step-item">
+                        <div><strong>Bekræft:</strong> Brug evt. "Update Freight Refund Amount" til automatisk fragtbeløb. Tryk "Confirm".</div>
+                    </div>
+                </div>
                 
                 <img src="images/image12.png" alt="Bekræft retur" class="screenshot">
                 <div class="screenshot-caption">Bekræft returen med Finance Info og fragtbeløb</div>
@@ -679,7 +774,7 @@
                         <div class="card-subtitle">Hurtigere workflow med stregkoder</div>
                     </div>
                 </div>
-                <p>I kan printe jeres "Claim Causes" og "Claim Types" ud som stregkoder. På den måde slipper I for at trykke på PC'en – i stedet vælger I ved at scanne den relevante stregkode. Perfekt til at speede arbejdsgangen op!</p>
+                <p>I kan printe jeres "Claim Causes" og "Claim Types" ud som stregkoder. På den måde slipper I for at trykke på pc'en – i stedet vælger I ved at scanne den relevante stregkode. Perfekt til at speede arbejdsgangen op!</p>
                 <img src="images/image14.png" alt="Print Action Barcodes" class="screenshot">
                 <div class="screenshot-caption">Klik på "Print Action Barcodes" for at printe stregkoder</div>
             </div>
@@ -688,15 +783,15 @@
                 <div class="tip-box-title">🔄 Toggle Label via scanner</div>
                 <p style="margin: 0;">Ligesom det er muligt at navigere med bordscanneren ved at scanne funktioner med stregkoder, kan I også skifte "Needs Label" til/fra ved at scanne på "Toggle Label".</p>
                 <img src="images/image13.png" alt="Toggle Label" class="screenshot" style="margin-top: 16px;">
-                <div class="screenshot-caption">"Needs Label" kan togles via scanner</div>
+                <div class="screenshot-caption">"Needs Label" kan toggles via scanner</div>
             </div>
         </section>
 
         <!-- Activation -->
         <section class="section">
-            <div class="card" style="border: 2px solid var(--spy-gold); background: rgba(201, 162, 39, 0.05);">
+            <div class="card" style="border: 3px solid var(--spy-blue); background: linear-gradient(135deg, var(--gray-50), var(--white));">
                 <div class="card-header">
-                    <div class="card-icon gold">⚙️</div>
+                    <div class="card-icon" style="background: var(--blue-light);">⚙️</div>
                     <div>
                         <div class="card-title">Sådan aktiverer I returhåndtering</div>
                         <div class="card-subtitle">Shopify Return-filteret vises først, når det er aktiveret</div>
@@ -711,7 +806,7 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <div class="footer-title">De bedste hilsner fra SPY Teamet</div>
+            <div class="footer-title">De bedste hilsner fra SPY-teamet</div>
             <div class="footer-contacts">
                 <div class="footer-contact">
                     <div class="footer-contact-flag">🇩🇰</div>

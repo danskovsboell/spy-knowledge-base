@@ -71,30 +71,20 @@ function VideoSection() {
           </div>
         </div>
 
-        {/* Demo Fashion Video */}
-        <div>
-          <div style={{ fontSize: 14, fontWeight: 600, color: C.gold, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span>👗</span> Example: Fashion Collection Showcase
-          </div>
-          <div style={{ 
-            position: 'relative', 
-            borderRadius: 12, 
-            overflow: 'hidden',
-            border: `2px solid ${C.border}`,
-            background: C.dark,
-          }}>
-            <video 
-              controls 
-              muted
-              loop
-              style={{ width: '100%', display: 'block', maxHeight: 400, objectFit: 'cover' }}
-            >
-              <source src="https://videos.pexels.com/video-files/3773486/3773486-uhd_2560_1440_30fps.mp4" type="video/mp4" />
-              Your browser does not support video playback.
-            </video>
-          </div>
-          <div style={{ fontSize: 12, color: C.dimmed, marginTop: 8, textAlign: 'center' }}>
-            Embed stunning videos like this on your B2B frontpage using the Video component
+        {/* Tip Box */}
+        <div style={{ 
+          background: C.greenBg, 
+          borderRadius: 8, 
+          padding: 16, 
+          border: `1px solid ${C.green}30`,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+        }}>
+          <span style={{ fontSize: 24 }}>💡</span>
+          <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.5 }}>
+            <strong style={{ color: C.green }}>Tip:</strong> Upload your own product videos, runway shows, or brand content 
+            directly in the editor – they'll be automatically optimized for fast streaming.
           </div>
         </div>
       </div>
@@ -107,25 +97,11 @@ function EditorOverview() {
   return (
     <section style={{ ...section, borderBottom: `1px solid ${C.border}` }}>
       <h2 style={heading}>🖥️ The Editor Interface</h2>
-      <p style={sub}>A powerful yet intuitive drag-and-drop editor built on Puck technology</p>
+      <p style={sub}>SPY's powerful and intuitive drag-and-drop editor makes page building effortless</p>
       
       <div style={card}>
-        {/* Editor Screenshot */}
-        <div style={{ 
-          borderRadius: 12, 
-          overflow: 'hidden',
-          border: `2px solid ${C.border}`,
-          marginBottom: 24,
-        }}>
-          <img 
-            src="/videos/landingpage-editor-overview.png" 
-            alt="Landingpage Editor Interface"
-            style={{ width: '100%', display: 'block' }}
-          />
-        </div>
-
-        {/* Three Panels Explanation */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
+        {/* Four Panels Explanation */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
           <div style={{ background: C.subtle, borderRadius: 10, padding: 20, border: `1px solid ${C.border}`, borderTop: `3px solid ${C.gold}` }}>
             <div style={{ fontSize: 32, marginBottom: 12 }}>📦</div>
             <div style={{ fontWeight: 700, fontSize: 15, color: C.white, marginBottom: 8 }}>Left Panel: Components</div>
@@ -137,7 +113,7 @@ function EditorOverview() {
             <div style={{ fontSize: 32, marginBottom: 12 }}>🎨</div>
             <div style={{ fontWeight: 700, fontSize: 15, color: C.white, marginBottom: 8 }}>Center: Live Canvas</div>
             <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.6 }}>
-              See your page come to life in real-time. Drag components, reorder elements, and preview exactly how customers will see it.
+              See your page come to life in real-time. Drag components, reorder elements, and watch changes appear instantly.
             </div>
           </div>
           <div style={{ background: C.subtle, borderRadius: 10, padding: 20, border: `1px solid ${C.border}`, borderTop: `3px solid ${C.purple}` }}>
@@ -145,6 +121,13 @@ function EditorOverview() {
             <div style={{ fontWeight: 700, fontSize: 15, color: C.white, marginBottom: 8 }}>Right Panel: Settings</div>
             <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.6 }}>
               Configure the selected component. Adjust text, colors, sizes, filters, and more with instant visual feedback.
+            </div>
+          </div>
+          <div style={{ background: C.subtle, borderRadius: 10, padding: 20, border: `1px solid ${C.border}`, borderTop: `3px solid ${C.green}` }}>
+            <div style={{ fontSize: 32, marginBottom: 12 }}>👁️</div>
+            <div style={{ fontWeight: 700, fontSize: 15, color: C.white, marginBottom: 8 }}>Preview Mode</div>
+            <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.6 }}>
+              Switch to Preview Mode to see exactly how your customers will experience the page – without any editor UI.
             </div>
           </div>
         </div>
@@ -271,6 +254,7 @@ function ComponentsSection() {
       features: [
         'Choose 2, 3, or 4 column layouts',
         'Adjustable column widths (50/50, 70/30, etc.)',
+        'Advanced: manually specify custom column ratios',
         'Configurable gap spacing between columns',
         'Responsive: stacks on mobile devices',
       ],
@@ -297,11 +281,11 @@ function ComponentsSection() {
       description: 'A container that groups content together with optional background.',
       features: [
         'Add background color or image',
-        'Perfect for layering text over visuals',
         'Configurable padding and margins',
         'Can contain any other components',
+        'Great for organizing content blocks',
       ],
-      example: 'Wrap a Text component inside a Section with a gradient background for a call-to-action.',
+      example: 'Wrap multiple components inside a Section with a background color for visual grouping.',
     },
     // Typography
     {
@@ -346,9 +330,9 @@ function ComponentsSection() {
         'Adjustable width and height',
         'Border radius for rounded corners',
         'Alt text for accessibility',
-        'Click-to-enlarge option',
+        'Built-in text overlay for layering text on images',
       ],
-      example: 'Showcase your hero banner, product photos, or brand imagery.',
+      example: 'Showcase your hero banner with an overlay title, product photos, or brand imagery.',
     },
     {
       icon: '🎬',
@@ -360,10 +344,10 @@ function ComponentsSection() {
         'Upload videos directly',
         'Automatic Cloudflare Stream integration',
         'Autoplay, loop, and mute options',
-        'Poster image support',
+        'Built-in text overlay for layering text on video',
         'Responsive player',
       ],
-      example: 'Feature a runway show video or product demonstration on your frontpage.',
+      example: 'Feature a runway show video with an overlay title or product demonstration on your frontpage.',
     },
     // Actions
     {
@@ -553,14 +537,75 @@ function WorkflowSteps() {
   )
 }
 
+/* ─── Section 6: Pro Tips ─── */
+function ProTips() {
+  return (
+    <section style={{ ...section, borderBottom: `1px solid ${C.border}` }}>
+      <h2 style={heading}>💡 Pro Tips</h2>
+      <p style={sub}>Get more out of the Landingpage Builder with these power features</p>
+      
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
+        <div style={card}>
+          <div style={{ fontSize: 24, marginBottom: 12 }}>📅</div>
+          <div style={{ fontWeight: 700, fontSize: 15, color: C.white, marginBottom: 8 }}>Schedule Multiple Pages</div>
+          <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.6 }}>
+            Create several B2B frontpages and set release dates for each. Perfect for seasonal campaigns – no manual switching needed!
+          </div>
+        </div>
+        <div style={card}>
+          <div style={{ fontSize: 24, marginBottom: 12 }}>📋</div>
+          <div style={{ fontWeight: 700, fontSize: 15, color: C.white, marginBottom: 8 }}>Copy Existing Pages</div>
+          <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.6 }}>
+            Don't start from scratch! Duplicate any existing landingpage and modify it to quickly create variations.
+          </div>
+        </div>
+        <div style={card}>
+          <div style={{ fontSize: 24, marginBottom: 12 }}>🔄</div>
+          <div style={{ fontWeight: 700, fontSize: 15, color: C.white, marginBottom: 8 }}>Continuous Updates</div>
+          <div style={{ fontSize: 13, color: C.grayLight, lineHeight: 1.6 }}>
+            We're constantly adding new features and components. Check back regularly for the latest additions!
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ─── Intro Section ─── */
+function IntroSection() {
+  return (
+    <section style={{ ...section, borderBottom: `1px solid ${C.border}`, textAlign: 'center' }}>
+      <div style={{ fontSize: 48, marginBottom: 16 }}>🎨</div>
+      <h1 style={{ ...heading, fontSize: 32, marginBottom: 16 }}>B2B Landingpage Builder</h1>
+      <p style={{ fontSize: 18, color: C.grayLight, lineHeight: 1.7, maxWidth: 700, margin: '0 auto 24px auto' }}>
+        Create stunning, professional B2B frontpages in minutes – no coding required. 
+        Drag and drop components, preview in real-time, and publish instantly.
+      </p>
+      <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div style={{ background: C.greenBg, color: C.green, padding: '8px 16px', borderRadius: 20, fontSize: 13, fontWeight: 600 }}>
+          ✓ No coding skills needed
+        </div>
+        <div style={{ background: C.blueBg, color: C.blue, padding: '8px 16px', borderRadius: 20, fontSize: 13, fontWeight: 600 }}>
+          ✓ Real-time preview
+        </div>
+        <div style={{ background: C.purpleBg, color: C.purple, padding: '8px 16px', borderRadius: 20, fontSize: 13, fontWeight: 600 }}>
+          ✓ Publish instantly
+        </div>
+      </div>
+    </section>
+  )
+}
+
 /* ─── Main Component ─── */
 export default function LandingpageBuilderContent({ lang = 'en' }: { lang?: string }) {
   return (
     <div style={{ background: '#222222', borderRadius: 12, padding: '8px 24px', border: '1px solid #333333' }}>
+      <IntroSection />
       <VideoSection />
       <EditorOverview />
       <ComponentsSection />
       <SampleLayouts />
+      <ProTips />
       <WorkflowSteps />
     </div>
   )

@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.94.1",
+    "docx": "^9.5.1",
     "next": "^14.0.0",
     "openai": "^6.17.0",
     "pg": "^8.18.0",
