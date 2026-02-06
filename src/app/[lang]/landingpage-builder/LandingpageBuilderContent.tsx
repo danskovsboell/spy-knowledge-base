@@ -42,32 +42,34 @@ function VideoSection() {
   return (
     <section style={{ ...section, borderBottom: `1px solid ${C.border}` }}>
       <h2 style={heading}>🎬 See It In Action</h2>
-      <p style={sub}>Watch how easy it is to build a professional B2B landingpage in under a minute</p>
+      <p style={sub}>Watch how easy it is to build a professional B2B landingpage</p>
       
       <div style={card}>
-        {/* Main Tutorial Video */}
+        {/* Feature Highlights Video - NEW */}
         <div style={{ marginBottom: 24 }}>
           <div style={{ fontSize: 14, fontWeight: 600, color: C.gold, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span>📖</span> Tutorial: Building Your First Landingpage
+            <span>✨</span> Feature Highlights
           </div>
           <div style={{ 
             position: 'relative', 
             borderRadius: 12, 
             overflow: 'hidden',
-            border: `2px solid ${C.border}`,
+            border: `2px solid ${C.gold}40`,
             background: C.dark,
           }}>
             <video 
               controls 
+              autoPlay
+              muted
+              loop
               style={{ width: '100%', display: 'block' }}
-              poster="/videos/landingpage-editor-overview.png"
             >
-              <source src="/videos/landingpage-builder-guide.mp4" type="video/mp4" />
+              <source src="/videos/landingpage-builder-features.mp4" type="video/mp4" />
               Your browser does not support video playback.
             </video>
           </div>
           <div style={{ fontSize: 12, color: C.dimmed, marginTop: 8, textAlign: 'center' }}>
-            20 seconds · Shows drag & drop, configuration, preview, and publish
+            18 seconds · Overview of all key features and capabilities
           </div>
         </div>
 
