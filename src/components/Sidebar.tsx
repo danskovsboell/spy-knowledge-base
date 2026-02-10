@@ -35,6 +35,7 @@ export default function Sidebar({ lang, isOpen, onClose }: SidebarProps) {
       section: t.navFunctions,
       items: [
         { href: `/${lang}/dedication`, label: t.dedicationTitle, icon: '🎯' },
+        { href: `/${lang}/triangular-trade`, label: t.triangularTradeTitle, icon: '🔺' },
       ],
     },
   ]
