@@ -58,6 +58,9 @@ export interface UIStrings {
   triangularTradeTitle: string
   triangularTradeDesc: string
   triangularTradePageDesc: string
+  shopifyFlowTitle: string
+  shopifyFlowDesc: string
+  shopifyFlowPageDesc: string
   
   // Language switcher
   selectLanguage: string
@@ -106,6 +109,9 @@ const translations: Record<Locale, UIStrings> = {
     triangularTradeTitle: 'Trekantshandel',
     triangularTradeDesc: 'Interaktiv guide til trekantshandel – scenarier, momsbehandling og ERP-integration.',
     triangularTradePageDesc: 'Interaktiv guide til trekantshandel – scenarier, momsbehandling og ERP-integration',
+    shopifyFlowTitle: 'Shopify Flow',
+    shopifyFlowDesc: 'Automatisering af Shopify-hændelser med SPY ERP – ordrer, lager, kunder og produktdata via Shopify Flow.',
+    shopifyFlowPageDesc: 'Automatisering af Shopify-hændelser med SPY ERP via Shopify Flow workflows',
     selectLanguage: 'Vælg sprog',
   },
   en: {
@@ -150,6 +156,9 @@ const translations: Record<Locale, UIStrings> = {
     triangularTradeTitle: 'Triangular Trade',
     triangularTradeDesc: 'Interactive guide to triangular trade – scenarios, VAT treatment and ERP integration.',
     triangularTradePageDesc: 'Interactive guide to triangular trade – scenarios, VAT treatment and ERP integration',
+    shopifyFlowTitle: 'Shopify Flow',
+    shopifyFlowDesc: 'Automating Shopify events with SPY ERP – orders, inventory, customers and product data via Shopify Flow.',
+    shopifyFlowPageDesc: 'Automating Shopify events with SPY ERP via Shopify Flow workflows',
     selectLanguage: 'Select language',
   },
   nl: {
@@ -194,6 +203,9 @@ const translations: Record<Locale, UIStrings> = {
     triangularTradeTitle: 'Driehoekshandel',
     triangularTradeDesc: 'Interactieve gids voor driehoekshandel – scenario\'s, btw-behandeling en ERP-integratie.',
     triangularTradePageDesc: 'Interactieve gids voor driehoekshandel – scenario\'s, btw-behandeling en ERP-integratie',
+    shopifyFlowTitle: 'Shopify Flow',
+    shopifyFlowDesc: 'Automatisering van Shopify-events met SPY ERP – bestellingen, voorraad, klanten en productgegevens via Shopify Flow.',
+    shopifyFlowPageDesc: 'Automatisering van Shopify-events met SPY ERP via Shopify Flow workflows',
     selectLanguage: 'Taal selecteren',
   },
 }

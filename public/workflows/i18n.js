@@ -14,7 +14,8 @@ const WORKFLOW_SLUGS = {
   'ongoing-workflow': 'ongoing-wms',
   'nemedi-workflow': 'nemedi',
   'sitoo-workflow': 'sitoo-pos',
-  'lector-customs-workflow': 'lector-customs'
+  'lector-customs-workflow': 'lector-customs',
+  'shopify-flow-workflow': 'shopify-flow'
 };
 
 // Get locale from URL parameter
