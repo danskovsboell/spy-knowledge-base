@@ -55,6 +55,9 @@ export interface UIStrings {
   dedicationTitle: string
   dedicationDesc: string
   dedicationPageDesc: string
+  triangularTradeTitle: string
+  triangularTradeDesc: string
+  triangularTradePageDesc: string
   
   // Language switcher
   selectLanguage: string
@@ -100,6 +103,9 @@ const translations: Record<Locale, UIStrings> = {
     dedicationTitle: 'Dedication / Reservering',
     dedicationDesc: 'Guide til Pre-Dedication funktionaliteten – fordeling af varer mellem Stock og Pre ordrer.',
     dedicationPageDesc: 'Guide til Pre-Dedication funktionaliteten – fordeling af varer mellem Stock og Pre ordrer',
+    triangularTradeTitle: 'Trekantshandel',
+    triangularTradeDesc: 'Interaktiv guide til trekantshandel – scenarier, momsbehandling og ERP-integration.',
+    triangularTradePageDesc: 'Interaktiv guide til trekantshandel – scenarier, momsbehandling og ERP-integration',
     selectLanguage: 'Vælg sprog',
   },
   en: {
@@ -141,6 +147,9 @@ const translations: Record<Locale, UIStrings> = {
     dedicationTitle: 'Dedication / Reservation',
     dedicationDesc: 'Guide to Pre-Dedication functionality – allocation of goods between Stock and Pre orders.',
     dedicationPageDesc: 'Guide to Pre-Dedication functionality – allocation of goods between Stock and Pre orders',
+    triangularTradeTitle: 'Triangular Trade',
+    triangularTradeDesc: 'Interactive guide to triangular trade – scenarios, VAT treatment and ERP integration.',
+    triangularTradePageDesc: 'Interactive guide to triangular trade – scenarios, VAT treatment and ERP integration',
     selectLanguage: 'Select language',
   },
   nl: {
@@ -182,6 +191,9 @@ const translations: Record<Locale, UIStrings> = {
     dedicationTitle: 'Dedication / Reservering',
     dedicationDesc: 'Gids voor Pre-Dedication functionaliteit – verdeling van goederen tussen Stock en Pre orders.',
     dedicationPageDesc: 'Gids voor Pre-Dedication functionaliteit – verdeling van goederen tussen Stock en Pre orders',
+    triangularTradeTitle: 'Driehoekshandel',
+    triangularTradeDesc: 'Interactieve gids voor driehoekshandel – scenario\'s, btw-behandeling en ERP-integratie.',
+    triangularTradePageDesc: 'Interactieve gids voor driehoekshandel – scenario\'s, btw-behandeling en ERP-integratie',
     selectLanguage: 'Taal selecteren',
   },
 }

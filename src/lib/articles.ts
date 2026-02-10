@@ -189,6 +189,27 @@ const FALLBACK_ARTICLES: Record<string, Omit<ArticleData, 'title' | 'description
       no: 'Guide til Pre-Dedication-funksjonalitet – fordeling av varer mellom Stock- og Pre-ordrer.',
     },
   },
+  'triangular-trade': {
+    slug: 'triangular-trade',
+    category: 'Feature',
+    icon: '🔺',
+    imageUrl: null,
+    badge: 'Interaktiv guide',
+    badgeColor: '#e67e22',
+    sortOrder: 6,
+    content: null,
+    contentType: 'react',
+    titles: {
+      da: 'Trekantshandel',
+      en: 'Triangular Trade',
+      nl: 'Driehoekshandel',
+    },
+    descriptions: {
+      da: 'Interaktiv guide til trekantshandel – scenarier, momsbehandling og ERP-integration.',
+      en: 'Interactive guide to triangular trade – scenarios, VAT treatment and ERP integration.',
+      nl: 'Interactieve gids voor driehoekshandel – scenario\'s, btw-behandeling en ERP-integratie.',
+    },
+  },
 }
 
 // Slug to page route mapping
@@ -198,6 +219,7 @@ const SLUG_TO_ROUTE: Record<string, string> = {
   'nemedi': 'nemedi',
   'lector-customs': 'lector',
   'dedication': 'dedication',
+  'triangular-trade': 'triangular-trade',
 }
 
 const ROUTE_TO_SLUG: Record<string, string> = {
@@ -206,6 +228,7 @@ const ROUTE_TO_SLUG: Record<string, string> = {
   'nemedi': 'nemedi',
   'lector': 'lector-customs',
   'dedication': 'dedication',
+  'triangular-trade': 'triangular-trade',
 }
 
 export function getRouteForSlug(slug: string): string {
