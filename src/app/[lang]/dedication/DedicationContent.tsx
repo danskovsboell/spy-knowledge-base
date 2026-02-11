@@ -155,6 +155,7 @@ function Section2({ t }: { t: DedicationStrings }) {
           </table>
         </div>
         <div style={{ marginTop: 16, padding: 16, background: C.greenBg, borderRadius: 8, fontSize: 13, lineHeight: 1.6, color: C.grayLight, border: `1px solid rgba(39, 174, 96, 0.2)` }} dangerouslySetInnerHTML={{ __html: t.s2Tip }} />
+        <div style={{ marginTop: 12, padding: 16, background: 'rgba(201, 162, 39, 0.08)', borderRadius: 8, fontSize: 13, lineHeight: 1.6, color: C.grayLight, border: `1px solid rgba(201, 162, 39, 0.2)` }} dangerouslySetInnerHTML={{ __html: `💡 ${t.s2AlternativeTip}` }} />
       </div>
     </section>
   )

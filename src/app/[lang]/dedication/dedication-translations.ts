@@ -98,6 +98,8 @@ export interface DedicationStrings {
   s5Loc5When: string
   s5WhatCanYou: string
   s5UseIt: string
+  // Style > Dedication alternative tip
+  s2AlternativeTip: string
 }
 
 const da: DedicationStrings = {
@@ -131,6 +133,7 @@ const da: DedicationStrings = {
   s2ColDedicate: 'Dedicér til',
   s2Tip: '<strong style="color: #27ae60">Tip:</strong> Denne dialog åbner automatisk når du sætter en farve til NOOS og der allerede eksisterer indkøbsordrer for farven.',
   s2Pcs: 'stk',
+  s2AlternativeTip: 'Du kan også tildele dedication direkte fra Style-menuen: gå til <strong style="color: #c9a227">Style → Dedication</strong> for at se og redigere fordelingen for en hel style på tværs af sæsoner.',
   s3Title: '3. Fra lager – når du allerede har varerne',
   s3Intro: 'Det andet scenarie: en farve er netop blevet NOOS, og du har allerede varer på lager.',
   s3WarehouseTitle: 'Dit lager: {total} stk',
@@ -225,6 +228,7 @@ const en: DedicationStrings = {
   s2ColDedicate: 'Dedicate to',
   s2Tip: '<strong style="color: #27ae60">Tip:</strong> This dialog opens automatically when you set a colour to NOOS and purchase orders already exist for that colour.',
   s2Pcs: 'pcs',
+  s2AlternativeTip: 'You can also assign dedication directly from the Style menu: go to <strong style="color: #c9a227">Style → Dedication</strong> to view and edit the allocation for an entire style across seasons.',
   s3Title: '3. From warehouse – when you already have the goods',
   s3Intro: 'The second scenario: a colour has just become NOOS, and you already have goods in stock.',
   s3WarehouseTitle: 'Your warehouse: {total} pcs',
@@ -319,6 +323,7 @@ const de: DedicationStrings = {
   s2ColDedicate: 'Zuweisen an',
   s2Tip: '<strong style="color: #27ae60">Tipp:</strong> Dieser Dialog öffnet sich automatisch, wenn Sie eine Farbe auf NOOS setzen und bereits Bestellungen für diese Farbe existieren.',
   s2Pcs: 'Stk.',
+  s2AlternativeTip: 'Sie können Dedication auch direkt über das Style-Menü zuweisen: gehen Sie zu <strong style="color: #c9a227">Style → Dedication</strong>, um die Verteilung für einen ganzen Style über Saisons hinweg anzuzeigen und zu bearbeiten.',
   s3Title: '3. Vom Lager – wenn Sie die Ware bereits haben',
   s3Intro: 'Das zweite Szenario: Eine Farbe wurde gerade NOOS, und Sie haben bereits Ware auf Lager.',
   s3WarehouseTitle: 'Ihr Lager: {total} Stk.',
@@ -413,6 +418,7 @@ const nl: DedicationStrings = {
   s2ColDedicate: 'Toewijzen aan',
   s2Tip: '<strong style="color: #27ae60">Tip:</strong> Dit dialoogvenster opent automatisch wanneer je een kleur op NOOS zet en er al inkooporders bestaan voor die kleur.',
   s2Pcs: 'stuks',
+  s2AlternativeTip: 'Je kunt dedication ook rechtstreeks toewijzen vanuit het Style-menu: ga naar <strong style="color: #c9a227">Style → Dedication</strong> om de verdeling voor een hele style over seizoenen te bekijken en te bewerken.',
   s3Title: '3. Vanuit magazijn – wanneer je de goederen al hebt',
   s3Intro: 'Het tweede scenario: een kleur is net NOOS geworden, en je hebt al goederen op voorraad.',
   s3WarehouseTitle: 'Jouw magazijn: {total} stuks',
@@ -507,6 +513,7 @@ const fr: DedicationStrings = {
   s2ColDedicate: 'Assigner à',
   s2Tip: '<strong style="color: #27ae60">Conseil :</strong> Ce dialogue s\'ouvre automatiquement lorsque vous définissez une couleur en NOOS et que des bons de commande existent déjà pour cette couleur.',
   s2Pcs: 'pcs',
+  s2AlternativeTip: 'Vous pouvez également assigner la dedication directement depuis le menu Style : allez dans <strong style="color: #c9a227">Style → Dedication</strong> pour visualiser et modifier la répartition pour un style entier sur plusieurs saisons.',
   s3Title: '3. Depuis l\'entrepôt – quand vous avez déjà les articles',
   s3Intro: 'Le second scénario : une couleur vient de devenir NOOS, et vous avez déjà des articles en stock.',
   s3WarehouseTitle: 'Votre entrepôt : {total} pcs',
@@ -601,6 +608,7 @@ const it: DedicationStrings = {
   s2ColDedicate: 'Assegna a',
   s2Tip: '<strong style="color: #27ae60">Suggerimento:</strong> Questo dialogo si apre automaticamente quando imposti un colore su NOOS e esistono già ordini di acquisto per quel colore.',
   s2Pcs: 'pz',
+  s2AlternativeTip: 'Puoi anche assegnare la dedication direttamente dal menu Style: vai su <strong style="color: #c9a227">Style → Dedication</strong> per visualizzare e modificare la distribuzione per un intero stile su più stagioni.',
   s3Title: '3. Dal magazzino – quando hai già la merce',
   s3Intro: 'Il secondo scenario: un colore è appena diventato NOOS e hai già merce in magazzino.',
   s3WarehouseTitle: 'Il tuo magazzino: {total} pz',
@@ -695,6 +703,7 @@ const es: DedicationStrings = {
   s2ColDedicate: 'Asignar a',
   s2Tip: '<strong style="color: #27ae60">Consejo:</strong> Este diálogo se abre automáticamente cuando estableces un color como NOOS y ya existen órdenes de compra para ese color.',
   s2Pcs: 'uds',
+  s2AlternativeTip: 'También puedes asignar dedication directamente desde el menú Style: ve a <strong style="color: #c9a227">Style → Dedication</strong> para ver y editar la distribución de un estilo completo en todas las temporadas.',
   s3Title: '3. Desde el almacén – cuando ya tienes la mercancía',
   s3Intro: 'El segundo escenario: un color acaba de convertirse en NOOS y ya tienes mercancía en stock.',
   s3WarehouseTitle: 'Tu almacén: {total} uds',
@@ -789,6 +798,7 @@ const sv: DedicationStrings = {
   s2ColDedicate: 'Tilldela till',
   s2Tip: '<strong style="color: #27ae60">Tips:</strong> Denna dialog öppnas automatiskt när du sätter en färg till NOOS och det redan finns inköpsordrar för den färgen.',
   s2Pcs: 'st',
+  s2AlternativeTip: 'Du kan också tilldela dedication direkt från Style-menyn: gå till <strong style="color: #c9a227">Style → Dedication</strong> för att se och redigera fördelningen för en hel style över säsonger.',
   s3Title: '3. Från lager – när du redan har varorna',
   s3Intro: 'Det andra scenariot: en färg har precis blivit NOOS, och du har redan varor på lager.',
   s3WarehouseTitle: 'Ditt lager: {total} st',
@@ -883,6 +893,7 @@ const no: DedicationStrings = {
   s2ColDedicate: 'Tildel til',
   s2Tip: '<strong style="color: #27ae60">Tips:</strong> Denne dialogen åpnes automatisk når du setter en farge til NOOS og det allerede finnes innkjøpsordrer for den fargen.',
   s2Pcs: 'stk',
+  s2AlternativeTip: 'Du kan også tildele dedication direkte fra Style-menyen: gå til <strong style="color: #c9a227">Style → Dedication</strong> for å se og redigere fordelingen for en hel style på tvers av sesonger.',
   s3Title: '3. Fra lager – når du allerede har varene',
   s3Intro: 'Det andre scenariet: en farge har nettopp blitt NOOS, og du har allerede varer på lager.',
   s3WarehouseTitle: 'Ditt lager: {total} stk',
