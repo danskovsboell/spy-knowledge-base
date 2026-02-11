@@ -16,9 +16,9 @@ export default async function ShopifyFlowPage({ params }: PageProps) {
     <>
       <div className="page-header">
         <div className="page-breadcrumb">
-          <a href={`/${locale}`}>{t.breadcrumbOverview}</a> → {t.sectionIntegrations} → {article?.title || 'Shopify Flow'}
+          <a href={`/${locale}`}>{t.breadcrumbOverview}</a> → {t.sectionIntegrations} → {article?.title || t.shopifyFlowTitle}
         </div>
-        <h1>{article?.title || 'Shopify Flow Integration'}</h1>
+        <h1>{article?.title || t.shopifyFlowTitle}</h1>
         <p>{article?.description || t.shopifyFlowPageDesc}</p>
       </div>
       {article?.content ? (
