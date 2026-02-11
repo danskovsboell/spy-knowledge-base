@@ -29,6 +29,7 @@ export default function Sidebar({ lang, isOpen, onClose }: SidebarProps) {
         { href: `/${lang}/sitoo`, label: t.sitooTitle, icon: '🏪' },
         { href: `/${lang}/nemedi`, label: t.nemediTitle, icon: '📄' },
         { href: `/${lang}/lector`, label: t.lectorTitle, icon: '🛃' },
+        { href: `/${lang}/shopify-flow`, label: t.shopifyFlowTitle, icon: '🛒' },
       ],
     },
     {
