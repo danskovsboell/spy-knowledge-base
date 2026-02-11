@@ -58,6 +58,9 @@ export interface UIStrings {
   triangularTradeTitle: string
   triangularTradeDesc: string
   triangularTradePageDesc: string
+  vatRepresentationTitle: string
+  vatRepresentationDesc: string
+  vatRepresentationPageDesc: string
   shopifyFlowTitle: string
   shopifyFlowDesc: string
   shopifyFlowPageDesc: string
@@ -109,6 +112,9 @@ const translations: Record<Locale, UIStrings> = {
     triangularTradeTitle: 'Trekantshandel',
     triangularTradeDesc: 'Interaktiv guide til trekantshandel – scenarier, momsbehandling og ERP-integration.',
     triangularTradePageDesc: 'Interaktiv guide til trekantshandel – scenarier, momsbehandling og ERP-integration',
+    vatRepresentationTitle: 'VAT-repræsentation',
+    vatRepresentationDesc: 'A-Z guide til momsrepræsentation – fiskal repræsentant, told, opsætning og daglig drift i SPY.',
+    vatRepresentationPageDesc: 'A-Z guide til momsrepræsentation – fiskal repræsentant, told, opsætning og daglig drift i SPY',
     shopifyFlowTitle: 'Shopify Integration',
     shopifyFlowDesc: 'Spy\'s webhook-baserede realtidssynkronisering med Shopify – ordrer, produkter, fulfillment, returneringer og kø-system.',
     shopifyFlowPageDesc: 'Spy\'s webhook-baserede Shopify-integration: ordreimport, produktsync, fulfillment og queue-system',
@@ -156,6 +162,9 @@ const translations: Record<Locale, UIStrings> = {
     triangularTradeTitle: 'Triangular Trade',
     triangularTradeDesc: 'Interactive guide to triangular trade – scenarios, VAT treatment and ERP integration.',
     triangularTradePageDesc: 'Interactive guide to triangular trade – scenarios, VAT treatment and ERP integration',
+    vatRepresentationTitle: 'VAT Representation',
+    vatRepresentationDesc: 'A-Z guide to VAT representation – fiscal representative, customs, setup and daily workflow in SPY.',
+    vatRepresentationPageDesc: 'A-Z guide to VAT representation – fiscal representative, customs, setup and daily workflow in SPY',
     shopifyFlowTitle: 'Shopify Integration',
     shopifyFlowDesc: 'Spy\'s webhook-based real-time synchronization with Shopify – orders, products, fulfillment, returns and queue system.',
     shopifyFlowPageDesc: 'Spy\'s webhook-based Shopify integration: order import, product sync, fulfillment and queue system',
@@ -203,6 +212,9 @@ const translations: Record<Locale, UIStrings> = {
     triangularTradeTitle: 'Driehoekshandel',
     triangularTradeDesc: 'Interactieve gids voor driehoekshandel – scenario\'s, btw-behandeling en ERP-integratie.',
     triangularTradePageDesc: 'Interactieve gids voor driehoekshandel – scenario\'s, btw-behandeling en ERP-integratie',
+    vatRepresentationTitle: 'Btw-vertegenwoordiging',
+    vatRepresentationDesc: 'A-Z gids voor btw-vertegenwoordiging – fiscaal vertegenwoordiger, douane, instelling en dagelijkse workflow in SPY.',
+    vatRepresentationPageDesc: 'A-Z gids voor btw-vertegenwoordiging – fiscaal vertegenwoordiger, douane, instelling en dagelijkse workflow in SPY',
     shopifyFlowTitle: 'Shopify Integratie',
     shopifyFlowDesc: 'Spy\'s webhook-gebaseerde realtime synchronisatie met Shopify – bestellingen, producten, fulfillment, retouren en wachtrijsysteem.',
     shopifyFlowPageDesc: 'Spy\'s webhook-gebaseerde Shopify-integratie: orderimport, productsync, fulfillment en wachtrijsysteem',
