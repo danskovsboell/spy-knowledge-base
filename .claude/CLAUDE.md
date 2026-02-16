@@ -111,6 +111,16 @@ public/
 - Brug `git -c safe.directory=/home/clawdbot/dev/spy-knowledge-base` prefix
 - Commit message: beskriv hvad artiklen dækker
 
+### 5. Artikel-registrering i articles.ts (VIGTIG!)
+Ny artikel SKAL tilføjes i `src/lib/articles.ts`:
+- Tilføj entry i `HARDCODED_ARTICLES` med slug, category, icon, titles, descriptions
+- Tilføj slug i `SLUG_TO_ROUTE` og `ROUTE_TO_SLUG` mappings
+- **Uden dette vises artiklen IKKE på startsiden** – kun i sidebar-menuen!
+
+### 6. Ikoner
+- Brug ÉT emoji-ikon per artikel – aldrig to emojis sammen (ser dobbelt ud i sidebar)
+- Vælg et ikon der passer til emnet
+
 ## Kvalitetstjek
 Før commit, verificér:
 - [ ] HTML følger samme stil som nemedi-workflow.html
@@ -119,3 +129,6 @@ Før commit, verificér:
 - [ ] Responsive (ser godt ud på mobil)
 - [ ] i18n-slug er korrekt
 - [ ] Sidebar er opdateret
+- [ ] **Artikel registreret i articles.ts** (HARDCODED_ARTICLES + route mappings)
+- [ ] **Startsiden viser artiklen** (den henter fra articles.ts)
+- [ ] **Kun ét ikon** per menu-punkt
