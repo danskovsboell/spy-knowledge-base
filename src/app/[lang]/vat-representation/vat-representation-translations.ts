@@ -177,13 +177,13 @@ const da: VatRepStrings = {
 
 const en: VatRepStrings = {
   s1Title: 'What is VAT Representation?',
-  s1Intro: 'VAT Representation means that a foreign company appoints a local fiscal representative in a non-EU country – such as Norway or the UK – to handle VAT registration, reporting and customs declarations on the company\'s behalf. For fashion/textile brands, this is typically relevant when selling and exporting to customers in Norway or the UK.',
-  s1Def1Title: 'Fiscal representative',
+  s1Intro: 'VAT Representation means that a foreign company appoints a local VAT representative in a non-EU country – such as Norway or the UK – to handle VAT registration, reporting and customs declarations on the company\'s behalf. For fashion/textile brands, this is typically relevant when selling and exporting to customers in Norway or the UK.',
+  s1Def1Title: 'Local VAT representative',
   s1Def1Desc: 'A local company or advisor who is VAT-registered in the relevant country (e.g. Norway or UK) and acts on behalf of the brand towards local tax authorities.',
   s1Def2Title: 'VAT registration',
   s1Def2Desc: 'The brand receives a local VAT number in the destination country through the representative – without establishing a physical presence.',
   s1Def3Title: 'Import VAT',
-  s1Def3Desc: 'When importing into non-EU countries (e.g. Norway, UK), local import VAT must be paid. With a fiscal representative, this VAT can be deducted directly, effectively making it €0.',
+  s1Def3Desc: 'When importing into non-EU countries (e.g. Norway, UK), local import VAT must be paid. With a local VAT representative, this VAT can be deducted directly, effectively making it €0.',
 
   s2Title: 'Why use VAT representation?',
   s2Intro: 'For fashion brands wanting to sell to B2B customers in non-EU countries – such as Norway or the UK – VAT representation offers several advantages.',
@@ -219,7 +219,7 @@ const en: VatRepStrings = {
   s4Intro: 'Here is the typical journey for a fashion brand setting up VAT representation in a non-EU country like Norway or the UK.',
   s4Step1Title: '1. Decision & analysis',
   s4Step1Desc: 'Assess whether there is sufficient sales volume in the target country. Typically relevant from >€50,000/year in revenue to Norway or the UK.',
-  s4Step2Title: '2. Choose fiscal representative',
+  s4Step2Title: '2. Choose a local VAT representative',
   s4Step2Desc: 'Find a reliable local partner in Norway or the UK (accountant/freight forwarder). They should handle VAT registration, periodic reporting and customs clearance.',
   s4Step3Title: '3. VAT registration',
   s4Step3Desc: 'The representative applies for a local VAT number (MVA number in Norway, VAT number in the UK). Typically requires: Articles of association, company registration, power of attorney. Takes 2-6 weeks.',
@@ -281,13 +281,13 @@ const en: VatRepStrings = {
 
 const nl: VatRepStrings = {
   s1Title: 'Wat is btw-vertegenwoordiging?',
-  s1Intro: 'Btw-vertegenwoordiging (VAT Representation) betekent dat een buitenlands bedrijf een lokale fiscaal vertegenwoordiger aanstelt in een land buiten de EU – zoals Noorwegen of het VK – om btw-registratie, -aangifte en douaneformaliteiten namens het bedrijf af te handelen. Voor fashion/textielbedrijven is dit meestal relevant bij verkoop en export naar klanten in Noorwegen of het VK.',
-  s1Def1Title: 'Fiscaal vertegenwoordiger',
+  s1Intro: 'Btw-vertegenwoordiging (VAT Representation) betekent dat een buitenlands bedrijf een lokale btw-vertegenwoordiger aanstelt in een land buiten de EU – zoals Noorwegen of het VK – om btw-registratie, -aangifte en douaneformaliteiten namens het bedrijf af te handelen. Voor fashion/textielbedrijven is dit meestal relevant bij verkoop en export naar klanten in Noorwegen of het VK.',
+  s1Def1Title: 'Lokale btw-vertegenwoordiger',
   s1Def1Desc: 'Een lokaal bedrijf of adviseur die btw-geregistreerd is in het betreffende land (bijv. Noorwegen of het VK) en namens het merk optreedt bij de lokale belastingdienst.',
   s1Def2Title: 'Btw-registratie',
   s1Def2Desc: 'Het merk krijgt een lokaal btw-nummer in het bestemmingsland via de vertegenwoordiger – zonder fysieke aanwezigheid.',
   s1Def3Title: 'Invoer-btw',
-  s1Def3Desc: 'Bij import naar landen buiten de EU (bijv. Noorwegen, VK) moet lokale invoer-btw worden betaald. Met een fiscaal vertegenwoordiger kan deze btw direct worden afgetrokken, waardoor het effectief €0 is.',
+  s1Def3Desc: 'Bij import naar landen buiten de EU (bijv. Noorwegen, VK) moet lokale invoer-btw worden betaald. Met een lokale btw-vertegenwoordiger kan deze btw direct worden afgetrokken, waardoor het effectief €0 is.',
 
   s2Title: 'Waarom btw-vertegenwoordiging gebruiken?',
   s2Intro: 'Voor fashion-merken die aan B2B-klanten in landen buiten de EU willen verkopen – zoals Noorwegen of het VK – biedt btw-vertegenwoordiging diverse voordelen.',
@@ -323,7 +323,7 @@ const nl: VatRepStrings = {
   s4Intro: 'Dit is de typische reis voor een fashion-merk dat btw-vertegenwoordiging wil opzetten in een land buiten de EU zoals Noorwegen of het VK.',
   s4Step1Title: '1. Beslissing & analyse',
   s4Step1Desc: 'Beoordeel of er voldoende verkoopvolume is in het doelland. Doorgaans relevant vanaf >€50.000/jaar aan omzet naar Noorwegen of het VK.',
-  s4Step2Title: '2. Kies fiscaal vertegenwoordiger',
+  s4Step2Title: '2. Kies een lokale btw-vertegenwoordiger',
   s4Step2Desc: 'Vind een betrouwbare lokale partner in Noorwegen of het VK (accountant/expediteur). Ze moeten btw-registratie, periodieke aangifte en douaneafhandeling kunnen verzorgen.',
   s4Step3Title: '3. Btw-registratie',
   s4Step3Desc: 'De vertegenwoordiger vraagt een lokaal btw-nummer aan (MVA-nummer in Noorwegen, VAT-nummer in het VK). Vereist doorgaans: statuten, KvK-uittreksel, volmacht. Duurt 2-6 weken.',
