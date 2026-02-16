@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Returneringsflow - SPY System</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="/workflows/i18n.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --spy-black: #1a1a1a;
+            --spy-dark: #0f0f0f;
+            --spy-gold: #c9a227;
+            --spy-gold-light: #d4b84a;
+            --spy-white: #ffffff;
+            --spy-gray: #888888;
+            --spy-gray-light: #b3b3b3;
+            --spy-gray-dark: #333333;
+            --spy-red: #e74c3c;
+            --spy-red-dark: #c0392b;
+            --spy-green: #2ecc71;
+            --spy-blue: #3498db;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Raleway', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--spy-black);
+            min-height: 100vh;
+            padding: 40px;
+            color: var(--spy-white);
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { 
+            text-align: center; 
+            margin-bottom: 10px; 
+            font-size: 2.5em;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+        }
+        .subtitle { text-align: center; color: var(--spy-gray); margin-bottom: 40px; }
+        
+        .workflow-section {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--spy-gold);
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+        }
+        
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .flow-box {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 12px;
+            padding: 15px;
+            min-width: 130px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .flow-box:hover {
+            border-color: var(--spy-gold);
+            background: rgba(201, 162, 39, 0.05);
+        }
+        
+        .flow-box.external { border-top: 3px solid #3498db; }
+        .flow-box.spy { border-top: 3px solid var(--spy-gold); }
+        .flow-box.customer { border-top: 3px solid #2ecc71; }
+        .flow-box.error { border-top: 3px solid var(--spy-red); background: rgba(231, 76, 60, 0.1); }
+        .flow-box.warehouse { border-top: 3px solid #2ecc71; }
+        .flow-box.portal { border-top: 3px solid #9b59b6; }
+        
+        .flow-box-icon { font-size: 1.8em; margin-bottom: 8px; }
+        .flow-box-title { font-weight: 600; margin-bottom: 5px; color: var(--spy-white); font-size: 0.9em; }
+        .flow-box-desc { font-size: 0.75em; color: var(--spy-gray); }
+        
+        .arrow {
+            font-size: 1.5em;
+            color: var(--spy-gold);
+        }
+        .arrow.bidirectional { color: var(--spy-blue); }
+        .arrow.error { color: var(--spy-red); }
+        
+        .doc-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .doc-card {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 10px;
+            padding: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .doc-card:hover {
+            border-color: var(--spy-gold);
+        }
+        .doc-card.import { border-left: 3px solid #3498db; }
+        .doc-card.export { border-left: 3px solid #2ecc71; }
+        .doc-card.ack { border-left: 3px solid #9b59b6; }
+        
+        .doc-card-title { 
+            font-weight: 600; 
+            margin-bottom: 8px; 
+            color: var(--spy-gold);
+        }
+        .doc-card-full { font-size: 0.8em; color: var(--spy-gray); margin-bottom: 8px; }
+        .doc-card-desc { font-size: 0.85em; color: var(--spy-gray-light); }
+        
+        .code-path {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.7em;
+            color: var(--spy-gold);
+            background: rgba(201, 162, 39, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 8px;
+            word-break: break-all;
+            white-space: normal;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+        .legend-color.external { background: #3498db; }
+        .legend-color.spy { background: var(--spy-gold); }
+        .legend-color.customer { background: #2ecc71; }
+        .legend-color.error { background: var(--spy-red); }
+        .legend-color.ack { background: #9b59b6; }
+        
+        .code-structure {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.85em;
+            line-height: 1.8;
+            background: var(--spy-dark);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--spy-gray-dark);
+        }
+        .code-structure .folder { color: var(--spy-gold); }
+        .code-structure .comment { color: var(--spy-gray); }
+        
+        .flow-label {
+            text-align: center;
+            font-size: 0.85em;
+            color: var(--spy-gray);
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .scenario-card {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .scenario-card.error { border-left: 3px solid var(--spy-red); }
+        .scenario-card.warning { border-left: 3px solid #f39c12; }
+        .scenario-card.success { border-left: 3px solid var(--spy-green); }
+        
+        .scenario-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--spy-white);
+        }
+        .scenario-desc {
+            font-size: 0.9em;
+            color: var(--spy-gray-light);
+            line-height: 1.6;
+        }
+        
+        .error-list {
+            list-style: none;
+            padding: 0;
+        }
+        .error-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--spy-gray-dark);
+            font-size: 0.9em;
+        }
+        .error-list li:last-child { border-bottom: none; }
+        .error-list .error-code { color: var(--spy-red); font-family: monospace; }
+        .error-list .error-desc { color: var(--spy-gray-light); }
+        
+        .link-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .link-card {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 10px;
+            padding: 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .link-card:hover {
+            border-color: var(--spy-gold);
+            background: rgba(201, 162, 39, 0.05);
+        }
+        .link-card-title {
+            color: var(--spy-gold);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .link-card-desc {
+            color: var(--spy-gray-light);
+            font-size: 0.85em;
+        }
+        
+        .footer-text {
+            text-align: center;
+            color: var(--spy-gray);
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+        .footer-text span { color: var(--spy-gold); }
+        
+        .info-box {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+        .info-box.warning {
+            background: rgba(243, 156, 18, 0.1);
+            border-color: rgba(243, 156, 18, 0.3);
+        }
+        .info-box.success {
+            background: rgba(46, 204, 113, 0.1);
+            border-color: rgba(46, 204, 113, 0.3);
+        }
+        
+        /* Returns-specific styles */
+        .overview-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .overview-table th {
+            background: var(--spy-dark);
+            color: var(--spy-gold);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--spy-gold);
+            font-size: 0.9em;
+        }
+        .overview-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--spy-gray-dark);
+            font-size: 0.85em;
+            color: var(--spy-gray-light);
+        }
+        .overview-table tr:hover td {
+            background: rgba(201, 162, 39, 0.05);
+        }
+        
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .portal-card {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .portal-card:hover {
+            border-color: #9b59b6;
+            background: rgba(155, 89, 182, 0.05);
+        }
+        .portal-card-name {
+            font-weight: 600;
+            color: var(--spy-white);
+            margin-bottom: 5px;
+        }
+        .portal-card-desc {
+            font-size: 0.75em;
+            color: var(--spy-gray);
+        }
+        
+        .status-flow {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+        .status-badge {
+            background: var(--spy-dark);
+            border: 1px solid var(--spy-gray-dark);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.8em;
+            color: var(--spy-gray-light);
+            transition: all 0.3s ease;
+        }
+        .status-badge:hover { border-color: var(--spy-gold); }
+        .status-badge.active { border-color: var(--spy-green); color: var(--spy-green); }
+        .status-badge.warning { border-color: #f39c12; color: #f39c12; }
+        .status-badge.error { border-color: var(--spy-red); color: var(--spy-red); }
+        .status-arrow { color: var(--spy-gray); font-size: 0.9em; }
+    </style>
+</head>
+<body style="opacity:0;transition:opacity .15s">
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const Arrow = ({ direction = "right", error = false }) => {
+            const symbols = { right: "→", left: "←", both: "↔" };
+            return <span className={`arrow ${direction === 'both' ? 'bidirectional' : ''} ${error ? 'error' : ''}`}>{symbols[direction]}</span>;
+        };
+        
+        const FlowBox = ({ icon, title, desc, type }) => (
+            <div className={`flow-box ${type}`}>
+                <div className="flow-box-icon">{icon}</div>
+                <div className="flow-box-title">{title}</div>
+                <div className="flow-box-desc">{desc}</div>
+            </div>
+        );
+        
+        const DocCard = ({ code, fullName, desc, direction, path }) => (
+            <div className={`doc-card ${direction}`}>
+                <div className="doc-card-title">{code}</div>
+                <div className="doc-card-full">{fullName}</div>
+                <div className="doc-card-desc">{desc}</div>
+                {path && <div className="code-path">{path}</div>}
+            </div>
+        );
+        
+        const ScenarioCard = ({ title, desc, type }) => (
+            <div className={`scenario-card ${type}`}>
+                <div className="scenario-title">{title}</div>
+                <div className="scenario-desc">{desc}</div>
+            </div>
+        );
+        
+        const ReturnsWorkflow = ({ t = (k) => k, locale = 'da' }) => {
+            return (
+                <div className="container">
+                    <h1>{t("Returneringsflow i SPY")}</h1>
+                    <p className="subtitle">{t("Sådan håndterer SPY returvarer – fra kunde til kreditnota")}</p>
+                    
+                    {/* LEGEND */}
+                    <div className="legend">
+                        <div className="legend-item">
+                            <div className="legend-color external"></div>
+                            <span>{t("Shopify")}</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color spy"></div>
+                            <span>{t("SPY System")}</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color customer"></div>
+                            <span>{t("Eksternt lager")}</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color ack"></div>
+                            <span>{t("Returportal")}</span>
+                        </div>
+                        <div className="legend-item">
+                            <div className="legend-color error"></div>
+                            <span>{t("Fejl / afvigelse")}</span>
+                        </div>
+                    </div>
+                    
+                    {/* SHOPIFY B2C RETURFLOW */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">{t("🛒 Shopify B2C Returflow")}</h2>
+                        <p className="flow-label">{t("Kunden returnerer via webshoppen – SPY henter alt fra Shopify")}</p>
+                        
+                        <div className="flow-container">
+                            <FlowBox icon="👤" title={t("Kunde")} desc={t("Vil returnere en vare")} type="external" />
+                            <Arrow />
+                            <FlowBox icon="🔄" title={t("Returportal")} desc={t("ReturnGo, Loop, Returnless m.fl.")} type="portal" />
+                            <Arrow />
+                            <FlowBox icon="🛍️" title="Shopify" desc={t("Opretter return på ordren")} type="external" />
+                            <Arrow />
+                            <FlowBox icon="⚡" title="SPY" desc={t("Henter via GraphQL API")} type="spy" />
+                            <Arrow />
+                            <FlowBox icon="📋" title={t("Claim")} desc={t("Reklamation oprettes")} type="spy" />
+                            <Arrow />
+                            <FlowBox icon="💰" title={t("Afslutning")} desc={t("Refusion, gavekort eller ombytning")} type="spy" />
+                        </div>
+                        
+                        <div className="info-box" style={{marginTop: '20px'}}>
+                            <strong>{t("💡 Vigtigt:")}</strong> {t("SPY integrerer ikke direkte med returportaler. Alle portaler (ReturnGo, Returnless, Loop osv.) opretter returneringen i Shopify – og SPY henter den derfra. Det betyder, at alle Shopify-kompatible returportaler virker automatisk med SPY.")}
+                        </div>
+                        
+                        <h3 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>{t("To måder at modtage returvarer")}</h3>
+                        
+                        <div className="scenario-grid">
+                            <ScenarioCard
+                                title={t("📱 Scanning på eget lager")}
+                                desc={t("Når varen ankommer, scanner lagermedarbejderen den ind. SPY beder om returtype, returårsag og kommentar. Claim oprettes og bekræftes med det samme. Nye labels kan printes automatisk.")}
+                                type="success"
+                            />
+                            <ScenarioCard
+                                title={t("🏭 Automatisk fra eksternt lager")}
+                                desc={t("Hvis varerne returneres til et eksternt lager (f.eks. Ongoing), får SPY besked automatisk. SPY matcher de modtagne varer mod returneringen og opretter en Claim.")}
+                                type="success"
+                            />
+                        </div>
+                        
+                        <h3 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>{t("Hvad sker der med pengene?")}</h3>
+                        
+                        <div className="scenario-grid">
+                            <ScenarioCard
+                                title={t("💳 Refusion")}
+                                desc={t("Kreditnota oprettes automatisk. Fragtomkostninger refunderes kun hvis alle varer er returneret.")}
+                                type="success"
+                            />
+                            <ScenarioCard
+                                title={t("🎁 Gavekort")}
+                                desc={t("Hvis kunden betalte med gavekort, håndterer SPY det automatisk – beløbet trækkes fra kreditnotaen.")}
+                                type="success"
+                            />
+                            <ScenarioCard
+                                title={t("🔄 Ombytning")}
+                                desc={t("Ved exchange-ordrer opdaterer SPY gavekortstatus på den nye ordre automatisk.")}
+                                type="success"
+                            />
+                        </div>
+                    </div>
+                    
+                    {/* ONGOING WMS RETURFLOW */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">{t("🏭 Ongoing WMS Returflow")}</h2>
+                        <p className="flow-label">{t("Eksternt lager modtager returvarer og rapporterer til SPY")}</p>
+                        
+                        <h3 style={{marginBottom: '15px', color: '#2ecc71', fontSize: '1.1em'}}>{t("B2B-returneringer (fra forhandlere)")}</h3>
+                        <div className="flow-container">
+                            <FlowBox icon="🏢" title="SPY" desc={t("Opretter returordre")} type="spy" />
+                            <Arrow />
+                            <FlowBox icon="📤" title={t("Returordre")} desc={t("Sendes til Ongoing")} type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🏭" title="Ongoing" desc={t("Modtager pakken")} type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="📊" title={t("Status")} desc={t("Rapporterer modtagelse")} type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="✅" title="SPY" desc={t("Claim bekræftes")} type="spy" />
+                        </div>
+                        
+                        <h3 style={{marginTop: '25px', marginBottom: '15px', color: '#3498db', fontSize: '1.1em'}}>{t("B2C-returneringer (fra webshop-kunder)")}</h3>
+                        <div className="flow-container">
+                            <FlowBox icon="🛍️" title="Shopify" desc={t("Return oprettes")} type="external" />
+                            <Arrow />
+                            <FlowBox icon="🏢" title="SPY" desc={t("Sender til lager")} type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🏭" title="Ongoing" desc={t("Shop Return Purchase Order")} type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="📊" title={t("Status")} desc={t("Varer modtaget")} type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="✅" title="SPY" desc={t("Claim + kreditnota")} type="spy" />
+                        </div>
+                        
+                        <h3 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>{t("Statustrin i Ongoing")}</h3>
+                        <div className="status-flow">
+                            <span className="status-badge">{t("Notified (200)")}</span>
+                            <span className="status-arrow">→</span>
+                            <span className="status-badge">{t("Arrival (300)")}</span>
+                            <span className="status-arrow">→</span>
+                            <span className="status-badge active">{t("Returned (500)")}</span>
+                        </div>
+                        <div className="status-flow" style={{marginTop: '5px'}}>
+                            <span style={{color: 'var(--spy-gray)', fontSize: '0.8em', marginRight: '10px'}}>{t("Eller:")}</span>
+                            <span className="status-badge warning">{t("Deviation (400)")}</span>
+                            <span className="status-arrow">→</span>
+                            <span className="status-badge error">{t("Fejlhåndtering")}</span>
+                        </div>
+                        <div className="status-flow" style={{marginTop: '5px'}}>
+                            <span style={{color: 'var(--spy-gray)', fontSize: '0.8em', marginRight: '10px'}}>{t("Eller:")}</span>
+                            <span className="status-badge error">{t("Shredded (1000)")}</span>
+                            <span className="status-arrow">→</span>
+                            <span className="status-badge error">{t("Claim annulleres")}</span>
+                        </div>
+                        
+                        <div className="info-box" style={{marginTop: '20px'}}>
+                            <strong>{t("💡 Webhooks:")}</strong> {t("Ongoing kan også sende webhooks til SPY, når en enkelt vare returneres. SPY finder den rigtige leverance, opretter eller genbruger en åben Claim, og tilføjer varen. Returårsagen mappes automatisk via returnCauseCode.")}
+                        </div>
+                    </div>
+                    
+                    {/* NEMEDI / SYSTEMTRANSPORT RETURFLOW */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">{t("📄 NemEDI / SystemTransport Returflow")}</h2>
+                        <p className="flow-label">{t("Returneringer via EDI-dokumenter eller XML-filer")}</p>
+                        
+                        <h3 style={{marginBottom: '15px', color: '#9b59b6', fontSize: '1.1em'}}>{t("NemEDI (EDI-dokumenter)")}</h3>
+                        <div className="flow-container">
+                            <FlowBox icon="🏢" title="SPY" desc={t("Claim oprettes")} type="spy" />
+                            <Arrow />
+                            <FlowBox icon="📤" title="ORDERS" desc={t("Returordre via EDI")} type="spy" />
+                            <Arrow />
+                            <FlowBox icon="📋" title="PRICAT" desc={t("Produktinfo sendes")} type="spy" />
+                            <Arrow />
+                            <FlowBox icon="🏭" title={t("Lager")} desc={t("Modtager og behandler")} type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="📄" title="RECADV" desc={t("Modtagelseskvittering")} type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="✅" title="SPY" desc={t("ReturnConfirmation")} type="spy" />
+                        </div>
+                        
+                        <h3 style={{marginTop: '25px', marginBottom: '15px', color: '#2ecc71', fontSize: '1.1em'}}>{t("SystemTransport (XML-filer)")}</h3>
+                        <div className="flow-container">
+                            <FlowBox icon="🏭" title="SystemTransport" desc={t("Modtager returvarer")} type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="📄" title="XML" desc={t("ReturnConfirmation-fil")} type="warehouse" />
+                            <Arrow />
+                            <FlowBox icon="🏢" title="SPY" desc={t("Læser filen via SFTP")} type="spy" />
+                            <Arrow />
+                            <FlowBox icon="📋" title={t("Claim")} desc={t("Oprettes automatisk")} type="spy" />
+                            <Arrow />
+                            <FlowBox icon="📧" title={t("Email")} desc={t("Brandet notificeres")} type="spy" />
+                        </div>
+                        
+                        <div className="info-box" style={{marginTop: '20px'}}>
+                            <strong>{t("📝 Disposition:")}</strong> {t("SystemTransport angiver for hver vare, hvad der skal ske: Kode 1 = Retur til lager (varen er OK og kan sælges igen). Kode 2 = Kasseret (varen er defekt og kan ikke sælges).")}
+                        </div>
+                    </div>
+                    
+                    {/* CLAIMS */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">{t("📋 Claims (reklamationer)")}</h2>
+                        <p style={{color: 'var(--spy-gray)', marginBottom: '20px'}}>
+                            {t("Alle returneringer ender som en Claim i SPY – det centrale dokument der holder styr på hvad der er returneret, hvorfor, og hvad kunden skal have tilbage.")}
+                        </p>
+                        
+                        <div className="scenario-grid">
+                            <ScenarioCard
+                                title={t("🤖 Automatisk oprettet (Shopify)")}
+                                desc={t("Når en Shopify-return importeres og varer scannes ind eller modtages fra eksternt lager, opretter SPY en Claim automatisk med de korrekte linjer og beløb.")}
+                                type="success"
+                            />
+                            <ScenarioCard
+                                title={t("🤖 Automatisk oprettet (Ongoing/SystemTransport)")}
+                                desc={t("Når et eksternt lager rapporterer modtagne returvarer, opretter SPY en Claim automatisk. Returårsagen mappes fra lagerets kode til SPY's Claim Causes.")}
+                                type="success"
+                            />
+                            <ScenarioCard
+                                title={t("✍️ Manuelt oprettet")}
+                                desc={t("Support- eller lagermedarbejdere kan også oprette Claims manuelt i SPY – f.eks. ved telefonhenvendelser eller returneringer der ikke kommer via de automatiske kanaler.")}
+                                type="warning"
+                            />
+                        </div>
+                        
+                        <h3 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>{t("ClaimConfirmer – automatisk afstemning")}</h3>
+                        <p style={{color: 'var(--spy-gray)', marginBottom: '15px'}}>
+                            {t("Når et eksternt lager rapporterer hvad de faktisk har modtaget, sammenligner SPY det med hvad der var forventet:")}
+                        </p>
+                        
+                        <div className="scenario-grid">
+                            <ScenarioCard
+                                title={t("✅ Antal matcher")}
+                                desc={t("Alt stemmer – Claim bekræftes automatisk, og kreditnota kan oprettes.")}
+                                type="success"
+                            />
+                            <ScenarioCard
+                                title={t("⚠️ Antal matcher ikke, men kan rettes")}
+                                desc={t("SPY justerer automatisk (f.eks. hvis kun én farvevariant er berørt) og bekræfter. Brandet får en email med ændringerne.")}
+                                type="warning"
+                            />
+                            <ScenarioCard
+                                title={t("❌ Antal matcher ikke – kan IKKE rettes")}
+                                desc={t("SPY sender en fejl-email til brandet, som selv skal rette og bekræfte Claims manuelt.")}
+                                type="error"
+                            />
+                        </div>
+                    </div>
+                    
+                    {/* OVERBLIKSTABEL */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">{t("📊 Overblikstabel")}</h2>
+                        <p style={{color: 'var(--spy-gray)', marginBottom: '10px'}}>
+                            {t("Alle returkanaler samlet i ét overblik")}
+                        </p>
+                        
+                        <table className="overview-table">
+                            <thead>
+                                <tr>
+                                    <th>{t("Kanal")}</th>
+                                    <th>{t("Type")}</th>
+                                    <th>{t("Sådan virker det")}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Shopify</strong></td>
+                                    <td>{t("B2C")}</td>
+                                    <td>{t("Kunden returnerer via webshoppen. SPY henter returdata fra Shopify via GraphQL API. Varer scannes ind eller modtages fra eksternt lager.")}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ongoing (B2B)</strong></td>
+                                    <td>{t("B2B")}</td>
+                                    <td>{t("SPY sender en returordre til Ongoing. Lageret modtager varer og rapporterer status tilbage. SPY bekræfter eller afviser Claim baseret på modtagelsen.")}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ongoing + Shopify</strong></td>
+                                    <td>{t("B2C")}</td>
+                                    <td>{t("Shopify-returneringer der sendes til eksternt lager via Ongoing som 'Shop Return Purchase Order'. Lageret rapporterer modtagelse, SPY matcher og opretter kreditnota.")}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>NemEDI / SystemTransport</strong></td>
+                                    <td>{t("B2B")}</td>
+                                    <td>{t("Returneringer via EDI-dokumenter (ORDERS + PRICAT + RECADV) eller XML-filer. Lageret sender en ReturnConfirmation, og SPY opretter Claim automatisk.")}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{t("Return to Stock")}</strong></td>
+                                    <td>{t("Konsignation")}</td>
+                                    <td>{t("Konsignationsvarer returneres til brandets lager. Kræver returårsag og finansdato. Kan eksporteres direkte til eksternt lager.")}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    {/* RETURPORTAL-KOMPATIBILITET */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">{t("🔌 Returportal-kompatibilitet")}</h2>
+                        <p style={{color: 'var(--spy-gray)', marginBottom: '10px'}}>
+                            {t("Disse returportaler virker med SPY via Shopify – ingen ekstra opsætning nødvendig")}
+                        </p>
+                        
+                        <div className="portal-grid">
+                            <div className="portal-card">
+                                <div className="portal-card-name">ReturnGo</div>
+                                <div className="portal-card-desc">{t("Shopify-app")}</div>
+                            </div>
+                            <div className="portal-card">
+                                <div className="portal-card-name">Loop Returns</div>
+                                <div className="portal-card-desc">{t("Shopify-app")}</div>
+                            </div>
+                            <div className="portal-card">
+                                <div className="portal-card-name">Returnless</div>
+                                <div className="portal-card-desc">{t("Shopify-app")}</div>
+                            </div>
+                            <div className="portal-card">
+                                <div className="portal-card-name">Narvar</div>
+                                <div className="portal-card-desc">{t("Shopify-app")}</div>
+                            </div>
+                            <div className="portal-card">
+                                <div className="portal-card-name">Reclaimit</div>
+                                <div className="portal-card-desc">{t("Shopify-app")}</div>
+                            </div>
+                            <div className="portal-card">
+                                <div className="portal-card-name">AfterShip Returns</div>
+                                <div className="portal-card-desc">{t("Shopify-app")}</div>
+                            </div>
+                            <div className="portal-card">
+                                <div className="portal-card-name">{t("Shopify Returns")}</div>
+                                <div className="portal-card-desc">{t("Indbygget i Shopify")}</div>
+                            </div>
+                            <div className="portal-card">
+                                <div className="portal-card-name">{t("Alle andre")}</div>
+                                <div className="portal-card-desc">{t("Via Shopify Return API")}</div>
+                            </div>
+                        </div>
+                        
+                        <div className="info-box success" style={{marginTop: '20px'}}>
+                            <strong>{t("✨ SPY behøver ingen opsætning")}</strong> – {t("det virker automatisk. Alle returportaler der opretter en return i Shopify, vil automatisk blive fanget af SPY. Brandet vælger selv hvilken returportal de vil bruge – SPY er klar fra dag ét.")}
+                        </div>
+                    </div>
+                    
+                    <p className="footer-text">
+                        {t("Genereret af")} <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString('da-DK')}
+                    </p>
+                </div>
+            );
+        };
+        
+        // Initialize i18n and render with translations
+        (async function() {
+            const { locale, t } = await window.i18n.initI18n('returns-workflow');
+            ReactDOM.render(<ReturnsWorkflow t={t} locale={locale} />, document.getElementById('root'));
+            document.body.style.opacity = '1';
+            window.i18n.autoApplyTranslations(200);
+        })();
+    </script>
+</body>
+</html>
