@@ -73,13 +73,13 @@ export interface VatRepStrings {
 
 const da: VatRepStrings = {
   s1Title: 'Hvad er momsrepræsentation?',
-  s1Intro: 'Momsrepræsentation (VAT Representation) betyder, at en udenlandsk virksomhed udpeger en lokal fiskal repræsentant i et land uden for EU – f.eks. Norge eller UK – til at håndtere momsregistrering, -afregning og toldangivelser på virksomhedens vegne. For fashion/tekstilbrands er det typisk relevant ved salg og eksport til kunder i Norge eller UK.',
-  s1Def1Title: 'Fiskal repræsentant',
+  s1Intro: 'Momsrepræsentation (VAT Representation) betyder, at en udenlandsk virksomhed udpeger en lokal momsrepræsentant i et land uden for EU – f.eks. Norge eller UK – til at håndtere momsregistrering, -afregning og toldangivelser på virksomhedens vegne. For fashion/tekstilbrands er det typisk relevant ved salg og eksport til kunder i Norge eller UK.',
+  s1Def1Title: 'Lokal momsrepræsentant',
   s1Def1Desc: 'En lokal virksomhed eller rådgiver der er momsregistreret i det pågældende land (f.eks. Norge eller UK) og optræder på brandets vegne over for de lokale skattemyndigheder.',
   s1Def2Title: 'Momsregistrering',
   s1Def2Desc: 'Brandet får et lokalt momsnummer (VAT-nummer) i destinationslandet via repræsentanten – uden at etablere en fysisk tilstedeværelse.',
   s1Def3Title: 'Importmoms',
-  s1Def3Desc: 'Ved import til lande uden for EU (f.eks. Norge, UK) skal der betales lokal importmoms. Med en fiskal repræsentant kan denne moms fratrækkes direkte, så den reelt bliver 0.',
+  s1Def3Desc: 'Ved import til lande uden for EU (f.eks. Norge, UK) skal der betales lokal importmoms. Med en lokal momsrepræsentant kan denne moms fratrækkes direkte, så den reelt bliver 0.',
 
   s2Title: 'Hvorfor bruge momsrepræsentation?',
   s2Intro: 'For fashion-brands der vil sælge til B2B-kunder i lande uden for EU – som Norge eller UK – giver momsrepræsentation en række fordele.',
@@ -115,7 +115,7 @@ const da: VatRepStrings = {
   s4Intro: 'Her er den typiske rejse for et fashion-brand der vil sætte momsrepræsentation op i et land uden for EU som Norge eller UK.',
   s4Step1Title: '1. Beslutning & analyse',
   s4Step1Desc: 'Vurder om der er tilstrækkeligt salgsvolumen i mållandet. Typisk relevant fra >€50.000/år i omsætning til Norge eller UK.',
-  s4Step2Title: '2. Vælg fiskal repræsentant',
+  s4Step2Title: '2. Vælg lokal momsrepræsentant',
   s4Step2Desc: 'Find en pålidelig lokal partner i Norge eller UK (revisor/speditor). De skal kunne håndtere momsregistrering, periodisk indberetning og toldklarering.',
   s4Step3Title: '3. Momsregistrering',
   s4Step3Desc: 'Repræsentanten ansøger om lokalt momsnummer (MVA-nummer i Norge, VAT-nummer i UK). Kræver typisk: Vedtægter, CVR-bevis, fuldmagt. Tager 2-6 uger.',
