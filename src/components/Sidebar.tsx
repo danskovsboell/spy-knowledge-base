@@ -38,7 +38,7 @@ export default function Sidebar({ lang, isOpen, onClose }: SidebarProps) {
         { href: `/${lang}/dedication`, label: t.dedicationTitle, icon: '🎯' },
         { href: `/${lang}/triangular-trade`, label: t.triangularTradeTitle, icon: '🔺' },
         { href: `/${lang}/vat-representation`, label: t.vatRepresentationTitle, icon: '🏛️' },
-        { href: `/${lang}/returns`, label: lang === 'nl' ? 'Retouren' : lang === 'en' ? 'Returns' : 'Returneringer', icon: '📦↩️' },
+        { href: `/${lang}/returns`, label: lang === 'nl' ? 'Retouren' : lang === 'en' ? 'Returns' : 'Returneringer', icon: '↩️' },
       ],
     },
   ]

@@ -265,6 +265,27 @@ const FALLBACK_ARTICLES: Record<string, Omit<ArticleData, 'title' | 'description
       nl: 'A-Z gids voor btw-vertegenwoordiging – fiscaal vertegenwoordiger, douane, instelling en dagelijkse workflow in SPY.',
     },
   },
+  'returns': {
+    slug: 'returns',
+    category: 'Feature',
+    icon: '↩️',
+    imageUrl: null,
+    badge: 'Interaktiv guide',
+    badgeColor: '#e67e22',
+    sortOrder: 8,
+    content: null,
+    contentType: 'react',
+    titles: {
+      da: 'Returneringer',
+      en: 'Returns',
+      nl: 'Retouren',
+    },
+    descriptions: {
+      da: 'Komplet guide til returhåndtering i SPY – kreditnotaer, lagermodtagelse, Ongoing WMS og Returnflows/Shopify-integration.',
+      en: 'Complete guide to returns handling in SPY – credit notes, stock receiving, Ongoing WMS and Returnflows/Shopify integration.',
+      nl: 'Complete gids voor retourafhandeling in SPY – creditnota\'s, voorraadverwerking, Ongoing WMS en Returnflows/Shopify-integratie.',
+    },
+  },
 }
 
 // Slug to page route mapping
@@ -277,6 +298,7 @@ const SLUG_TO_ROUTE: Record<string, string> = {
   'dedication': 'dedication',
   'triangular-trade': 'triangular-trade',
   'vat-representation': 'vat-representation',
+  'returns': 'returns',
 }
 
 const ROUTE_TO_SLUG: Record<string, string> = {
@@ -288,6 +310,7 @@ const ROUTE_TO_SLUG: Record<string, string> = {
   'dedication': 'dedication',
   'triangular-trade': 'triangular-trade',
   'vat-representation': 'vat-representation',
+  'returns': 'returns',
 }
 
 export function getRouteForSlug(slug: string): string {
