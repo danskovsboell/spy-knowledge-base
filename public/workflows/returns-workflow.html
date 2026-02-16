@@ -428,7 +428,7 @@
                         <div className="flow-container">
                             <FlowBox icon="👤" title={t("Kunde")} desc={t("Vil returnere en vare")} type="external" />
                             <Arrow />
-                            <FlowBox icon="🔄" title={t("Returportal")} desc={t("ReturnGo, Loop, Returnless m.fl.")} type="portal" />
+                            <FlowBox icon="🔄" title={t("Returportal")} desc={t("Returnflows, ReturnGo, Loop m.fl.")} type="portal" />
                             <Arrow />
                             <FlowBox icon="🛍️" title="Shopify" desc={t("Opretter return på ordren")} type="external" />
                             <Arrow />
@@ -440,7 +440,7 @@
                         </div>
                         
                         <div className="info-box" style={{marginTop: '20px'}}>
-                            <strong>{t("💡 Vigtigt:")}</strong> {t("SPY integrerer ikke direkte med returportaler. Alle portaler (ReturnGo, Returnless, Loop osv.) opretter returneringen i Shopify – og SPY henter den derfra. Det betyder, at alle Shopify-kompatible returportaler virker automatisk med SPY.")}
+                            <strong>{t("💡 Vigtigt:")}</strong> {t("SPY integrerer ikke direkte med de fleste returportaler. Portaler som ReturnGo, Returnless, Loop osv. opretter returneringen i Shopify – og SPY henter den derfra. Det betyder, at alle Shopify-kompatible returportaler virker automatisk med SPY. For Returnflows-appen har SPY en særlig integration, der også henter fragtrefusionsdata via metafields.")}
                         </div>
                         
                         <h3 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>{t("To måder at modtage returvarer")}</h3>
@@ -570,7 +570,7 @@
                         </div>
                         
                         <div className="info-box" style={{marginTop: '20px'}}>
-                            <strong>{t("📝 Disposition:")}</strong> {t("SystemTransport angiver for hver vare, hvad der skal ske: Kode 1 = Retur til lager (varen er OK og kan sælges igen). Kode 2 = Kasseret (varen er defekt og kan ikke sælges).")}
+                            <strong>{t("📝 Disposition:")}</strong> {t("SystemTransport angiver for hver vare, hvad der skal ske: Kode 1 = Retur til lager (varen er OK og lægges tilbage på lager som retur). Kode 2 = Kasseret/skrottet (varen registreres som reklamation i SPY).")}
                         </div>
                     </div>
                     
@@ -699,6 +699,10 @@
                             <div className="portal-card">
                                 <div className="portal-card-name">AfterShip Returns</div>
                                 <div className="portal-card-desc">{t("Shopify-app")}</div>
+                            </div>
+                            <div className="portal-card" style={{borderColor: 'var(--spy-gold)'}}>
+                                <div className="portal-card-name">Returnflows</div>
+                                <div className="portal-card-desc">{t("Shopify-app – SPY henter fragtrefusion via metafields")}</div>
                             </div>
                             <div className="portal-card">
                                 <div className="portal-card-name">{t("Shopify Returns")}</div>
