@@ -340,6 +340,61 @@
             font-size: 0.9em;
         }
         .footer-text span { color: var(--spy-gold); }
+
+        /* Support/Technical Toggle */
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 30px;
+        }
+        .view-toggle button {
+            padding: 10px 28px;
+            border: 1px solid var(--spy-gray-dark);
+            background: var(--spy-dark);
+            color: var(--spy-gray);
+            cursor: pointer;
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .view-toggle button:first-child {
+            border-radius: 20px 0 0 20px;
+            border-right: none;
+        }
+        .view-toggle button:last-child {
+            border-radius: 0 20px 20px 0;
+        }
+        .view-toggle button.active {
+            background: var(--spy-gold);
+            border-color: var(--spy-gold);
+            color: var(--spy-black);
+            font-weight: 600;
+        }
+        .view-toggle button:hover:not(.active) {
+            border-color: var(--spy-gold);
+            color: var(--spy-white);
+        }
+        .view-mode-support .tech-only {
+            display: none !important;
+        }
+        .tech-hidden-note {
+            display: none;
+            text-align: center;
+            padding: 12px 20px;
+            margin-bottom: 30px;
+            background: rgba(201, 162, 39, 0.08);
+            border: 1px dashed var(--spy-gray-dark);
+            border-radius: 8px;
+            color: var(--spy-gray);
+            font-size: 0.85em;
+            font-style: italic;
+        }
+        .view-mode-support .tech-hidden-note {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -372,11 +427,31 @@
             </div>
         );
         
+        
+        const ViewToggle = ({ mode, setMode, t }) => (
+            <div className="view-toggle">
+                <button className={mode === 'support' ? 'active' : ''} onClick={() => { setMode('support'); try { localStorage.setItem('kb-view-mode', 'support'); } catch(e) {} }}>
+                    {t("Support")}
+                </button>
+                <button className={mode === 'tech' ? 'active' : ''} onClick={() => { setMode('tech'); try { localStorage.setItem('kb-view-mode', 'tech'); } catch(e) {} }}>
+                    {t("Technisch")}
+                </button>
+            </div>
+        );
+        
+        const TechNote = ({ t }) => (
+            <div className="tech-hidden-note">
+                {t("Technische details verborgen – schakel naar Technisch voor meer info")}
+            </div>
+        );
+
         const OngoingWorkflow = ({ t = (k) => k, locale = 'da' }) => {
             return (
                 <div className="container">
                     <h1>{t("Ongoing WMS Integration Workflow")}</h1>
                     <p className="subtitle">{t("Visualisering af SPY's integration med Ongoing Warehouse Management System")}</p>
+                    
+                    <ViewToggle mode={viewMode} setMode={setViewMode} t={t} />
                     
                     <div className="legend">
                         <div className="legend-item">
@@ -627,7 +702,7 @@
                     </div>
                     
                     {/* ============ TEKNISK OVERSIGT ============ */}
-                    <div className="workflow-section">
+                    <div className="workflow-section tech-only">
                         <h2 className="section-title">{t("⚙️ Teknisk oversigt")}</h2>
                         <div className="info-grid">
                             <div className="info-card">
@@ -704,7 +779,7 @@
                     </div>
                     
                     {/* ============ STATUS GRUPPER / RANGES ============ */}
-                    <div className="workflow-section">
+                    <div className="workflow-section tech-only">
                         <h2 className="section-title">{t("📊 Status-grupper / Ranges — Sådan virker Ongoing statuses")}</h2>
                         
                         <div className="range-important-note">
@@ -872,7 +947,7 @@
                     </div>
                     
                     {/* ============ KODESTRUKTUR ============ */}
-                    <div className="workflow-section">
+                    <div className="workflow-section tech-only">
                         <h2 className="section-title">{t("🗂️ Kodestruktur")}</h2>
                         <div className="code-structure">
                             <span className="folder">class/Integration/ExternalWarehouse/Ongoing/</span><br/>
