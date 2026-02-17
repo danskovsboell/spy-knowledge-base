@@ -1,6 +1,7 @@
 import { type Locale } from '../../../lib/i18n'
 import { getTranslations } from '../../../lib/translations'
 import { getArticle } from '../../../lib/articles'
+import ContentToggle from '../../../components/ContentToggle'
 
 interface PageProps {
   params: Promise<{ lang: string }>
@@ -22,10 +23,7 @@ export default async function LectorPage({ params }: PageProps) {
         <p>{article?.description || t.lectorPageDesc}</p>
       </div>
       {article?.content ? (
-        <div 
-          className="article-content"
-          dangerouslySetInnerHTML={{ __html: article.content }}
-        />
+        <ContentToggle content={article.content} />
       ) : (
         <div className="iframe-wrapper">
           <iframe
