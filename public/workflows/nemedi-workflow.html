@@ -372,6 +372,23 @@
                         </div>
                     </div>
                     
+                    {/* PURCHASE-MODUL EKSPORTFUNKTIONER */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">{t("📤 Eksportfunktioner i Purchase-modulet")}</h2>
+                        <p style={{color: 'var(--spy-gray)', marginBottom: '20px'}}>
+                            {t("Ud over de almindelige indkøbsdokumenter har Purchase-modulet to eksportfunktioner, som du finder under indkøbsordrer:")}
+                        </p>
+                        
+                        <div className="doc-types">
+                            <DocCard code={t("Export selected Pricat")} fullName="Price/Sales Catalogue" desc={t("Sender produktkataloger og prisinformation til dine kunder. Vælg de relevante indkøbsordrer og eksportér prisdata som en Pricat-besked via NemEDI.")} direction="export" />
+                            <DocCard code={t("Export selected RECADV")} fullName="Receiving Advice" desc={t("Sender modtagelseskvittering til leverandøren. Når du har modtaget varer på en indkøbsordre, kan du sende en RECADV der bekræfter hvad du har modtaget.")} direction="export" />
+                        </div>
+                        
+                        <div className="info-box" style={{marginTop: '20px'}}>
+                            <strong>{t("💡 Bemærk:")}</strong> {t("Begge funktioner ligger under Purchase-modulet (ikke under Sales). Du finder dem ved at markere en eller flere indkøbsordrer og vælge den relevante eksportfunktion.")}
+                        </div>
+                    </div>
+                    
                     {/* SALGSFLOW */}
                     <div className="workflow-section">
                         <h2 className="section-title">{t("💰 Salgsflow (Kunde køber fra SPY)")}</h2>
@@ -538,6 +555,7 @@
                             <DocCard code="DESADV" fullName="Despatch Advice" desc={t("Forsendelsesadvis til kunder - varer afsendt")} direction="export" path="class/EDI/NemEDI/.../Export/DESADV/"/>
                             <DocCard code="INVOIC" fullName="Invoice" desc={t("Salgsfakturaer til kunder")} direction="export" path="class/EDI/NemEDI/.../Export/INVOIC/"/>
                             <DocCard code="PRICAT" fullName="Price Catalogue" desc={t("Prisliste og produktkatalog til kunder")} direction="export" path="class/EDI/NemEDI/.../Export/PRICAT/"/>
+                            <DocCard code="RECADV" fullName="Receiving Advice" desc={t("Modtagelseskvittering til leverandør – sendes fra Purchase-modulet")} direction="export" path="class/EDI/NemEDI/.../Export/RECADV/"/>
                             <DocCard code="INVRPT" fullName="Inventory Report" desc={t("Lagerrapport til samarbejdspartnere")} direction="export" path="class/EDI/NemEDI/.../Export/INVRPT/"/>
                         </div>
                         
@@ -602,6 +620,7 @@
                             &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── DESADV/ <span className="comment">← {t("Forsendelsesadviser")}</span><br/>
                             &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── INVOIC/ <span className="comment">← {t("Salgsfakturaer")}</span><br/>
                             &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── PRICAT/ <span className="comment">← {t("Prislister")}</span><br/>
+                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── RECADV/ <span className="comment">← {t("Modtagelseskvitteringer (Purchase)")}</span><br/>
                             &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── INVRPT/ <span className="comment">← {t("Lagerrapporter")}</span><br/><br/>
                             <span className="folder">applications/Spy/Controller/Tools/NemEDI/</span><br/>
                             &nbsp;&nbsp;├── ReceivedFiles/ <span className="comment">← {t("Håndter modtagne filer")}</span><br/>

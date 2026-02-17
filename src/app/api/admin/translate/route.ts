@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerClient } from '@/lib/supabase'
-import { locales, Locale } from '@/lib/i18n'
+import { createServerClient } from '../../../../lib/supabase'
+import { locales, Locale } from '../../../../lib/i18n'
 import crypto from 'crypto'
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY

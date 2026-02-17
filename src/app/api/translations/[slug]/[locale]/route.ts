@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getWorkflowTranslations } from '@/lib/services/translation-service'
-import { isValidLocale, Locale } from '@/lib/i18n'
+import { getWorkflowTranslations } from '../../../../../lib/services/translation-service'
+import { isValidLocale, Locale } from '../../../../../lib/i18n'
 
 export async function GET(
   request: NextRequest,
