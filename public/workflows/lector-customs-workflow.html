@@ -342,6 +342,46 @@
             font-size: 0.85em;
         }
         .footer-text span { color: var(--spy-gold); }
+
+        /* Support/Technical Toggle */
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 30px;
+        }
+        .view-toggle button {
+            padding: 10px 28px;
+            border: 1px solid var(--spy-gray-dark);
+            background: var(--spy-dark);
+            color: var(--spy-gray);
+            cursor: pointer;
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .view-toggle button:first-child {
+            border-radius: 20px 0 0 20px;
+            border-right: none;
+        }
+        .view-toggle button:last-child {
+            border-radius: 0 20px 20px 0;
+        }
+        .view-toggle button.active {
+            background: var(--spy-gold);
+            border-color: var(--spy-gold);
+            color: var(--spy-black);
+            font-weight: 600;
+        }
+        .view-toggle button:hover:not(.active) {
+            border-color: var(--spy-gold);
+            color: var(--spy-white);
+        }
+        .tech-only.hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -366,10 +406,24 @@
         );
         
         const LectorWorkflow = ({ t = (k) => k, locale = 'da' }) => {
+            const [viewMode, setViewMode] = React.useState(() => {
+                try { return localStorage.getItem('kb-view-mode') || 'tech'; } catch(e) { return 'tech'; }
+            });
+            const techClass = viewMode === 'support' ? 'tech-only hidden' : 'tech-only';
             return (
                 <div className="container">
                     <h1>{t("🛃 Lector Told-Integration")}</h1>
                     <p className="subtitle">{t("Sådan fungerer toldoplag og Lector-integrationen i SPY")}</p>
+
+                    <div className="view-toggle">
+                        <button className={viewMode === 'support' ? 'active' : ''} onClick={() => { setViewMode('support'); try { localStorage.setItem('kb-view-mode', 'support'); } catch(e) {} }}>
+                            Support
+                        </button>
+                        <button className={viewMode === 'tech' ? 'active' : ''} onClick={() => { setViewMode('tech'); try { localStorage.setItem('kb-view-mode', 'tech'); } catch(e) {} }}>
+                            Technical
+                        </button>
+                    </div>
+
                     
                     <div className="key-concept">
                         <h3>{t("💡 Det vigtigste at forstå")}</h3>
@@ -420,7 +474,7 @@
                     </div>
                     
                     {/* TOVEJS KOMMUNIKATION */}
-                    <div className="workflow-section">
+                    <div className={`workflow-section ${techClass}`}>
                         <h2 className="section-title">{t("🔄 SPY ↔ Lector Kommunikation")}</h2>
                         <p className="section-subtitle">{t("Integrationen er tovejs – SPY sender data, og Lector svarer tilbage")}</p>
                         
@@ -465,7 +519,7 @@
                     </div>
                     
                     {/* STATUS-FLOW FOR EN BESKED */}
-                    <div className="workflow-section">
+                    <div className={`workflow-section ${techClass}`}>
                         <h2 className="section-title">{t("📊 Livscyklus for en Lector-besked")}</h2>
                         <p className="section-subtitle">{t("Sådan bevæger en besked sig gennem systemet")}</p>
                         
@@ -688,7 +742,7 @@
                     </div>
                     
                     {/* FEJLHÅNDTERING - NY SEKTION */}
-                    <div className="workflow-section">
+                    <div className={`workflow-section ${techClass}`}>
                         <h2 className="section-title">{t("⚠️ Fejlhåndtering")}</h2>
                         <p className="section-subtitle">{t("Hvad sker når noget går galt?")}</p>
                         

@@ -274,6 +274,46 @@
             background: rgba(243, 156, 18, 0.1);
             border-color: rgba(243, 156, 18, 0.3);
         }
+
+        /* Support/Technical Toggle */
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 30px;
+        }
+        .view-toggle button {
+            padding: 10px 28px;
+            border: 1px solid var(--spy-gray-dark);
+            background: var(--spy-dark);
+            color: var(--spy-gray);
+            cursor: pointer;
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .view-toggle button:first-child {
+            border-radius: 20px 0 0 20px;
+            border-right: none;
+        }
+        .view-toggle button:last-child {
+            border-radius: 0 20px 20px 0;
+        }
+        .view-toggle button.active {
+            background: var(--spy-gold);
+            border-color: var(--spy-gold);
+            color: var(--spy-black);
+            font-weight: 600;
+        }
+        .view-toggle button:hover:not(.active) {
+            border-color: var(--spy-gold);
+            color: var(--spy-white);
+        }
+        .tech-only.hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body style="opacity:0;transition:opacity .15s">
@@ -314,10 +354,24 @@
         );
         
         const NemEDIWorkflow = ({ t = (k) => k, locale = 'da' }) => {
+            const [viewMode, setViewMode] = React.useState(() => {
+                try { return localStorage.getItem('kb-view-mode') || 'tech'; } catch(e) { return 'tech'; }
+            });
+            const techClass = viewMode === 'support' ? 'tech-only hidden' : 'tech-only';
             return (
                 <div className="container">
                     <h1>{t("NemEDI Integration Workflow")}</h1>
                     <p className="subtitle">{t("Visualisering af SPY's EDI dokumentflow med NemEDI")}</p>
+
+                    <div className="view-toggle">
+                        <button className={viewMode === 'support' ? 'active' : ''} onClick={() => { setViewMode('support'); try { localStorage.setItem('kb-view-mode', 'support'); } catch(e) {} }}>
+                            Support
+                        </button>
+                        <button className={viewMode === 'tech' ? 'active' : ''} onClick={() => { setViewMode('tech'); try { localStorage.setItem('kb-view-mode', 'tech'); } catch(e) {} }}>
+                            Technical
+                        </button>
+                    </div>
+
                     
                     <div className="legend">
                         <div className="legend-item">
@@ -463,7 +517,7 @@
                     </div>
                     
                     {/* FEJLHÅNDTERING */}
-                    <div className="workflow-section">
+                    <div className={`workflow-section ${techClass}`}>
                         <h2 className="section-title">{t("🔧 Fejlhåndtering og Retry")}</h2>
                         
                         <div className="info-box">
@@ -571,7 +625,7 @@
                     </div>
                     
                     {/* API DOKUMENTATION */}
-                    <div className="workflow-section">
+                    <div className={`workflow-section ${techClass}`}>
                         <h2 className="section-title">{t("🔗 API-dokumentation og Ressourcer")}</h2>
                         
                         <div className="link-section">
@@ -583,7 +637,7 @@
                     </div>
                     
                     {/* KODESTRUKTUR */}
-                    <div className="workflow-section">
+                    <div className={`workflow-section ${techClass}`}>
                         <h2 className="section-title">{t("🗂️ Kodestruktur i SPY")}</h2>
                         <div className="code-structure">
                             <span className="folder">class/EDI/NemEDI/</span><br/>
