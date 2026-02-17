@@ -111,11 +111,20 @@ public/
 - Brug `git -c safe.directory=/home/clawdbot/dev/spy-knowledge-base` prefix
 - Commit message: beskriv hvad artiklen dækker
 
-### 5. Artikel-registrering i articles.ts (VIGTIG!)
-Ny artikel SKAL tilføjes i `src/lib/articles.ts`:
+### 5. Artikel-registrering – BÅDE articles.ts OG Supabase (KRITISK!)
+Ny artikel SKAL registreres **to steder**:
+
+**A) `src/lib/articles.ts`** (fallback/hardcoded):
 - Tilføj entry i `HARDCODED_ARTICLES` med slug, category, icon, titles, descriptions
 - Tilføj slug i `SLUG_TO_ROUTE` og `ROUTE_TO_SLUG` mappings
-- **Uden dette vises artiklen IKKE på startsiden** – kun i sidebar-menuen!
+
+**B) Supabase database** (`kb_articles` + `kb_translations`):
+- Opret artikel i `kb_articles` med slug, category, sort_order, published=true
+- Opret oversættelser i `kb_translations` for da, en, nl (title + description)
+- **VIGTIGT:** Forsiden henter fra Supabase FØRST. Hvis artiklen kun er i articles.ts men IKKE i Supabase, vil den IKKE vises på forsiden!
+- Supabase ref: `dnitshjnyvupgcxbcqem` (eu-central-1)
+
+**Uden begge dele risikerer du at artiklen forsvinder fra forsiden!**
 
 ### 6. Ikoner
 - Brug ÉT emoji-ikon per artikel – aldrig to emojis sammen (ser dobbelt ud i sidebar)
@@ -130,5 +139,6 @@ Før commit, verificér:
 - [ ] i18n-slug er korrekt
 - [ ] Sidebar er opdateret
 - [ ] **Artikel registreret i articles.ts** (HARDCODED_ARTICLES + route mappings)
-- [ ] **Startsiden viser artiklen** (den henter fra articles.ts)
+- [ ] **Artikel registreret i Supabase** (kb_articles + kb_translations for da/en/nl)
+- [ ] **Startsiden viser artiklen** (henter fra Supabase først, fallback til articles.ts)
 - [ ] **Kun ét ikon** per menu-punkt
