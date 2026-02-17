@@ -428,7 +428,7 @@
                         <div className="flow-container">
                             <FlowBox icon="👤" title={t("Kunde")} desc={t("Vil returnere en vare")} type="external" />
                             <Arrow />
-                            <FlowBox icon="🔄" title={t("Returportal")} desc={t("Returnflows, ReturnGo, Loop m.fl.")} type="portal" />
+                            <FlowBox icon="🔄" title={t("Returportal")} desc={t("Returnflows, Float m.fl.")} type="portal" />
                             <Arrow />
                             <FlowBox icon="🛍️" title="Shopify" desc={t("Opretter return på ordren")} type="external" />
                             <Arrow />
@@ -440,7 +440,7 @@
                         </div>
                         
                         <div className="info-box" style={{marginTop: '20px'}}>
-                            <strong>{t("💡 Vigtigt:")}</strong> {t("SPY integrerer ikke direkte med de fleste returportaler. Portaler som ReturnGo, Returnless, Loop osv. opretter returneringen i Shopify – og SPY henter den derfra. Det betyder, at alle Shopify-kompatible returportaler virker automatisk med SPY. For Returnflows-appen har SPY en særlig integration, der også henter fragtrefusionsdata via metafields.")}
+                            <strong>{t("💡 Vigtigt:")}</strong> {t("SPY integrerer ikke direkte med de fleste returportaler. Portaler som Float, Returnless osv. opretter returneringen i Shopify – og SPY henter den derfra. Det betyder, at alle Shopify-kompatible returportaler virker automatisk med SPY. For Returnflows-appen har SPY en særlig integration, der også henter fragtrefusionsdata via metafields.")}
                         </div>
                         
                         <h3 style={{marginTop: '25px', marginBottom: '15px', color: 'var(--spy-gold)', fontSize: '1.1em'}}>{t("To måder at modtage returvarer")}</h3>
@@ -677,11 +677,7 @@
                         
                         <div className="portal-grid">
                             <div className="portal-card">
-                                <div className="portal-card-name">ReturnGo</div>
-                                <div className="portal-card-desc">{t("Shopify-app")}</div>
-                            </div>
-                            <div className="portal-card">
-                                <div className="portal-card-name">Loop Returns</div>
+                                <div className="portal-card-name">Float</div>
                                 <div className="portal-card-desc">{t("Shopify-app")}</div>
                             </div>
                             <div className="portal-card">
