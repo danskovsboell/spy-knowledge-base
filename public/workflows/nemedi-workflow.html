@@ -355,7 +355,7 @@
         
         const NemEDIWorkflow = ({ t = (k) => k, locale = 'da' }) => {
             const [viewMode, setViewMode] = React.useState(() => {
-                try { return localStorage.getItem('kb-view-mode') || 'tech'; } catch(e) { return 'tech'; }
+                try { return localStorage.getItem('kb-view-mode') || 'support'; } catch(e) { return 'support'; }
             });
             const techClass = viewMode === 'support' ? 'tech-only hidden' : 'tech-only';
             return (
