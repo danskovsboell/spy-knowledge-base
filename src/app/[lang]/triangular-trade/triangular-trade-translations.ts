@@ -20,7 +20,7 @@ export interface TriangularStrings {
   s5Row3: string; s5Row3Reason: string; s5Row4: string; s5Row4Reason: string
   s5Row5: string; s5Row5Reason: string; s5Row6: string; s5Row6Reason: string
   s5Row7: string; s5Row7Reason: string
-  s6Title: string; s6Intro: string; s6EuSalesReport: string; s6EuSalesDesc: string
+  s6Title: string; s6Intro: string; s6AutoNote: string; s6EuSalesReport: string; s6EuSalesDesc: string
   s6ErpTitle: string; s6ErpIntro: string; s6LedgerTitle: string; s6LedgerDesc: string
 }
 
@@ -83,6 +83,7 @@ const da: TriangularStrings = {
   s5Row7Reason: 'Kun B2B – OSS-regler for B2C',
   s6Title: 'SPY-håndtering',
   s6Intro: 'Sådan håndterer SPY trekantshandel i praksis.',
+  s6AutoNote: 'Trekantshandel detekteres automatisk i SPY baseret på landekombinationerne. Der er ingen separat aktivering nødvendig. Beløbene vises automatisk i EU-salgsrapporten.',
   s6EuSalesReport: 'EU-salgsrapport (listesystem)',
   s6EuSalesDesc: 'B skal indberette trekantshandel til SKAT via EU-salgsrapporten. SPY genererer automatisk rapporten med en dedikeret "Triangular Trade"-kolonne, der viser beløbet separat fra normale EU-salg.',
   s6ErpTitle: 'ERP-integrationer',
@@ -150,6 +151,7 @@ const en: TriangularStrings = {
   s5Row7Reason: 'B2B only – OSS rules for B2C',
   s6Title: 'SPY handling',
   s6Intro: 'How SPY handles triangular trade in practice.',
+  s6AutoNote: 'Triangular trade is detected automatically in SPY based on the country combinations. No separate activation is needed. The amounts are shown automatically in the EU Sales Report.',
   s6EuSalesReport: 'EU Sales Report (listing system)',
   s6EuSalesDesc: 'B must report triangular trade to tax authorities via the EU Sales Report. SPY automatically generates the report with a dedicated "Triangular Trade" column showing the amount separately from normal EU sales.',
   s6ErpTitle: 'ERP integrations',
@@ -217,6 +219,7 @@ const nl: TriangularStrings = {
   s5Row7Reason: 'Alleen B2B – OSS-regels voor B2C',
   s6Title: 'SPY-afhandeling',
   s6Intro: 'Hoe SPY driehoekshandel in de praktijk afhandelt.',
+  s6AutoNote: 'Driehoekshandel wordt automatisch gedetecteerd in SPY op basis van de landencombinaties. Er is geen aparte activering nodig. De bedragen worden automatisch weergegeven in het EU-verkooprapport.',
   s6EuSalesReport: 'EU-verkooprapport (listensysteem)',
   s6EuSalesDesc: 'B moet driehoekshandel melden via het EU-verkooprapport. SPY genereert automatisch het rapport met een aparte "Driehoekshandel"-kolom.',
   s6ErpTitle: 'ERP-integraties',

@@ -318,6 +318,15 @@ function Section6({ t }: { t: TriangularStrings }) {
       <h2 style={heading}>⚙️ {t.s6Title}</h2>
       <p style={sub}>{t.s6Intro}</p>
 
+      {/* Auto-detection note */}
+      <div style={{
+        padding: 20, marginBottom: 24, background: C.greenBg, borderRadius: 12,
+        border: '1px solid rgba(39,174,96,0.3)', fontSize: 15, color: C.greenDark,
+        fontWeight: 600, lineHeight: 1.6, textAlign: 'center',
+      }}>
+        ✅ {t.s6AutoNote}
+      </div>
+
       {/* EU Sales Report */}
       <div style={card}>
         <h3 style={{ fontSize: 18, fontWeight: 700, color: C.gold, marginBottom: 8 }}>📋 {t.s6EuSalesReport}</h3>

@@ -37,6 +37,7 @@ export interface VatRepStrings {
 
   // Section 5: Setup in SPY
   s5Title: string; s5Intro: string
+  s5Step0Title: string; s5Step0Desc: string
   s5Step1Title: string; s5Step1Desc: string
   s5Step2Title: string; s5Step2Desc: string
   s5Step3Title: string; s5Step3Desc: string
@@ -129,6 +130,8 @@ const da: VatRepStrings = {
 
   s5Title: 'Opsætning i SPY',
   s5Intro: 'Følgende trin skal udføres i SPY for at understøtte momsrepræsentation i et land uden for EU (f.eks. Norge eller UK).',
+  s5Step0Title: 'Sæt Accounting Method på landet',
+  s5Step0Desc: 'Gå til Admin → Settings → System → Country. Åbn det relevante land (f.eks. Norge eller UK) og sæt feltet "Accounting Method" til den korrekte type: "VAT Representation" (generel), "B2B VAT Representation" eller "B2C VAT Representation". Dette er påkrævet før de øvrige trin virker.',
   s5Step1Title: 'Opret leveringsadresse / lager',
   s5Step1Desc: 'Under Administration → Lagre, opret en ny lokation for destinationslandet (f.eks. Norge eller UK). Sæt land og adresse til repræsentantens/lagerets adresse. Denne bruges som "ship-from" for ordrer i det pågældende land.',
   s5Step2Title: 'Konfigurér momsgrupper',
@@ -233,6 +236,8 @@ const en: VatRepStrings = {
 
   s5Title: 'Setup in SPY',
   s5Intro: 'The following steps should be completed in SPY to support VAT representation in a non-EU country (e.g. Norway or the UK).',
+  s5Step0Title: 'Set Accounting Method on the country',
+  s5Step0Desc: 'Go to Admin → Settings → System → Country. Open the relevant country (e.g. Norway or UK) and set the "Accounting Method" field to the correct type: "VAT Representation" (general), "B2B VAT Representation", or "B2C VAT Representation". This is required before the other steps will work.',
   s5Step1Title: 'Create delivery address / warehouse',
   s5Step1Desc: 'Under Administration → Warehouses, create a new location for the destination country (e.g. Norway or UK). Set country and address to the representative\'s/warehouse address. This is used as "ship-from" for orders in that country.',
   s5Step2Title: 'Configure VAT groups',
@@ -337,6 +342,8 @@ const nl: VatRepStrings = {
 
   s5Title: 'Instelling in SPY',
   s5Intro: 'De volgende stappen moeten in SPY worden uitgevoerd om btw-vertegenwoordiging in een land buiten de EU (bijv. Noorwegen of het VK) te ondersteunen.',
+  s5Step0Title: 'Stel Accounting Method in op het land',
+  s5Step0Desc: 'Ga naar Admin → Settings → System → Country. Open het betreffende land (bijv. Noorwegen of VK) en stel het veld "Accounting Method" in op het juiste type: "VAT Representation" (algemeen), "B2B VAT Representation" of "B2C VAT Representation". Dit is vereist voordat de overige stappen werken.',
   s5Step1Title: 'Maak afleveradres / magazijn aan',
   s5Step1Desc: 'Onder Administratie → Magazijnen, maak een nieuwe locatie aan voor het bestemmingsland (bijv. Noorwegen of VK). Stel land en adres in op het adres van de vertegenwoordiger/het magazijn. Dit wordt gebruikt als "ship-from" voor bestellingen in dat land.',
   s5Step2Title: 'Configureer btw-groepen',

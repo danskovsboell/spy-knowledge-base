@@ -217,6 +217,7 @@ function Section4({ t }: { t: VatRepStrings }) {
 function Section5({ t }: { t: VatRepStrings }) {
   const [openStep, setOpenStep] = useState<number | null>(null)
   const steps = [
+    { icon: '🌍', title: t.s5Step0Title, desc: t.s5Step0Desc },
     { icon: '🏢', title: t.s5Step1Title, desc: t.s5Step1Desc },
     { icon: '💶', title: t.s5Step2Title, desc: t.s5Step2Desc },
     { icon: '📦', title: t.s5Step3Title, desc: t.s5Step3Desc },
