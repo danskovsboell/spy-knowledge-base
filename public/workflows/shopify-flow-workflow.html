@@ -222,6 +222,18 @@
         }
         .note-box strong { color: #c9a227; }
         
+        .master-box {
+            margin-top: 12px;
+            padding: 14px 18px;
+            background: rgba(201,162,39,0.12);
+            border: 1px solid var(--spy-gold);
+            border-radius: 8px;
+            font-size: 0.95em;
+            color: var(--spy-white);
+            text-align: center;
+        }
+        .master-box strong { color: #c9a227; }
+        
         .footer-text {
             text-align: center;
             color: var(--spy-gray);
@@ -230,44 +242,50 @@
         }
         .footer-text span { color: var(--spy-gold); }
 
-        /* Support/Technical Toggle */
-        .view-toggle {
-            display: flex;
-            justify-content: center;
-            gap: 0;
-            margin-bottom: 30px;
-        }
-        .view-toggle button {
-            padding: 10px 28px;
+        /* Tech Details Accordion */
+        .tech-details {
+            margin-top: 16px;
             border: 1px solid var(--spy-gray-dark);
-            background: var(--spy-dark);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .tech-details-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            padding: 10px 16px;
+            background: rgba(255,255,255,0.03);
+            border: none;
             color: var(--spy-gray);
             cursor: pointer;
             font-family: 'Raleway', sans-serif;
-            font-size: 0.9em;
+            font-size: 0.85em;
             font-weight: 500;
             transition: all 0.3s ease;
-            outline: none;
+            text-align: left;
         }
-        .view-toggle button:first-child {
-            border-radius: 20px 0 0 20px;
-            border-right: none;
+        .tech-details-toggle:hover {
+            background: rgba(201,162,39,0.08);
+            color: var(--spy-gold-light);
         }
-        .view-toggle button:last-child {
-            border-radius: 0 20px 20px 0;
+        .tech-details-toggle.open {
+            color: var(--spy-gold);
+            border-bottom: 1px solid var(--spy-gray-dark);
         }
-        .view-toggle button.active {
-            background: var(--spy-gold);
-            border-color: var(--spy-gold);
-            color: var(--spy-black);
-            font-weight: 600;
+        .tech-details-toggle .chevron {
+            transition: transform 0.3s ease;
+            font-size: 0.8em;
         }
-        .view-toggle button:hover:not(.active) {
-            border-color: var(--spy-gold);
-            color: var(--spy-white);
+        .tech-details-toggle.open .chevron {
+            transform: rotate(90deg);
         }
-        .tech-only.hidden {
-            display: none !important;
+        .tech-details-content {
+            padding: 16px;
+            background: rgba(0,0,0,0.2);
+        }
+        .tech-details-content.hidden {
+            display: none;
         }
     </style>
 </head>
@@ -293,26 +311,33 @@
             </div>
         );
         
+        const TechDetails = ({ label, children }) => {
+            const [open, setOpen] = React.useState(false);
+            return (
+                <div className="tech-details">
+                    <button className={`tech-details-toggle ${open ? 'open' : ''}`} onClick={() => setOpen(!open)}>
+                        <span className="chevron">▶</span> {label || 'Vis tekniske detaljer'}
+                    </button>
+                    <div className={`tech-details-content ${open ? '' : 'hidden'}`}>
+                        {children}
+                    </div>
+                </div>
+            );
+        };
+        
         const ShopifyWorkflow = ({ t = (k) => k, locale = 'da' }) => {
-            const [viewMode, setViewMode] = React.useState(() => {
-                try { return localStorage.getItem('kb-view-mode') || 'support'; } catch(e) { return 'support'; }
-            });
-            const techClass = viewMode === 'support' ? 'tech-only hidden' : 'tech-only';
             return (
                 <div className="container">
-                    <h1>{t("Shopify Integration Workflow")}</h1>
-                    <p className="subtitle">{t("Spy's webhook-baserede realtidssynkronisering med Shopify")}</p>
+                    <h1>{t("Shopify Integration")}</h1>
+                    <p className="subtitle">{t("Hvordan SPY og Shopify arbejder sammen – synkronisering af produkter, ordrer og lager")}</p>
 
-                    <div className="view-toggle">
-                        <button className={viewMode === 'support' ? 'active' : ''} onClick={() => { setViewMode('support'); try { localStorage.setItem('kb-view-mode', 'support'); } catch(e) {} }}>
-                            Support
-                        </button>
-                        <button className={viewMode === 'tech' ? 'active' : ''} onClick={() => { setViewMode('tech'); try { localStorage.setItem('kb-view-mode', 'tech'); } catch(e) {} }}>
-                            Technical
-                        </button>
+                    {/* Master Data Principle */}
+                    <div className="master-box">
+                        <strong>🔑 {t("Grundprincip:")}</strong> {t("SPY er master for produktdata (styles, farver, priser, lager). Shopify er master for ordredata (ordrer, returneringer, refunds).")}
                     </div>
-
                     
+                    <div style={{height: '24px'}}></div>
+
                     <div className="legend">
                         <div className="legend-item">
                             <div className="legend-color shopify"></div>
@@ -324,405 +349,539 @@
                         </div>
                         <div className="legend-item">
                             <div className="legend-color queue"></div>
-                            <span>{t("Queue / Async")}</span>
+                            <span>{t("Kø (asynkron)")}</span>
                         </div>
                     </div>
                     
-                    {/* Section 1: Overview */}
+                    {/* Section 1: SPY → Shopify (Product Data) */}
                     <div className="workflow-section">
-                        <h2 className="section-title">{t("🔗 Arkitektur Overblik")}</h2>
+                        <h2 className="section-title">{t("📤 SPY → Shopify (Produktdata)")}</h2>
                         <p style={{color: '#b3b3b3', marginBottom: '20px', lineHeight: '1.6'}}>
-                            {t("Spy's Shopify-integration er webhook-drevet og queue-baseret. Shopify sender events via webhooks til Spy's API. Hvert webhook valideres med HMAC-SHA256, og opretter en asynkron opgave i køen. En worker processor håndterer opgaverne i prioriteret rækkefølge.")}
+                            {t("Når du opdaterer produktdata i SPY, synkroniseres ændringerne automatisk til Shopify. SPY er master – det er altid SPY-data der \"vinder\".")}
                         </p>
                         <div className="flow-container">
-                            <FlowBox icon="🛍️" title={t("Shopify Store")} desc={t("Event opstår")} type="shopify" />
+                            <FlowBox icon="✏️" title={t("Ændring i SPY")} desc={t("Style, farve, pris, lager...")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="🔐" title={t("HMAC Validering")} desc={t("SHA256 signaturcheck")} type="spy" />
+                            <FlowBox icon="📋" title={t("Opgave i kø")} desc={t("Sættes automatisk i kø")} type="queue" />
                             <Arrow />
-                            <FlowBox icon="📋" title={t("Queue Item")} desc={t("Task scheduleres")} type="queue" />
+                            <FlowBox icon="🔄" title={t("Sync til Shopify")} desc={t("Opdaterer via API")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="⚙️" title={t("Worker")} desc={t("Async processing")} type="spy" />
-                            <Arrow />
-                            <FlowBox icon="✅" title={t("SPY Opdateret")} desc={t("Data synkroniseret")} type="result" />
+                            <FlowBox icon="🛍️" title={t("Shopify opdateret")} desc={t("Ændring live i webshoppen")} type="shopify" />
                         </div>
-                        <div className="note-box">
-                            <strong>{t("💡 Endpoint:")}</strong> <code>POST /api/v1/webhook/shopify</code> — {t("alle webhooks modtages her. Shopify headers identificerer shop, topic og HMAC.")}
-                        </div>
-                    </div>
-                    
-                    {/* Section 2: Webhook Flow */}
-                    <div className="workflow-section">
-                        <h2 className="section-title">{t("🔔 Webhook Flow")}</h2>
-                        <div className="info-grid">
+                        
+                        <div className="info-grid" style={{marginTop: '20px'}}>
                             <div className="info-card">
-                                <div className="info-card-title">{t("📥 Modtagelse")}</div>
+                                <div className="info-card-title">{t("👗 Produktdata")}</div>
                                 <ul className="info-card-list">
-                                    <li><code>X-Shopify-Shop-Domain</code> → {t("Identificerer shop")}</li>
-                                    <li><code>X-Shopify-Hmac-Sha256</code> → {t("Signatur")}</li>
-                                    <li><code>X-Shopify-Topic</code> → {t("Event type")}</li>
-                                    <li>{t("Body: JSON payload (oftest kun ID)")}</li>
+                                    <li>{t("Style-navn, beskrivelse, type, kvalitet")}</li>
+                                    <li>{t("Farver og farvenavne")}</li>
+                                    <li>{t("Størrelser og varianter")}</li>
+                                    <li>{t("Brand og kategori")}</li>
+                                    <li>{t("Vaskeanvisninger og dimensioner")}</li>
+                                    <li>{t("Custom fields / metafields")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">{t("🔐 Validering (dobbelt)")}</div>
+                                <div className="info-card-title">{t("📸 Billeder & Media")}</div>
                                 <ul className="info-card-list">
-                                    <li>{t("1. Middleware: ShopifyWebhookValidator")}</li>
-                                    <li>{t("2. Model: verifyWebhook() (belt-and-suspenders)")}</li>
-                                    <li>{t("Finder ShopifyShop via domæne")}</li>
-                                    <li>{t("Sætter system-bruger til 'Chuck Norris'")}</li>
+                                    <li>{t("Produktbilleder synkroniseres automatisk")}</li>
+                                    <li>{t("Farve-specifikke billeder kobles korrekt")}</li>
+                                    <li>{t("Rækkefølge styres fra SPY")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">{t("📤 Routing")}</div>
+                                <div className="info-card-title">{t("💰 Priser & Lager")}</div>
                                 <ul className="info-card-list">
-                                    <li>{t("Topic → handler-metode")}</li>
-                                    <li>{t("Handler scheduler queue task")}</li>
-                                    <li>{t("Returnerer 200 OK med det samme")}</li>
-                                    <li>{t("Ingen inline processing")}</li>
+                                    <li>{t("Priser pr. market/valuta")}</li>
+                                    <li>{t("Lagerbeholdning pr. lokation")}</li>
+                                    <li>{t("Oversættelser til flere sprog")}</li>
+                                    <li>{t("Kampagnepriser og sæsonpriser")}</li>
                                 </ul>
                             </div>
                         </div>
                         <div className="note-box">
-                            <strong>{t("💡 Registrering:")}</strong> {t("Webhooks registreres automatisk via ShopifyShop::synchronizeWebhooks() baseret på access scopes og konfiguration. ReadOnly-mode forhindrer registrering.")}
+                            <strong>{t("💡 Hvad trigger sync?")}</strong> {t("Når du gemmer en style, ændrer en farve, opdaterer priser, retter lagerbeholdning eller ændrer oversættelser i SPY, oprettes automatisk en opgave i køen der sender ændringen til Shopify.")}
                         </div>
+                        
+                        <TechDetails label={t("Vis tekniske detaljer – Eksport-tasks og triggers")}>
+                            <div className="info-grid">
+                                <div className="info-card">
+                                    <div className="info-card-title">{t("📤 Eksport Task-typer")}</div>
+                                    <ul className="info-card-list">
+                                        <li>ProductDataExport(Manager) — {t("produktdata")}</li>
+                                        <li>ProductMediaExport(Manager) — {t("billeder/media")}</li>
+                                        <li>ProductPriceExport — {t("priser")}</li>
+                                        <li>ProductStockExport — {t("lagerbeholdning")}</li>
+                                        <li>ProductTranslationExport — {t("oversættelser")}</li>
+                                        <li>ProductDataAndMediaExport(Manager) — {t("kombineret")}</li>
+                                        <li>ProductDelete / ProductDeleteVariant</li>
+                                        <li>ProductBulkUpdatePrices</li>
+                                        <li>SeasonCampaignPriceUpdate</li>
+                                        <li>PausePriceUpdatesPriceUpdate</li>
+                                    </ul>
+                                </div>
+                                <div className="info-card">
+                                    <div className="info-card-title">{t("⚡ Triggers i koden")}</div>
+                                    <ul className="info-card-list">
+                                        <li><code>Style::sendToShopifyShops()</code> — {t("ved style-ændring")}</li>
+                                        <li><code>ShopifyEventHandler</code> — {t("ved ændring af ColorMaster, Type, Quality")}</li>
+                                        <li>{t("Felter der trigger: farvenavn, størrelse, brand, stylenr, kvalitet, kategori, dimensioner, vaskeanvisning")}</li>
+                                        <li>{t("Lokaliserings-ændringer trigger ProductTranslationExport")}</li>
+                                        <li><code>ConsignmentOrder</code> — {t("trigger ved lagerændring")}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="note-box">
+                                <strong>{t("📁 Kode:")}</strong> <code>class/EDI/Shopify/ShopifyEventHandler.php</code>, <code>class/Style/Style.php</code>, <code>class/EDI/Shopify/Entity/ShopifyShop.php</code>
+                            </div>
+                        </TechDetails>
                     </div>
                     
-                    {/* Section 3: Order Import */}
+                    {/* Section 2: Shopify → SPY (Orders) */}
                     <div className="workflow-section">
-                        <h2 className="section-title">{t("🛒 Ordreimport (Shopify → SPY)")}</h2>
+                        <h2 className="section-title">{t("📥 Shopify → SPY (Ordrer)")}</h2>
+                        <p style={{color: '#b3b3b3', marginBottom: '20px', lineHeight: '1.6'}}>
+                            {t("Når en kunde afgiver en ordre i Shopify, sendes den automatisk til SPY via webhooks. Shopify er master for ordredata – ordren oprettes i Shopify og importeres til SPY.")}
+                        </p>
                         <div className="flow-container">
-                            <FlowBox icon="🛍️" title={t("Ordre oprettet")} desc={t("orders/create")} type="shopify" />
+                            <FlowBox icon="🛍️" title={t("Ordre i Shopify")} desc={t("Kunde afgiver ordre")} type="shopify" />
                             <Arrow />
-                            <FlowBox icon="🔐" title={t("HMAC Check")} desc={t("Valideret")} type="spy" />
+                            <FlowBox icon="📡" title={t("Webhook")} desc={t("Shopify giver besked")} type="shopify" />
                             <Arrow />
-                            <FlowBox icon="🪞" title={t("OrderMirrorTask")} desc={t("Henter fuld ordre via GraphQL")} type="queue" />
+                            <FlowBox icon="📋" title={t("Kø")} desc={t("Opgave oprettes")} type="queue" />
                             <Arrow />
-                            <FlowBox icon="📦" title={t("OrderImportTask")} desc={t("Opretter SOrder i SPY")} type="spy" />
+                            <FlowBox icon="📦" title={t("Import")} desc={t("Ordre oprettes i SPY")} type="spy" />
                             <Arrow />
-                            <FlowBox icon="✅" title={t("Ordre klar")} desc={t("Klar til fulfillment")} type="result" />
+                            <FlowBox icon="✅" title={t("Klar")} desc={t("Klar til behandling")} type="result" />
                         </div>
                         <div className="info-grid" style={{marginTop: '20px'}}>
                             <div className="info-card">
-                                <div className="info-card-title">{t("🪞 OrderMirrorTask")}</div>
+                                <div className="info-card-title">{t("🛒 Ordreimport")}</div>
                                 <ul className="info-card-list">
-                                    <li>{t("orders/create: kører med det samme")}</li>
-                                    <li>{t("Andre topics: +15 sek. delay")}</li>
-                                    <li>{t("Henter komplet ordre via GraphQL")}</li>
-                                    <li>{t("Gemmer: linjer, shipping, tax, fulfillments, refunds, transaktioner")}</li>
+                                    <li>{t("Ordren hentes komplet fra Shopify (linjer, fragt, moms, betalinger)")}</li>
+                                    <li>{t("Kunde matches eller oprettes automatisk")}</li>
+                                    <li>{t("Fragt kobles via Webshipper-integration")}</li>
+                                    <li>{t("Fraud-check: ordrer under 5 min. venter på Shopify's vurdering")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">{t("📦 OrderImportTask")}</div>
+                                <div className="info-card-title">{t("🔄 Automatisk sikkerhedsnet")}</div>
                                 <ul className="info-card-list">
-                                    <li>{t("Kun ved orders/create")}</li>
-                                    <li>{t("Mapper kunde, validerer ordre")}</li>
-                                    <li>{t("Integrerer med Webshipper for fragt")}</li>
-                                    <li>{t("Fraud-analyse: 5 min. grace period")}</li>
-                                    <li>{t("Kan sætte ordre i karantæne")}</li>
+                                    <li>{t("SPY tjekker løbende om der er ordrer der er gået tabt")}</li>
+                                    <li>{t("Sammenligner Shopify-ordrer med hvad SPY har modtaget")}</li>
+                                    <li>{t("Manglende ordrer hentes automatisk")}</li>
+                                    <li>{t("Sikrer at ingen ordrer misses, selv ved nedbrud")}</li>
                                 </ul>
                             </div>
                         </div>
                         <div className="note-box">
-                            <strong>{t("⚠️ Krav for ordreimport:")}</strong> {t("allowExchange() + ReadCustomers scope + protected customer data access + bImportOrders = true")}
+                            <strong>{t("💡 Opsætning:")}</strong> {t("Ordreimport aktiveres per shop i Admin → Settings → Integration → Shopify. Kræver at \"Importér ordrer\" er slået til.")}
                         </div>
+                        
+                        <TechDetails label={t("Vis tekniske detaljer – Webhook-validering og tasks")}>
+                            <div className="info-grid">
+                                <div className="info-card">
+                                    <div className="info-card-title">{t("🔐 HMAC Validering")}</div>
+                                    <ul className="info-card-list">
+                                        <li>{t("Dobbelt validering: Middleware + Model (belt-and-suspenders)")}</li>
+                                        <li><code>ShopifyWebhookValidator</code> — {t("middleware")}</li>
+                                        <li><code>Model::verifyWebhook()</code> — {t("model-lag")}</li>
+                                        <li>{t("HMAC-SHA256 signatur fra")} <code>X-Shopify-Hmac-Sha256</code></li>
+                                        <li>{t("Shop identificeres via")} <code>X-Shopify-Shop-Domain</code></li>
+                                        <li>{t("Sætter system-bruger til 'Chuck Norris'")}</li>
+                                    </ul>
+                                </div>
+                                <div className="info-card">
+                                    <div className="info-card-title">{t("📋 Ordre-tasks")}</div>
+                                    <ul className="info-card-list">
+                                        <li><code>OrderMirrorTask</code> — {t("henter fuld ordre via GraphQL")}</li>
+                                        <li><code>OrderImportTask</code> — {t("opretter SOrder i SPY")}</li>
+                                        <li><code>OrderMirrorCheckTask</code> — {t("fallback-tjek for mistede ordrer (tjekker 2 år tilbage)")}</li>
+                                        <li><code>OrderExport</code> / <code>OrderCheck</code> — {t("synkronisering")}</li>
+                                        <li><code>OrderCheckTransactionStatus</code> — {t("betalingsstatus")}</li>
+                                        <li>{t("Endpoint:")} <code>POST /api/v1/webhook/shopify</code></li>
+                                    </ul>
+                                </div>
+                                <div className="info-card">
+                                    <div className="info-card-title">{t("⚙️ Konfigurationsvariabler")}</div>
+                                    <ul className="info-card-list">
+                                        <li><code>bFullIntegrationEnabled</code> — {t("master switch for ordreimport")}</li>
+                                        <li><code>bImportOrders</code> — {t("per shop: importér ordrer")}</li>
+                                        <li><code>bReadOnly</code> — {t("kun læseadgang")}</li>
+                                        <li><code>allowExchange()</code> + <code>ReadCustomers</code> {t("scope")}</li>
+                                        <li>{t("Webhooks registreres automatisk via")} <code>synchronizeWebhooks()</code></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </TechDetails>
                     </div>
-                    
-                    {/* Section 4: Fulfillment & Returns */}
+
+                    {/* Section 3: Fulfillment, Returns & Refunds */}
                     <div className="workflow-section">
                         <h2 className="section-title">{t("📦 Fulfillment, Returneringer & Refunds")}</h2>
-                        <div className="doc-types">
-                            <DocCard 
-                                title={t("Fulfillments (2 topics)")}
-                                desc={t("fulfillments/create + update → OrderMirrorTask + ReturnImportTask for relaterede returneringer")}
-                                type="webhook"
-                                path="FulfillmentsWebhookData"
-                            />
-                            <DocCard 
-                                title={t("Returns (7 topics)")}
-                                desc={t("approve, cancel, close, decline, reopen, request, update → ReturnImportTask synkroniserer status")}
-                                type="webhook"
-                                path="ReturnsWebhookData"
-                            />
-                            <DocCard 
-                                title={t("Refunds (1 topic)")}
-                                desc={t("refunds/create → RefundImportTask importerer refund og linker til original ordre")}
-                                type="webhook"
-                                path="RefundsCreateWebhookData"
-                            />
-                        </div>
-                        <div className="note-box">
-                            <strong>{t("💡 Krav:")}</strong> {t("allowRefundAndReturnImport() — kræver ordreimport + RefundsAndReturns access layer")}
-                        </div>
-                    </div>
-                    
-                    {/* Section 5: Product Sync */}
-                    <div className="workflow-section">
-                        <h2 className="section-title">{t("👗 Produktsynkronisering")}</h2>
+                        <p style={{color: '#b3b3b3', marginBottom: '20px', lineHeight: '1.6'}}>
+                            {t("Shopify sender automatisk besked til SPY når der sker ændringer i fulfillments, returneringer og refunds. Disse håndteres ligesom ordrer – Shopify er master.")}
+                        </p>
                         <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title">{t("📥 Import (Shopify → SPY)")}</div>
+                                <div className="info-card-title">{t("📦 Fulfillments")}</div>
                                 <ul className="info-card-list">
-                                    <li>{t("products/create webhook")}</li>
-                                    <li>{t("Kun for Create2Stay-produkter (iCreate2StayBrandID ≠ 0)")}</li>
-                                    <li>{t("Verificerer forfatter er Create2Stay-appen")}</li>
-                                    <li>{t("Create2StaySynchronizeProductTask")}</li>
+                                    <li>{t("Oprettelse og opdatering af forsendelser")}</li>
+                                    <li>{t("Relaterede returneringer importeres automatisk")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">{t("📤 Export (SPY → Shopify)")}</div>
+                                <div className="info-card-title">{t("🔄 Returneringer")}</div>
                                 <ul className="info-card-list">
-                                    <li>{t("ProductDataExport — produktdata")}</li>
-                                    <li>{t("ProductMediaExport — billeder/media")}</li>
-                                    <li>{t("ProductPriceExport — priser")}</li>
-                                    <li>{t("ProductStockExport — lagerbeholdning")}</li>
-                                    <li>{t("ProductTranslationExport — oversættelser")}</li>
+                                    <li>{t("Godkendelse, afvisning, lukning, genåbning")}</li>
+                                    <li>{t("Status synkroniseres løbende")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">{t("🌍 Markets & Locations")}</div>
+                                <div className="info-card-title">{t("💸 Refunds")}</div>
                                 <ul className="info-card-list">
-                                    <li>{t("markets/create, update, delete → fuld sync")}</li>
-                                    <li>{t("locations/create, update, delete → fuld sync")}</li>
-                                    <li>{t("SynchronizeMarketsTask / SynchronizeLocationsTask")}</li>
-                                    <li>{t("Kræver ReadMarkets / ReadLocations scope")}</li>
+                                    <li>{t("Refunds importeres og linkes til original ordre")}</li>
+                                    <li>{t("Kræver RefundsAndReturns access layer")}</li>
                                 </ul>
                             </div>
                         </div>
+
+                        <TechDetails label={t("Vis tekniske detaljer – Webhooks og tasks")}>
+                            <div className="doc-types">
+                                <DocCard 
+                                    title={t("Fulfillments (2 topics)")}
+                                    desc={t("fulfillments/create + update → OrderMirrorTask + ReturnImportTask")}
+                                    type="webhook"
+                                    path="FulfillmentsWebhookData"
+                                />
+                                <DocCard 
+                                    title={t("Returns (7 topics)")}
+                                    desc={t("approve, cancel, close, decline, reopen, request, update → ReturnImportTask")}
+                                    type="webhook"
+                                    path="ReturnsWebhookData"
+                                />
+                                <DocCard 
+                                    title={t("Refunds (1 topic)")}
+                                    desc={t("refunds/create → RefundImportTask")}
+                                    type="webhook"
+                                    path="RefundsCreateWebhookData"
+                                />
+                            </div>
+                            <div className="note-box">
+                                <strong>{t("Krav:")}</strong> <code>allowRefundAndReturnImport()</code> — {t("kræver ordreimport + RefundsAndReturns access layer")}
+                            </div>
+                        </TechDetails>
+                    </div>
+
+                    {/* Section 4: Markets & Locations */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">{t("🌍 Markets & Lokationer")}</h2>
+                        <p style={{color: '#b3b3b3', marginBottom: '15px', lineHeight: '1.6'}}>
+                            {t("Shopify's markets (lande/regioner) og lokationer (lagersteder) synkroniseres automatisk til SPY. Ændringer i Shopify fanges via webhooks.")}
+                        </p>
+                        <div className="info-grid">
+                            <div className="info-card">
+                                <div className="info-card-title">{t("🌍 Markets")}</div>
+                                <ul className="info-card-list">
+                                    <li>{t("Oprettelse, ændring og sletning synkroniseres")}</li>
+                                    <li>{t("Bruges til markeds-specifikke priser")}</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">{t("📍 Lokationer")}</div>
+                                <ul className="info-card-list">
+                                    <li>{t("Oprettelse, ændring og sletning synkroniseres")}</li>
+                                    <li>{t("Bruges til lagerfordeling")}</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <TechDetails label={t("Vis tekniske detaljer – Sync-tasks")}>
+                            <ul className="info-card-list" style={{padding: '0 10px'}}>
+                                <li><code>SynchronizeMarketsTask</code> / <code>SynchronizeLocationsTask</code></li>
+                                <li><code>SynchronizeMarketPrices</code> / <code>SynchronizeMarketPriceListPrices</code></li>
+                                <li><code>SynchronizeLocales</code> / <code>SynchronizeProductIDs</code></li>
+                                <li>{t("Kræver ReadMarkets / ReadLocations scope")}</li>
+                            </ul>
+                        </TechDetails>
+                    </div>
+
+                    {/* Section 5: Create2Stay */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">{t("🎨 Create2Stay")}</h2>
+                        <p style={{color: '#b3b3b3', marginBottom: '15px', lineHeight: '1.6'}}>
+                            {t("Create2Stay er en specialfunktion for kunder der bruger Shopify's Create2Stay-app til at lade slutkunder designe produkter. Kun relevant hvis det er aktiveret for shoppen.")}
+                        </p>
+                        <div className="info-grid">
+                            <div className="info-card">
+                                <div className="info-card-title">{t("Sådan virker det")}</div>
+                                <ul className="info-card-list">
+                                    <li>{t("Slutkunde designer et produkt i Shopify via Create2Stay-appen")}</li>
+                                    <li>{t("Produktet oprettes i Shopify og webhook sendes til SPY")}</li>
+                                    <li>{t("SPY importerer produktet og kobler det til det rette brand")}</li>
+                                    <li>{t("Fulfillments og returneringer håndteres også via Create2Stay")}</li>
+                                </ul>
+                            </div>
+                            <div className="info-card">
+                                <div className="info-card-title">{t("Hvornår er det relevant?")}</div>
+                                <ul className="info-card-list">
+                                    <li>{t("Kun for shops med Create2Stay aktiveret")}</li>
+                                    <li>{t("Indstillingen \"Create2Stay Brand\" skal være sat (≠ 0)")}</li>
+                                    <li>{t("Verificerer at produktet er oprettet af Create2Stay-appen")}</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <TechDetails label={t("Vis tekniske detaljer – Tasks og konfiguration")}>
+                            <ul className="info-card-list" style={{padding: '0 10px'}}>
+                                <li><code>Create2StaySynchronizeProductTask</code> — {t("importerer produktet")}</li>
+                                <li><code>Create2StayHandleFulfillmentTask</code> — {t("håndterer forsendelse")}</li>
+                                <li><code>Create2StayHandleReturnTask</code> — {t("håndterer retur")}</li>
+                                <li>{t("Trigger: products/create webhook hvor forfatter er Create2Stay-appen")}</li>
+                                <li>{t("Konfiguration:")} <code>iCreate2StayBrandID</code> {t("på ShopifyShop entity (0 = deaktiveret)")}</li>
+                            </ul>
+                        </TechDetails>
                     </div>
                     
-                    {/* Section 6: Queue System */}
-                    <div className={`workflow-section ${techClass}`}>
-                        <h2 className="section-title">{t("⚙️ Queue System")}</h2>
-                        <p style={{color: '#b3b3b3', marginBottom: '15px'}}>
-                            {t("Alle webhooks ender som ShopifyShopQueueItem i databasen. ShopifyHandleQueueTask worker'en processerer dem asynkront.")}
+                    {/* Section 6: Queue */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">{t("⚙️ Køsystemet")}</h2>
+                        <p style={{color: '#b3b3b3', marginBottom: '15px', lineHeight: '1.6'}}>
+                            {t("Alle synkroniseringsopgaver håndteres via en kø. Opgaver sættes i kø og behandles asynkront i prioriteret rækkefølge. Du kan overvåge køen i Admin → Settings → Integration → Shopify → Queue.")}
                         </p>
-                        <table className="priority-table">
-                            <thead>
-                                <tr>
-                                    <th>{t("Prioritet")}</th>
-                                    <th>{t("Værdi")}</th>
-                                    <th>{t("Typisk brug")}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>🔴 {t("Highest")}</td>
-                                    <td>85</td>
-                                    <td>{t("Order mirror + import (webhook)")}</td>
-                                </tr>
-                                <tr>
-                                    <td>🟠 {t("High")}</td>
-                                    <td>75</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td>🟡 {t("Medium")}</td>
-                                    <td>50</td>
-                                    <td>{t("Bulk operationer")}</td>
-                                </tr>
-                                <tr>
-                                    <td>🔵 {t("Low")}</td>
-                                    <td>25</td>
-                                    <td>—</td>
-                                </tr>
-                                <tr>
-                                    <td>⚪ {t("Lowest")}</td>
-                                    <td>15</td>
-                                    <td>{t("Baggrunds-sync")}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div className="info-grid" style={{marginTop: '20px'}}>
+                        <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title">{t("📊 Status Flow")}</div>
+                                <div className="info-card-title">{t("📊 Status")}</div>
                                 <ul className="info-card-list">
-                                    <li><code>pending</code> → <code>running</code> → <code>done</code></li>
-                                    <li><code>pending</code> → <code>running</code> → <code>error</code></li>
-                                    <li><code>pending</code> → <code>skipped</code></li>
+                                    <li>{t("Ventende → Kører → Færdig")}</li>
+                                    <li>{t("Ventende → Kører → Fejl (prøver igen)")}</li>
+                                    <li>{t("Ventende → Sprunget over (ikke relevant)")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">{t("🗑️ Oprydning (TTL)")}</div>
+                                <div className="info-card-title">{t("⏱️ Prioritering")}</div>
                                 <ul className="info-card-list">
-                                    <li>{t("Fuldførte: 30 dage (standard)")}</li>
-                                    <li>{t("Fejlede: 90 dage (til debugging)")}</li>
-                                    <li>{t("OrderMirror: 7 dage (høj volumen)")}</li>
+                                    <li>{t("Ordrer har højeste prioritet")}</li>
+                                    <li>{t("Produktændringer kører med mellem prioritet")}</li>
+                                    <li>{t("Baggrunds-sync kører med laveste prioritet")}</li>
                                 </ul>
                             </div>
                         </div>
+
+                        <TechDetails label={t("Vis tekniske detaljer – Prioriteter, TTL og task-typer")}>
+                            <table className="priority-table">
+                                <thead>
+                                    <tr>
+                                        <th>{t("Prioritet")}</th>
+                                        <th>{t("Værdi")}</th>
+                                        <th>{t("Typisk brug")}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>🔴 Highest</td>
+                                        <td>85</td>
+                                        <td>{t("Order mirror + import (webhook)")}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>🟠 High</td>
+                                        <td>75</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>🟡 Medium</td>
+                                        <td>50</td>
+                                        <td>{t("Bulk operationer, produkteksport")}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>🔵 Low</td>
+                                        <td>25</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>⚪ Lowest</td>
+                                        <td>15</td>
+                                        <td>{t("Baggrunds-sync, OrderMirrorCheck")}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div className="info-grid" style={{marginTop: '16px'}}>
+                                <div className="info-card">
+                                    <div className="info-card-title">{t("🗑️ Oprydning (TTL)")}</div>
+                                    <ul className="info-card-list">
+                                        <li>{t("Fuldførte: 30 dage")}</li>
+                                        <li>{t("Fejlede: 90 dage (til debugging)")}</li>
+                                        <li>{t("OrderMirror: 7 dage (høj volumen)")}</li>
+                                    </ul>
+                                </div>
+                                <div className="info-card">
+                                    <div className="info-card-title">{t("📋 Alle 37 task-typer")}</div>
+                                    <ul className="info-card-list">
+                                        <li>{t("Ordre: OrderMirror, OrderImport, OrderExport, OrderCheck, m.fl. (10)")}</li>
+                                        <li>{t("Produkt: ProductDataExport, ProductMediaExport, ProductPriceExport, m.fl. (12)")}</li>
+                                        <li>{t("Refund/Return/Sync: RefundImport, ReturnImport, SynchronizeLocations, m.fl. (9)")}</li>
+                                        <li>{t("Create2Stay & andet: 6 typer")}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="note-box">
+                                <strong>{t("Worker:")}</strong> <code>ShopifyHandleQueueTask</code> — {t("processerer")} <code>ShopifyShopQueueItem</code> {t("poster asynkront")}
+                            </div>
+                        </TechDetails>
                     </div>
                     
                     {/* Section 7: Configuration */}
                     <div className="workflow-section">
-                        <h2 className="section-title">{t("🔧 Konfiguration")}</h2>
+                        <h2 className="section-title">{t("🔧 Opsætning")}</h2>
                         <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title">{t("🌐 Globale indstillinger (SystemConfig_Shopify)")}</div>
-                                <ul className="info-card-list">
-                                    <li><code>bFullIntegrationEnabled</code> — {t("Master switch for ordreimport")}</li>
-                                    <li><code>bReadOnly</code> — {t("Kun læseadgang (ingen webhooks/exports)")}</li>
-                                    <li><code>bDontReportFailedTransactions</code> — {t("Undertrykker transaktionsfejl")}</li>
-                                    <li><code>bSkipSalesTaxLinesWithZeroValue</code> — {t("Ignorer nul-momslinjer")}</li>
-                                    <li><code>bImportOrderNoteAttributesToSOrderComment</code></li>
-                                </ul>
-                            </div>
-                            <div className="info-card">
-                                <div className="info-card-title">{t("🏪 Per Shop (ShopifyShop entity)")}</div>
-                                <ul className="info-card-list">
-                                    <li><code>bImportOrders</code> — {t("Importér ordrer fra denne shop")}</li>
-                                    <li><code>iCreate2StayBrandID</code> — {t("Create2Stay brand (0 = off)")}</li>
-                                    <li>{t("Access Scopes: ReadLocations, ReadMarkets, ReadCustomers...")}</li>
-                                    <li>{t("Access Layers: RefundsAndReturns")}</li>
-                                    <li>{t("App Secret til HMAC verifikation")}</li>
-                                </ul>
-                            </div>
-                            <div className="info-card">
-                                <div className="info-card-title">{t("📍 Admin UI")}</div>
+                                <div className="info-card-title">{t("📍 Hvor finder jeg det?")}</div>
                                 <ul className="info-card-list">
                                     <li>{t("Admin → Settings → Integration → Shopify")}</li>
-                                    <li>{t("Shop: opret, rediger, oversigt")}</li>
-                                    <li>{t("Order Mapping: feltkortlægning")}</li>
+                                    <li>{t("Shop: opret, rediger, oversigt over forbundne shops")}</li>
+                                    <li>{t("Order Mapping: feltkortlægning for ordrer")}</li>
                                     <li>{t("Freight: fragtkonfiguration + unmapped")}</li>
                                     <li>{t("Queue: overvåg og administrer kø")}</li>
                                 </ul>
                             </div>
+                            <div className="info-card">
+                                <div className="info-card-title">{t("🏪 Per shop-indstillinger")}</div>
+                                <ul className="info-card-list">
+                                    <li>{t("Importér ordrer (til/fra)")}</li>
+                                    <li>{t("Create2Stay brand (valgfrit)")}</li>
+                                    <li>{t("Læsetilstand (kun synkronisering, ingen eksport)")}</li>
+                                    <li>{t("Adgangsrettigheder (scopes)")}</li>
+                                </ul>
+                            </div>
                         </div>
+
+                        <TechDetails label={t("Vis tekniske detaljer – Konfigurationsvariabler")}>
+                            <div className="info-grid">
+                                <div className="info-card">
+                                    <div className="info-card-title">{t("🌐 SystemConfig_Shopify (globalt)")}</div>
+                                    <ul className="info-card-list">
+                                        <li><code>bFullIntegrationEnabled</code> — {t("master switch for ordreimport")}</li>
+                                        <li><code>bReadOnly</code> — {t("kun læseadgang (ingen webhooks/exports)")}</li>
+                                        <li><code>bDontReportFailedTransactions</code> — {t("undertrykker transaktionsfejl")}</li>
+                                        <li><code>bSkipSalesTaxLinesWithZeroValue</code> — {t("ignorer nul-momslinjer")}</li>
+                                        <li><code>bImportOrderNoteAttributesToSOrderComment</code></li>
+                                    </ul>
+                                </div>
+                                <div className="info-card">
+                                    <div className="info-card-title">{t("🏪 ShopifyShop entity (per shop)")}</div>
+                                    <ul className="info-card-list">
+                                        <li><code>bImportOrders</code> — {t("importér ordrer")}</li>
+                                        <li><code>iCreate2StayBrandID</code> — {t("Create2Stay brand (0 = off)")}</li>
+                                        <li>{t("Access Scopes: ReadLocations, ReadMarkets, ReadCustomers...")}</li>
+                                        <li>{t("Access Layers: RefundsAndReturns")}</li>
+                                        <li>{t("App Secret til HMAC verifikation")}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </TechDetails>
                     </div>
                     
                     {/* Section 8: Troubleshooting */}
-                    <div className={`workflow-section ${techClass}`}>
-                        <h2 className="section-title">{t("🔍 Fejlhåndtering & Troubleshooting")}</h2>
-                        <div className="doc-types">
-                            <DocCard 
-                                title={t("401 Unauthorized")}
-                                desc={t("Ugyldigt shop-domæne, tomt app secret, eller HMAC mismatch. Tjek shop-konfigurationen.")}
-                                type="error"
-                            />
-                            <DocCard 
-                                title={t("422 Unprocessable")}
-                                desc={t("Ugyldig webhook-data (ShopifyWebhookDataException). Tjek at payload matcher forventet format.")}
-                                type="error"
-                            />
-                            <DocCard 
-                                title={t("Webshipper: Ordre ikke fundet")}
-                                desc={t("Retry hvert 5. min i 60 min → bed Webshipper re-importere → efter 120 min: karantæne.")}
-                                type="error"
-                            />
-                            <DocCard 
-                                title={t("Webshipper: Fragtrate ikke fundet")}
-                                desc={t("Retry hvert 5. min i 60 min → derefter fejl. Tjek freight mapping i Admin.")}
-                                type="error"
-                            />
-                            <DocCard 
-                                title={t("Fraud analyse mangler")}
-                                desc={t("Ordre < 5 min: venter på Shopify. Ordre > 5 min: importeres alligevel.")}
-                                type="error"
-                            />
-                            <DocCard 
-                                title={t("Database deadlock")}
-                                desc={t("TransactionDeadlockException / LockWaitTimeout — retryable, håndteres automatisk.")}
-                                type="error"
-                            />
-                            <DocCard 
-                                title={t("Shopify API fejl")}
-                                desc={t("Forbidden, Locked, PaymentRequired, Unauthorized, NotFound — hver har specifik håndtering.")}
-                                type="error"
-                            />
-                            <DocCard 
-                                title={t("Max 25 Webshipper retries")}
-                                desc={t("Efter 25 API-fejl mod Webshipper → permanent fejl. Tjek Webshipper-status.")}
-                                type="error"
-                            />
-                        </div>
-                    </div>
-                    
-                    {/* Section 9: All 37 Task Types */}
-                    <div className={`workflow-section ${techClass}`}>
-                        <h2 className="section-title">{t("📋 Alle task-typer (37 total)")}</h2>
+                    <div className="workflow-section">
+                        <h2 className="section-title">{t("🔍 Fejlhåndtering")}</h2>
                         <div className="info-grid">
                             <div className="info-card">
-                                <div className="info-card-title">{t("🛒 Ordre (10 typer)")}</div>
+                                <div className="info-card-title">{t("🛒 Ordre-problemer")}</div>
                                 <ul className="info-card-list">
-                                    <li>OrderMirror, OrderMirrorCheck</li>
-                                    <li>OrderImport, OrderImportManager</li>
-                                    <li>OrderExport, OrderCheck</li>
-                                    <li>OrderCheckTransactionStatus</li>
-                                    <li>OrderSynchronization</li>
-                                    <li>OrderFinancialStatusCheck(Manager)</li>
+                                    <li>{t("Ordre ikke importeret → Tjek om \"Importér ordrer\" er slået til")}</li>
+                                    <li>{t("Fraud-vurdering mangler → Venter maks 5 min, importerer derefter")}</li>
+                                    <li>{t("Webshipper-fragtfejl → Tjek freight mapping i Admin")}</li>
+                                    <li>{t("Manglende ordrer → SPY's sikkerhedsnet henter dem automatisk")}</li>
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <div className="info-card-title">{t("👗 Produkt (12 typer)")}</div>
+                                <div className="info-card-title">{t("📦 Produkt-problemer")}</div>
                                 <ul className="info-card-list">
-                                    <li>ProductDataExport(Manager)</li>
-                                    <li>ProductMediaExport(Manager)</li>
-                                    <li>ProductDataAndMediaExport(Manager)</li>
-                                    <li>ProductDelete, ProductDeleteVariant</li>
-                                    <li>ProductPriceExport, ProductStockExport</li>
-                                    <li>ProductTranslationExport</li>
-                                    <li>ProductBulkUpdatePrices</li>
-                                </ul>
-                            </div>
-                            <div className="info-card">
-                                <div className="info-card-title">{t("🔄 Refund, Return & Sync (9 typer)")}</div>
-                                <ul className="info-card-list">
-                                    <li>RefundImport, RefundImportManager</li>
-                                    <li>ReturnImport</li>
-                                    <li>SynchronizeLocales, Locations, Markets</li>
-                                    <li>SynchronizeMarketPrices</li>
-                                    <li>SynchronizeMarketPriceListPrices</li>
-                                    <li>SynchronizeProductIDs</li>
-                                </ul>
-                            </div>
-                            <div className="info-card">
-                                <div className="info-card-title">{t("🎨 Create2Stay & Andet (6 typer)")}</div>
-                                <ul className="info-card-list">
-                                    <li>Create2StaySynchronizeProduct</li>
-                                    <li>Create2StayHandleFulfillment</li>
-                                    <li>Create2StayHandleReturn</li>
-                                    <li>SeasonCampaignPriceUpdate</li>
-                                    <li>PausePriceUpdatesPriceUpdate</li>
+                                    <li>{t("Produkt ikke opdateret i Shopify → Tjek køen for fejl")}</li>
+                                    <li>{t("Billeder mangler → Tjek om media-eksport er i kø")}</li>
+                                    <li>{t("Priser forkerte → Tjek market-konfiguration")}</li>
                                 </ul>
                             </div>
                         </div>
+                        
+                        <TechDetails label={t("Vis tekniske detaljer – HTTP-fejlkoder og retry-logik")}>
+                            <div className="doc-types">
+                                <DocCard 
+                                    title={t("401 Unauthorized")}
+                                    desc={t("Ugyldigt shop-domæne, tomt app secret, eller HMAC mismatch.")}
+                                    type="error"
+                                />
+                                <DocCard 
+                                    title={t("422 Unprocessable")}
+                                    desc={t("Ugyldig webhook-data (ShopifyWebhookDataException).")}
+                                    type="error"
+                                />
+                                <DocCard 
+                                    title={t("Webshipper: Ordre ikke fundet")}
+                                    desc={t("Retry hvert 5. min i 60 min → efter 120 min: karantæne.")}
+                                    type="error"
+                                />
+                                <DocCard 
+                                    title={t("Webshipper: Fragtrate ikke fundet")}
+                                    desc={t("Retry hvert 5. min i 60 min → derefter fejl.")}
+                                    type="error"
+                                />
+                                <DocCard 
+                                    title={t("Database deadlock")}
+                                    desc={t("TransactionDeadlockException — retryable, automatisk.")}
+                                    type="error"
+                                />
+                                <DocCard 
+                                    title={t("Shopify API fejl")}
+                                    desc={t("Forbidden, Locked, PaymentRequired, Unauthorized, NotFound.")}
+                                    type="error"
+                                />
+                                <DocCard 
+                                    title={t("Max 25 Webshipper retries")}
+                                    desc={t("Efter 25 API-fejl → permanent fejl.")}
+                                    type="error"
+                                />
+                            </div>
+                        </TechDetails>
                     </div>
-                    
-                    {/* Code Structure */}
-                    <div className={`workflow-section ${techClass}`}>
-                        <h2 className="section-title">{t("🗂️ Kodestruktur")}</h2>
-                        <div className="code-structure">
-                            <span className="folder">class/EDI/Shopify/</span><br/>
-                            &nbsp;&nbsp;├── Entity/ShopifyShop.php <span className="comment">← {t("Shop-forbindelse")}</span><br/>
-                            &nbsp;&nbsp;├── Entity/ShopifyShopQueueItem.php <span className="comment">← {t("Queue-poster")}</span><br/>
-                            &nbsp;&nbsp;├── API/ShopifyAPI.php <span className="comment">← {t("REST API klient")}</span><br/>
-                            &nbsp;&nbsp;├── GraphQL/ShopifyGraphQLClient.php <span className="comment">← {t("GraphQL klient")}</span><br/>
-                            &nbsp;&nbsp;├── Task/ <span className="comment">← {t("Alle 37 task-klasser")}</span><br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OrderMirrorTask.php<br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OrderImportTask.php<br/>
-                            &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── ...<br/><br/>
-                            <span className="folder">applications/API/V1/</span><br/>
-                            &nbsp;&nbsp;├── Controller/Webhook/Shopify/Controller.php <span className="comment">← {t("Webhook endpoint")}</span><br/>
-                            &nbsp;&nbsp;├── Model/Webhook/Shopify/Model.php <span className="comment">← {t("Routing + HMAC")}</span><br/>
-                            &nbsp;&nbsp;├── Middleware/ShopifyWebhookValidator.php <span className="comment">← {t("HMAC middleware")}</span><br/>
-                            &nbsp;&nbsp;└── Model/Webhook/Shopify/Data/ <span className="comment">← {t("Webhook data-klasser")}</span><br/><br/>
-                            <span className="folder">class/SystemConfig/SystemConfig_Shopify.php</span> <span className="comment">← {t("Global konfiguration")}</span>
-                        </div>
-                    </div>
-                    
-                    {/* CLI Tools */}
-                    <div className={`workflow-section ${techClass}`}>
-                        <h2 className="section-title">{t("🛠️ CLI Værktøjer")}</h2>
-                        <p style={{color: '#b3b3b3', marginBottom: '15px'}}>
-                            {t("Placeret i tools/Shopify/ — bruges til debugging, bulk-operationer og sync.")}
+
+                    {/* Section 9: Code Structure & CLI (tech only) */}
+                    <div className="workflow-section">
+                        <h2 className="section-title">{t("🛠️ Udviklerværktøjer")}</h2>
+                        <p style={{color: '#b3b3b3', marginBottom: '15px', lineHeight: '1.6'}}>
+                            {t("CLI-værktøjer og kodestruktur til debugging og manuelle operationer.")}
                         </p>
-                        <div className="doc-types">
-                            <DocCard title={t("ImportOrder.php")} desc={t("Importér en enkelt ordre efter Shopify order-ID")} type="task" path="tools/Shopify/" />
-                            <DocCard title={t("OrderMirror.php")} desc={t("Mirror en ordre manuelt")} type="task" path="tools/Shopify/" />
-                            <DocCard title={t("QuarantineOrder.php")} desc={t("Sæt en ordre i karantæne")} type="task" path="tools/Shopify/" />
-                            <DocCard title={t("ProductStockCompare.php")} desc={t("Sammenlign lager mellem Spy og Shopify")} type="task" path="tools/Shopify/" />
-                            <DocCard title={t("SendAllStyles.php")} desc={t("Eksportér alle styles til Shopify")} type="task" path="tools/Shopify/" />
-                            <DocCard title={t("SynchronizeMarkets.php")} desc={t("Synkroniser markets manuelt")} type="task" path="tools/Shopify/" />
-                        </div>
+                        
+                        <TechDetails label={t("Vis tekniske detaljer – Kodestruktur og CLI-værktøjer")}>
+                            <div className="code-structure">
+                                <span className="folder">class/EDI/Shopify/</span><br/>
+                                &nbsp;&nbsp;├── Entity/ShopifyShop.php <span className="comment">← {t("Shop-forbindelse + triggers")}</span><br/>
+                                &nbsp;&nbsp;├── Entity/ShopifyShopQueueItem.php <span className="comment">← {t("Queue-poster")}</span><br/>
+                                &nbsp;&nbsp;├── ShopifyEventHandler.php <span className="comment">← {t("Lytter på ændringer i Style/Color/Quality/Type")}</span><br/>
+                                &nbsp;&nbsp;├── API/ShopifyAPI.php <span className="comment">← {t("REST API klient")}</span><br/>
+                                &nbsp;&nbsp;├── GraphQL/ShopifyGraphQLClient.php <span className="comment">← {t("GraphQL klient")}</span><br/>
+                                &nbsp;&nbsp;├── Task/ <span className="comment">← {t("Alle 37 task-klasser")}</span><br/>
+                                &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OrderMirrorTask.php<br/>
+                                &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── OrderImportTask.php<br/>
+                                &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── ProductDataExportManagerTask.php<br/>
+                                &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── ...<br/><br/>
+                                <span className="folder">applications/API/V1/</span><br/>
+                                &nbsp;&nbsp;├── Controller/Webhook/Shopify/Controller.php <span className="comment">← {t("Webhook endpoint")}</span><br/>
+                                &nbsp;&nbsp;├── Model/Webhook/Shopify/Model.php <span className="comment">← {t("Routing + HMAC")}</span><br/>
+                                &nbsp;&nbsp;├── Middleware/ShopifyWebhookValidator.php <span className="comment">← {t("HMAC middleware")}</span><br/>
+                                &nbsp;&nbsp;└── Model/Webhook/Shopify/Data/ <span className="comment">← {t("Webhook data-klasser")}</span><br/><br/>
+                                <span className="folder">class/SystemConfig/SystemConfig_Shopify.php</span> <span className="comment">← {t("Global konfiguration")}</span>
+                            </div>
+                            <div style={{height: '16px'}}></div>
+                            <div className="doc-types">
+                                <DocCard title="ImportOrder.php" desc={t("Importér en enkelt ordre efter Shopify order-ID")} type="task" path="tools/Shopify/" />
+                                <DocCard title="OrderMirror.php" desc={t("Mirror en ordre manuelt")} type="task" path="tools/Shopify/" />
+                                <DocCard title="QuarantineOrder.php" desc={t("Sæt en ordre i karantæne")} type="task" path="tools/Shopify/" />
+                                <DocCard title="ProductStockCompare.php" desc={t("Sammenlign lager mellem SPY og Shopify")} type="task" path="tools/Shopify/" />
+                                <DocCard title="SendAllStyles.php" desc={t("Eksportér alle styles til Shopify")} type="task" path="tools/Shopify/" />
+                                <DocCard title="SynchronizeMarkets.php" desc={t("Synkroniser markets manuelt")} type="task" path="tools/Shopify/" />
+                            </div>
+                        </TechDetails>
                     </div>
                     
                     <p className="footer-text">
