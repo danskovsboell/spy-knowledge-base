@@ -417,10 +417,10 @@
 
                     <div className="view-toggle">
                         <button className={viewMode === 'support' ? 'active' : ''} onClick={() => { setViewMode('support'); try { localStorage.setItem('kb-view-mode', 'support'); } catch(e) {} }}>
-                            Support
+                            {t("Support")}
                         </button>
                         <button className={viewMode === 'tech' ? 'active' : ''} onClick={() => { setViewMode('tech'); try { localStorage.setItem('kb-view-mode', 'tech'); } catch(e) {} }}>
-                            Technical
+                            {t("Technical")}
                         </button>
                     </div>
 

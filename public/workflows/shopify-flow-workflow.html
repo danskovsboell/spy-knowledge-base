@@ -328,7 +328,7 @@
         const ShopifyWorkflow = ({ t = (k) => k, locale = 'da' }) => {
             return (
                 <div className="container">
-                    <h1>{t("Shopify Integration")}</h1>
+                    <h1>{t("Shopify integration")}</h1>
                     <p className="subtitle">{t("Hvordan SPY og Shopify arbejder sammen – synkronisering af produkter, ordrer og lager")}</p>
 
                     {/* Master Data Principle */}
@@ -885,7 +885,7 @@
                     </div>
                     
                     <p className="footer-text">
-                        {t("Genereret af")} <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString(locale === 'en' ? 'en-GB' : 'da-DK')} | {t("Baseret på Spy codebase-analyse")}
+                        {t("Genereret af")} <span>Nova</span> | SPY ApS | {new Date().toLocaleDateString(locale === 'en' ? 'en-GB' : locale === 'nl' ? 'nl-NL' : 'da-DK')} | {t("Baseret på Spy codebase-analyse")}
                     </p>
                 </div>
             );
